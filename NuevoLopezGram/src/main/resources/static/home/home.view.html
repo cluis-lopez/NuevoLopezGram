@@ -1,0 +1,29 @@
+<div class="col-md-6 col-md-offset-3"
+	ng-controller="Home.IndexController">
+	<!--Menu principal en la cabecera de la página (añadir body: { padding-top: 65px; } al CSS-->
+	<div class='navbar navbar-fixed-top'>
+		<div class='navbar-inner'>
+			<div class='container'>
+				<a class='btn btn-navbar' data-target='.nav-collapse'
+					data-toggle='collapse'> <span class='icon-bar'></span> <span
+					class='icon-bar'></span> <span class='icon-bar'></span>
+				</a>
+				<div class='nav-collapse'>
+					<ul class='nav'>
+						<li class='active'><a href='some_url'>New Event</a></li>
+						<li><a href='some_url'>User Details</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Contenedor para cada uno de los eventos -->
+<div class='jumbotron' id="event" ng-repeat="x in events">
+	<div ng-if="x.multiMedia != ''">
+		<img class="img-responsive" src="{{x.multiMedia}}" width="50%" height="50%"></img>
+	</div>
+	<p>{{x.text}}</p>
+	<a href="#"><span class="glyphicon glyphicon-thumbs-up"> {{x.likes.length}}</span></a>
+	<a href="#"><span class="glyphicon glyphicon-thumbs-down"> {{x.dislikes.length}}</span></a>
+</div>

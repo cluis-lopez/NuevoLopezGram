@@ -1,0 +1,19 @@
+body {
+	padding-top: 65px;
+}
+
+.help-block {
+	font-size: 12px;
+}
+
+#event {
+	margin-bottom: 5px;
+	background-position: 0% 25%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	color: black;
+	background: lightgrey;
+	border: 1px;
+	border-color: #000;
+	border-style:solid; 
+}
