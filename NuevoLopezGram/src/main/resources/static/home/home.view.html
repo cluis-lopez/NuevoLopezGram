@@ -20,6 +20,7 @@
 </div>
 <!-- Contenedor para cada uno de los eventos -->
 <div class='jumbotron' id="event" ng-repeat="x in events">
+	<p>{{x.creatorName}}</p>
 	<div ng-if="x.multiMedia != ''">
 		<img class="img-responsive" src="{{x.multiMedia}}" width="50%" height="50%"></img>
 	</div>

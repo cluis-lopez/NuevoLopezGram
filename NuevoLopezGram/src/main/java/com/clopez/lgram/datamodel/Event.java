@@ -49,6 +49,14 @@ public class Event {
 		return creatorId;
 	}
 
+	public void setCreatorName(String name) {
+		this.creatorName = name;
+	}
+	
+	public String getCreatoraName() {
+		return creatorName;
+	}
+	
 	public Date getCreatedAt() {
 		return createdAt;
 	}

@@ -36,12 +36,15 @@ public class EventController {
 	private UserRepository uRep;
 
 	@PostMapping("/api/event")
-	public @ResponseBody jsonStatus createEvent(@RequestHeader (name="Authorization") String token, @RequestParam String text, @RequestParam String multiMedia) {
+	public @ResponseBody jsonStatus createEvent(@RequestHeader (name="Authorization") String token, @RequestParam String creatorName, @RequestParam String text, @RequestParam String multiMedia) {
 		//userId extracted from the auth token
 		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", ""))
 				.getBody()
 				.getSubject();
+
 		Event ev = new Event(userId, text, multiMedia);
+		ev.setCreatorName(creatorName);
+		
 		if (eRep.save(ev) != null)
 			return new jsonStatus("OK", "Event saved");
 		else
