@@ -1,30 +1,28 @@
-<div class="col-md-6 col-md-offset-3"
-	ng-controller="Home.IndexController">
-	<!--Menu principal en la cabecera de la página (añadir body: { padding-top: 65px; } al CSS-->
-	<div class='navbar navbar-fixed-top'>
-		<div class='navbar-inner'>
-			<div class='container'>
-				<a class='btn btn-navbar' data-target='.nav-collapse'
-					data-toggle='collapse'> <span class='icon-bar'></span> <span
-					class='icon-bar'></span> <span class='icon-bar'></span>
-				</a>
-				<div class='nav-collapse'>
-					<ul class='nav'>
-						<li class='active'><a href='some_url'>New Event</a></li>
-						<li><a href='some_url'>User Details</a></li>
-					</ul>
-				</div>
-			</div>
+<nav class="navbar navbar-default navbar-fixed-top" ng-controller='EventController as pc'>
+	<div class="container">
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li ng-click="pc.openModal()"><i class="icon-export-outline" style="font-size: 32px;"></i></li>
+			</ul>
+			<ul lass="navbar-brand">
+				<li><a href="#"><img src="icons/Logo.png" height="75"></a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="/userdetails"><i class="icon-user-outline" style="font-size: 32px;"></i></a></li>
+			</ul>
 		</div>
+		<!--/.nav-collapse -->
 	</div>
-</div>
+</nav>
 <!-- Contenedor para cada uno de los eventos -->
-<div class='jumbotron' id="event" ng-repeat="x in events">
+<div class='jumbotron' id="event" ng-controller="Home.IndexController" ng-repeat="x in events">
 	<p>{{x.creatorName}}</p>
 	<div ng-if="x.multiMedia != ''">
-		<img class="img-responsive" src="{{x.multiMedia}}" width="50%" height="50%"></img>
+		<img class="img-responsive" src="{{x.multiMedia}}" width="50%"
+			height="50%"></img>
 	</div>
 	<p>{{x.text}}</p>
-	<a href="#"><span class="glyphicon glyphicon-thumbs-up"> {{x.likes.length}}</span></a>
-	<a href="#"><span class="glyphicon glyphicon-thumbs-down"> {{x.dislikes.length}}</span></a>
+	<a href="#"><span class="glyphicon glyphicon-thumbs-up">
+			{{x.likes.length}}</span></a> <a href="#"><span
+		class="glyphicon glyphicon-thumbs-down"> {{x.dislikes.length}}</span></a>
 </div>

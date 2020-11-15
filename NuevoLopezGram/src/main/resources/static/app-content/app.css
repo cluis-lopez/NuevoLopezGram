@@ -1,9 +1,20 @@
 body {
-	padding-top: 65px;
+	padding-top: 60px;
 }
 
 .help-block {
 	font-size: 12px;
+}
+
+.navbar-brand {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    text-align: center;
+    margin: auto;
+    padding:0;
+    list-style-type: none;
 }
 
 #event {

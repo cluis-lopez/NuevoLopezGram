@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+ 
+.icon-camera-outline:before { content: '\e037'; } /* '' */
+.icon-export-outline:before { content: '\e067'; } /* '' */
+.icon-power-outline:before { content: '\e0c4'; } /* '' */
+.icon-github:before { content: '\e0db'; } /* '' */
+.icon-linkedin:before { content: '\e0df'; } /* '' */
+.icon-user-outline:before { content: '\e112'; } /* '' */
+.icon-globe-outline:before { content: '\e12c'; } /* '' */
+.icon-globe:before { content: '𝌍'; } /* '\1d30d' */
+.icon-thumbs-up:before { content: '👍'; } /* '\1f44d' */
+.icon-thumbs-down:before { content: '👎'; } /* '\1f44e' */

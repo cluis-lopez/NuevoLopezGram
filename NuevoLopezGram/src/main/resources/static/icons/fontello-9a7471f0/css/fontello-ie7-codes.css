@@ -1,0 +1,11 @@
+
+.icon-camera-outline { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe037;&nbsp;'); }
+.icon-export-outline { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe067;&nbsp;'); }
+.icon-power-outline { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe0c4;&nbsp;'); }
+.icon-github { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe0db;&nbsp;'); }
+.icon-linkedin { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe0df;&nbsp;'); }
+.icon-user-outline { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe112;&nbsp;'); }
+.icon-globe-outline { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe12c;&nbsp;'); }
+.icon-globe { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x1d30d;&nbsp;'); }
+.icon-thumbs-up { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x1f44d;&nbsp;'); }
+.icon-thumbs-down { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x1f44e;&nbsp;'); }

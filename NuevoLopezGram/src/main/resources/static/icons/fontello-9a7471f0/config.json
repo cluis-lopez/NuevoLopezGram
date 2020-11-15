@@ -1,0 +1,70 @@
+{
+  "name": "",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "tau7t0t38662eqxrb80ozeiase5em2x9",
+      "css": "thumbs-up",
+      "code": 128077,
+      "src": "typicons"
+    },
+    {
+      "uid": "ani12ucvy2plqmykysnk4zd9i24cmxqp",
+      "css": "thumbs-down",
+      "code": 128078,
+      "src": "typicons"
+    },
+    {
+      "uid": "b94db9f012742fbdde9cb59413e14e9b",
+      "css": "github",
+      "code": 57563,
+      "src": "typicons"
+    },
+    {
+      "uid": "25a30265650b260ef03df4cbbff80272",
+      "css": "linkedin",
+      "code": 57567,
+      "src": "typicons"
+    },
+    {
+      "uid": "b7cf8dba5f349cb92b536d76db4a4178",
+      "css": "power-outline",
+      "code": 57540,
+      "src": "typicons"
+    },
+    {
+      "uid": "05de65980bb8a3711da037c2cc25f4f8",
+      "css": "camera-outline",
+      "code": 57399,
+      "src": "typicons"
+    },
+    {
+      "uid": "8ed4884bf9b840729eef8f0bbd2b1dbb",
+      "css": "user-outline",
+      "code": 57618,
+      "src": "typicons"
+    },
+    {
+      "uid": "44a6b866f720a1d2b11bf05023a4e089",
+      "css": "export-outline",
+      "code": 57447,
+      "src": "typicons"
+    },
+    {
+      "uid": "1e8ffb4f9e0d313a9f5ffa5788487712",
+      "css": "globe-outline",
+      "code": 57644,
+      "src": "typicons"
+    },
+    {
+      "uid": "igynut9bozd2s1mxnmkeeut1qou984gc",
+      "css": "globe",
+      "code": 119565,
+      "src": "typicons"
+    }
+  ]
+}

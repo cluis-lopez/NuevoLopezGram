@@ -28,7 +28,7 @@ public class BlobUploadGCP {
 	@Value("${gcp_storage_bucket}")
 	private String bucket;
 	
-    @PostMapping(path = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(path = "/api/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Map<String, String> uploadFile(@RequestPart(value = "file", required = true) MultipartFile files)  {
         //String name = azureAdapter.upload(files, "lgram_");
     	String name="";
