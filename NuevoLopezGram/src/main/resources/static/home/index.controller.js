@@ -48,19 +48,29 @@
 
 	angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $http, $localStorage, $scope) {
 		var pc = this;
+		var urlEncodedData;
 		
-		var local = $localStorage.currentUser;
-		console.log("variable local :"+local);
+		$scope.cameraState = false;
+		$scope.textRows = 5;
 		$scope.data = {};
-		$scope.data.creatorName = local.username;
+		$scope.data.creatorName = $localStorage.currentUser.username;
 		$scope.data.text = '';
 		$scope.data.multiMedia = '';
+		$scope.data.location = {};
 
 		pc.ok = function() {
+			urlEncodedData = 'creatorName=' + encodeURIComponent($scope.data.creatorName);
+			urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
+			urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
+			urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
 			
-			$http.post('/api/event', $scope.data)
+			$http({	url: '/api/event',
+					method: 'POST',
+					data: urlEncodedData,
+					headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+					})
 				.success(function(data) {
-					$scope.events = data.reverse();
+					console.log("Sent");
 				})
 				.error(function(status) {
 					console.log("Failed to get events " + status);
@@ -73,5 +83,26 @@
 			alert("You clicked the cancel button.");
 			$uibModalInstance.dismiss('cancel');
 		};
+		
+		pc.camera = function(){
+			if ($scope.cameraState) {
+				$scope.cameraState = false;
+				$scope.textRows = 5;
+			} else {
+				$scope.cameraState = true;
+				$scope.textRows = 2;		
+			}
+		}
+		
+		pc.location = function(){	
+			navigator.geolocation.getCurrentPosition(p);
+			function p(pos){
+				$scope.data.location.lat = pos.coords.latitude;
+				$scope.data.location.long = pos.coords.longitude; 
+			};
+		}
+		
+		
+		
 	});
 })();

@@ -3,8 +3,15 @@
 		<h4 class="modal-title" id="modal-title">Nuevo mensaje</h4>
 	</div>
 	<div class="modal-body" id="modal-body">
+		<div id="inputpicture" ng-show="cameraState">
+			<labelfor"inputfoto">Foto</label>
+			<div id="inputfoto">
+				<img src="" id="foto"></img>
+			</div>
+		</div>
 		<div class="form-group">
-			<textarea class="form-control" rows="5" id="comment" ng-bind="text">{{text}}</textarea>
+			<textarea class="form-control" rows="{{textRows}}" id="eventText"
+				ng-model="data.text"></textarea>
 		</div>
 	</div>
 	<div class="modal-footer">
