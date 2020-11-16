@@ -1,12 +1,21 @@
-<div class="modal-header">
-    <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
+<div clasds="modal fade bd-example-modal-lg">
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-title">Nuevo mensaje</h4>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<div class="form-group">
+			<textarea class="form-control" rows="5" id="comment" ng-bind="text">{{text}}</textarea>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" type="button" ng-click="pc.camera()">
+			<i class="icon-camera-outline" style="font-size: 24px;"></i>
+		</button>
+		<button class="btn btn-primary" type="button" ng-click="pc.ok()">OK</button>
+		<button class="btn btn-warning" type="button" ng-click="pc.cancel()">Cancel</button>
+		<button class="btn btn-primary" type="button" ng-click="pc.location()">
+			<i class="icon-globe-outline" style="font-size: 24px;"></i>
+		</button>
+	</div>
 </div>
-<div class="modal-body" id="modal-body">
-    <ul>
-        {{pc.data}}
-    </ul>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="pc.ok()">OK</button>
-    <button class="btn btn-warning" type="button" ng-click="pc.cancel()">Cancel</button>
-</div>
+<div>

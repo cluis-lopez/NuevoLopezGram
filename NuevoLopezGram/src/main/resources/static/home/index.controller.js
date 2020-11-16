@@ -46,13 +46,25 @@
 		};
 	});
 
-	angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, data) {
+	angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $http, $localStorage, $scope) {
 		var pc = this;
-		pc.data = data;
+		
+		var local = $localStorage.currentUser;
+		console.log("variable local :"+local);
+		$scope.data = {};
+		$scope.data.creatorName = local.username;
+		$scope.data.text = '';
+		$scope.data.multiMedia = '';
 
 		pc.ok = function() {
-			//{...}
-			alert("You clicked the ok button.");
+			
+			$http.post('/api/event', $scope.data)
+				.success(function(data) {
+					$scope.events = data.reverse();
+				})
+				.error(function(status) {
+					console.log("Failed to get events " + status);
+				});
 			$uibModalInstance.close();
 		};
 
