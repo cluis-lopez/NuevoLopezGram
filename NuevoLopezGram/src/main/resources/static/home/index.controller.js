@@ -64,54 +64,105 @@
 		$scope.data.multiMedia = '';
 		$scope.data.location = {};
 
-		pc.ok = function() {
-			
-			if ($scope.foto != ''){
-				// Upload picture
-				$scope.multiMedia = uploadPicture();
+		pc.send = function() {
+			if ($scope.text == '' && $scope.foto == '') {
+				window.alert("Nada que enviar");
+				return;
 			}
+
+
 			urlEncodedData = 'creatorName=' + encodeURIComponent($scope.data.creatorName);
 			urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
 			urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
 			urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
 
-			$http({
-				url: '/api/event',
-				method: 'POST',
-				data: urlEncodedData,
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-			})
-				.success(function(data) {
-					console.log("Sent");
+			if ($scope.foto != '') {
+				// Upload picture
+				var fd = new FormData();
+				fd.append("file", dataURLToBlob($scope.foto), $scope.data.creatorName + ":");
+				$http({
+					url: '/api/upload',
+					method: 'POST',
+					data: fd,
+					headers: { 'Content-Type': undefined }
 				})
-				.error(function(status) {
-					console.log("Failed to Upload event " + status.status + " " + status.error);
-					if (status.status === 401) {
-						$localStorage.removeItem('currentUser');
-						$location.path('/login');
-					}
-				});
+					.success(function(data) {
+						console.log("Uploaded: " + data.key);
+						$scope.data.multiMedia = data.key;
+
+						//Now upload the event
+
+						urlEncodedData = 'creatorName=' + encodeURIComponent($scope.data.creatorName);
+						urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
+						urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
+						urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
+
+						$http({
+							url: '/api/event',
+							method: 'POST',
+							data: urlEncodedData,
+							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+						})
+							.success(function(data) {
+								console.log("Sent");
+							})
+							.error(function(status) {
+								console.log("Failed to Upload event " + status.status + " " + status.error);
+								if (status.status === 401) {
+									$localStorage.removeItem('currentUser');
+									$location.path('/login');
+								}
+							});
+
+					})
+					.error(function(status) {
+						console.log("Failed to Upload picture " + status.status + " " + status.error);
+					});
+			} else { //No hay foto que subir, solo subimos el texto
+			
+				urlEncodedData = 'creatorName=' + encodeURIComponent($scope.data.creatorName);
+				urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
+				urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
+				urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
+
+				$http({
+					url: '/api/event',
+					method: 'POST',
+					data: urlEncodedData,
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+				})
+					.success(function(data) {
+						console.log("Sent");
+					})
+					.error(function(status) {
+						console.log("Failed to Upload event " + status.status + " " + status.error);
+						if (status.status === 401) {
+							$localStorage.removeItem('currentUser');
+							$location.path('/login');
+						}
+					});
+			}
 			$uibModalInstance.close();
 		};
 
 		pc.cancel = function() {
 			$uibModalInstance.dismiss('cancel');
 		};
-		
+
 		pc.removeFoto = function() {
 			$scope.foto = '';
 			$scope.textRows = 5;
 			$scope.cameraState = false;
-		}
+		};
 
 		pc.camera = function() {
-				//Plain vanila JS to generate a click in the File input form
-				var elem = document.getElementById('hiddeninput');
-				if (elem && document.createEvent) {
-					var evt = document.createEvent("MouseEvents");
-					evt.initEvent("click", true, false);
-					elem.dispatchEvent(evt);
-				}
+			//Plain vanila JS to generate a click in the File input form
+			var elem = document.getElementById('hiddeninput');
+			if (elem && document.createEvent) {
+				var evt = document.createEvent("MouseEvents");
+				evt.initEvent("click", true, false);
+				elem.dispatchEvent(evt);
+			}
 		}
 
 		pc.location = function() {
@@ -141,9 +192,23 @@
 				reader.readAsDataURL(input.files[0]);
 			};
 		};
-		
-		function uploadPicture(){
-			
+
+		function uploadPicture() {
+			var fd = new FormData();
+			fd.append("file", dataURLToBlob($scope.foto), $scope.data.creatorName + ":");
+			$http({
+				url: '/api/upload',
+				method: 'POST',
+				data: fd,
+				headers: { 'Content-Type': undefined }
+			})
+				.success(function(data) {
+					console.log("Uploaded: " + data.key);
+					return data.key;
+				})
+				.error(function(status) {
+					console.log("Failed to Upload picture " + status.status + " " + status.error);
+				});
 		}
 
 		function resize(src, maxWidth, maxHeight, callback) {

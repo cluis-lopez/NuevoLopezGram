@@ -3,6 +3,7 @@ package com.clopez.lgram.controller;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -27,10 +28,12 @@ public class BlobUploadGCP {
 	//Bucket name to store multimedia content
 	@Value("${gcp_storage_bucket}")
 	private String bucket;
+	@Value("${pictures_folder}")
+	private String picFolder;
 	
     @PostMapping(path = "/api/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Map<String, String> uploadFile(@RequestPart(value = "file", required = true) MultipartFile files)  {
-        //String name = azureAdapter.upload(files, "lgram_");
+    	System.out.println("name " + files.getName() + "  Original filename:" + files.getOriginalFilename());
     	String name="";
     	Map<String, String> result = new HashMap<>();
 		try {
@@ -45,9 +48,10 @@ public class BlobUploadGCP {
     
 	public String upload(MultipartFile file) throws IOException {
 		
-		try {			
+		try {	
+			String blobName = picFolder + "/" + file.getOriginalFilename()+UUID.randomUUID().toString();
 			BlobInfo blobInfo = storage.create(
-				BlobInfo.newBuilder(bucket, file.getOriginalFilename()).build(), //get original file name
+				BlobInfo.newBuilder(bucket, blobName).build(), //get original file name
 				file.getBytes(), // the file
 				BlobTargetOption.predefinedAcl(PredefinedAcl.PUBLIC_READ) // Set file permission
 			);
