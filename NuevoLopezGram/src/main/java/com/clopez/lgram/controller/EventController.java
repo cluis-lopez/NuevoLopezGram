@@ -52,18 +52,21 @@ public class EventController {
 	}
 
 	@GetMapping("/api/event")
-	public @ResponseBody List<Event> requestEvent(@RequestParam (value = "number", defaultValue = "5") String number){
-		int numevents;
+	public @ResponseBody List<Event> requestEvent(@RequestParam (value = "number", defaultValue = "5") String number, 
+			@RequestParam (value ="pagenumber", defaultValue= "0") String pagenumber){
+		
+		int pageNumber, numEvents;
 		try {
-			numevents = Integer.parseInt(number);
+			numEvents = Integer.parseInt(number);
+			pageNumber = Integer.parseInt(pagenumber);
 		} catch (NumberFormatException e) {
-			numevents = 5;
+			pageNumber = 0;
+			numEvents = 5;
 		}
 
-		List<Event> events = new ArrayList<Event>();
 		// Implement something like "SELECT * FROM c ORDER BY c.createdAt DESC OFFSET 0 LIMIT number"
-		List<Event> ret = new ArrayList<Event>();
-		eRep.findAll().forEach(ret::add);
+		
+		List<Event> ret = eRep.getLastEvents(numEvents);
 		return ret;
 	}
 	

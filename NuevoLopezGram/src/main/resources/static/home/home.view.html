@@ -2,7 +2,7 @@
 	<div class="container">
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
-				<li ng-click="pc.openModal()"><i class="icon-export-outline" style="font-size: 32px;"></i></li>
+				<li ng-click="pc.openModal()"><a href="#"><i class="icon-export-outline" style="font-size: 32px;"></i></a></li>
 			</ul>
 			<ul lass="navbar-brand">
 				<li><a href="#"><img src="icons/Logo.png" height="75"></a></li>
@@ -16,12 +16,17 @@
 </nav>
 <!-- Contenedor para cada uno de los eventos -->
 <div class='jumbotron' id="event" ng-controller="Home.IndexController" ng-repeat="x in events">
-	<p>{{x.creatorName}}</p>
-	<div ng-if="x.multiMedia != ''">
+	<div class="row"><div class="col-md-6">{{x.creatorName}}</div><div class="col-md-6"><span class="pull-right">{{x.createdAt}}</span></div></div>
+	<div ng-if="x.multiMedia.length > 0 ">
 		<img class="img-responsive" src="{{x.multiMedia}}" width="50%"
 			height="50%"></img>
 	</div>
 	<p>{{x.text}}</p>
-	<a href="#"><i class="icon-thumbs-up" style="font-size: 24px;"></i>{{x.likes.length}}</a>
-	<a href="#"><i class="icon-thumbs-down" style="font-size: 24px;"></i>{{x.dislikes.length}}</a>
+	<hr style="width: 80%; size: 3; color: black;">
+	<div class="row"><div class="col-md-6">
+		<a href="#"><i class="icon-thumbs-up" style="font-size: 24px;"></i>{{x.likes.length}}</a>
+	</div>
+	<div class="col-md-6"><span class="pull-right">
+		<a href="#"><i class="icon-thumbs-down" style="font-size: 24px;"></i>{{x.dislikes.length}}</a>
+	</span></div>
 </div>

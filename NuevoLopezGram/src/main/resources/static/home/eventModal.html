@@ -4,9 +4,8 @@
 	</div>
 	<div class="modal-body" id="modal-body">
 		<div id="inputpicture" ng-show="cameraState">
-			<labelfor"inputfoto">Foto</label>
 			<div id="inputfoto">
-				<img src="" id="foto"></img>
+				<img class="img-responsive" src="{{foto}}" id="foto"></img>
 			</div>
 		</div>
 		<div class="form-group">
@@ -24,5 +23,7 @@
 			<i class="icon-globe-outline" style="font-size: 24px;"></i>
 		</button>
 	</div>
+	<input type="file" name="foto" id="hiddeninput" accept="image/*" style="visibility: none;"
+	 ng-model="foto" onchange="angular.element(this).scope().pc.readURL(this)"/>
 </div>
 <div>

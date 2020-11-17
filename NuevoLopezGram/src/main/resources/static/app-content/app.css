@@ -1,5 +1,5 @@
 body {
-	padding-top: 60px;
+	padding-top: 100px;
 }
 
 .help-block {
@@ -17,6 +17,10 @@ body {
     list-style-type: none;
 }
 
+.jumbotron {
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
 #event {
 	margin-bottom: 5px;
 	background-position: 0% 25%;
@@ -27,4 +31,20 @@ body {
 	border: 1px;
 	border-color: #000;
 	border-style:solid; 
+}
+
+#inputfoto {
+	margin-left: 10%;
+	width: 80%;
+	margin-right: 10%;
+	/* border: 1px solid #ccc; */
+}
+
+
+#foto {
+	width: 90%;
+	max-width: 500px;
+	max-height: 500px;
+	margin-left: auto;
+	margin-right: auto;
 }

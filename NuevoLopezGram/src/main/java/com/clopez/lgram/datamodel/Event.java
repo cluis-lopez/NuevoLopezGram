@@ -53,7 +53,7 @@ public class Event {
 		this.creatorName = name;
 	}
 	
-	public String getCreatoraName() {
+	public String getCreatorName() {
 		return creatorName;
 	}
 	
