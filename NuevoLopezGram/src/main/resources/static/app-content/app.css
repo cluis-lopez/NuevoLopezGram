@@ -1,20 +1,14 @@
 body {
-	padding-top: 100px;
+	padding-top: 105px;
 }
 
 .help-block {
 	font-size: 12px;
 }
 
-.navbar-brand {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    top: 0;
-    text-align: center;
-    margin: auto;
-    padding:0;
-    list-style-type: none;
+.navbar {
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
 .jumbotron {

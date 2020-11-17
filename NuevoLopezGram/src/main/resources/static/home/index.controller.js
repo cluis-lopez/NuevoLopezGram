@@ -65,6 +65,11 @@
 		$scope.data.location = {};
 
 		pc.ok = function() {
+			
+			if ($scope.foto != ''){
+				// Upload picture
+				$scope.multiMedia = uploadPicture();
+			}
 			urlEncodedData = 'creatorName=' + encodeURIComponent($scope.data.creatorName);
 			urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
 			urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
@@ -92,25 +97,21 @@
 		pc.cancel = function() {
 			$uibModalInstance.dismiss('cancel');
 		};
+		
+		pc.removeFoto = function() {
+			$scope.foto = '';
+			$scope.textRows = 5;
+			$scope.cameraState = false;
+		}
 
 		pc.camera = function() {
-			if ($scope.cameraState) {
-				$scope.cameraState = false;
-				$scope.textRows = 5;
-			} else {
-				$scope.cameraState = true;
-				$scope.textRows = 2;
+				//Plain vanila JS to generate a click in the File input form
 				var elem = document.getElementById('hiddeninput');
 				if (elem && document.createEvent) {
 					var evt = document.createEvent("MouseEvents");
 					evt.initEvent("click", true, false);
 					elem.dispatchEvent(evt);
 				}
-			}
-		}
-
-		pc.processFoto = function() {
-			console.log("procesadno foto");
 		}
 
 		pc.location = function() {
@@ -132,12 +133,18 @@
 						resize(evt.target.result, 1024, 1024, function(dataURL) {
 							//$("#foto").attr("src", dataURL) //Convertir a Angular
 							$scope.foto = dataURL;
+							$scope.textRows = 2;
+							$scope.$apply();
 						});
 					}
 				})(input.files[0]);
 				reader.readAsDataURL(input.files[0]);
 			};
 		};
+		
+		function uploadPicture(){
+			
+		}
 
 		function resize(src, maxWidth, maxHeight, callback) {
 			var img = document.createElement('img');

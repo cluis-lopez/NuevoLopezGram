@@ -3,7 +3,8 @@
 		<h4 class="modal-title" id="modal-title">Nuevo mensaje</h4>
 	</div>
 	<div class="modal-body" id="modal-body">
-		<div id="inputpicture" ng-show="cameraState">
+		<div id="inputpicture" ng-if=" foto != '' ">
+			<button class="btn btn-primary" type="button" ng-click="pc.removeFoto()">Remove</button>
 			<div id="inputfoto">
 				<img class="img-responsive" src="{{foto}}" id="foto"></img>
 			</div>
@@ -17,13 +18,13 @@
 		<button class="btn btn-primary" type="button" ng-click="pc.camera()">
 			<i class="icon-camera-outline" style="font-size: 24px;"></i>
 		</button>
-		<button class="btn btn-primary" type="button" ng-click="pc.ok()">OK</button>
+		<button class="btn btn-primary" type="button" ng-click="pc.ok()">Send!!</button>
 		<button class="btn btn-warning" type="button" ng-click="pc.cancel()">Cancel</button>
 		<button class="btn btn-primary" type="button" ng-click="pc.location()">
 			<i class="icon-globe-outline" style="font-size: 24px;"></i>
 		</button>
 	</div>
-	<input type="file" name="foto" id="hiddeninput" accept="image/*" style="visibility: none;"
+	<input type="file" name="foto" id="hiddeninput" accept="image/*" style="display: none;"
 	 ng-model="foto" onchange="angular.element(this).scope().pc.readURL(this)"/>
 </div>
 <div>
