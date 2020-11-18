@@ -41,7 +41,7 @@ public class EventController {
 		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", ""))
 				.getBody()
 				.getSubject();
-
+		//TODO solucionar el nombre del usuario y actualizar LastActivity + Last Login
 		Event ev = new Event(userId, text, multiMedia);
 		ev.setCreatorName(creatorName);
 		

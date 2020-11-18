@@ -8,6 +8,7 @@
 	function Controller($scope, $http, $localStorage, $location) {
 
 		var pageNumber = 0;
+		var weekdays=["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
 		initController();
 
 		function initController() {
@@ -23,6 +24,40 @@
 					}
 				});
 		}
+	
+	$scope.formatDates = function(x){
+		let now = new Date().getTime();
+		let dev = Date.parse(x);
+		let startOfToday = new Date();
+		startOfToday.setHours(0,0,0,0);
+		let sot = Date.parse(startOfToday);
+		let timeDiff = Math.round((now-dev)/1000); //Diferencia en segundos
+		let seconds = Math.floor(timeDiff % 60);
+		let secondsAsString = seconds < 10 ? "0" + seconds : seconds;
+		timeDiff = Math.floor(timeDiff / 60);
+		let minutes = timeDiff % 60;
+		let minutesAsString = minutes < 10 ? "0" + minutes : minutes;
+		timeDiff = Math.floor(timeDiff / 60);
+		let hours = timeDiff % 24;
+			// return "Hace "+hours+ (hours ==1 ? " hora" : " horas")+" y "+minutes+" minutos";
+		timeDiff = Math.floor(timeDiff / 24);
+		let days = timeDiff;
+		if (dev > sot)
+			if (hours == 0)
+				if (minutes < 5)
+					return "Hace un momento";
+				else
+					return "Hace "+minutes+ " minutos";
+			else
+				return "Hace " + hours + (hours<1? " hora ":" horas ") +" y " + minutes + " minutos";
+		else if (days <=7) {
+			let d = new Date(dev)
+			hours = d.getHours();
+			minutes = d.getMilliseconds();
+			return "El " + weekdays[d.getDay()] +" a las " + (hours<10 ? hours : "0"+hours) + ":" + (minutes<10 ? minutes : "0"+minutes);
+			}
+		}
+		
 	};
 
 	angular.module('app').controller('EventController', function($uibModal, $log) {
@@ -70,6 +105,7 @@
 				return;
 			}
 
+			//TODO hay que refrescar después de enviar un post
 
 			urlEncodedData = 'creatorName=' + encodeURIComponent($scope.data.creatorName);
 			urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
@@ -212,6 +248,7 @@
 		}
 
 		function resize(src, maxWidth, maxHeight, callback) {
+			//TODO chequear tamaño final foto: no se comprime
 			var img = document.createElement('img');
 			img.src = src;
 			img.onload = () => {
@@ -267,3 +304,4 @@
 
 	});
 })();
+

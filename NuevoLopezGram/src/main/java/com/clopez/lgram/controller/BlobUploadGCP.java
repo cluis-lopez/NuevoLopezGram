@@ -40,7 +40,6 @@ public class BlobUploadGCP {
 			name = upload(files);
 			result.put("key", name);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         return result;
