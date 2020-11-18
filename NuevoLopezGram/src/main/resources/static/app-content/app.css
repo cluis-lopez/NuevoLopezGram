@@ -6,6 +6,10 @@ body {
 	font-size: 12px;
 }
 
+.footer {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
 .navbar {
 	height: 120px;
 	padding-top: 10px;

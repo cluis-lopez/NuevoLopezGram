@@ -16,6 +16,7 @@ public class Event {
 	private String id;
 	
 	private String creatorId;
+	private String creatorMail;
 	private String creatorName;
 	private Date createdAt;
 	private Date lastSeen;
@@ -29,6 +30,7 @@ public class Event {
 	public Event(String creatorId, String text, String multiMedia) {
 		this.id = UUID.randomUUID().toString();
 		this.creatorId = creatorId;
+		this.creatorMail = "";
 		this.creatorName = "";
 		this.text = text;
 		this.multiMedia = multiMedia;
@@ -49,6 +51,14 @@ public class Event {
 		return creatorId;
 	}
 
+	public void setCreatorMail(String mail) {
+		this.creatorMail = mail;
+	}
+	
+	public String getCreatorMail() {
+		return creatorMail;
+	}
+	
 	public void setCreatorName(String name) {
 		this.creatorName = name;
 	}

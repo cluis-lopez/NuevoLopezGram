@@ -1,6 +1,7 @@
 package com.clopez.lgram.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,17 +37,28 @@ public class EventController {
 	private UserRepository uRep;
 
 	@PostMapping("/api/event")
-	public @ResponseBody jsonStatus createEvent(@RequestHeader (name="Authorization") String token, @RequestParam String creatorName, @RequestParam String text, @RequestParam String multiMedia) {
+	public @ResponseBody jsonStatus createEvent(@RequestHeader (name="Authorization") String token, 
+			@RequestParam String creatorMail, @RequestParam String text, @RequestParam String multiMedia) {
 		//userId extracted from the auth token
 		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", ""))
 				.getBody()
 				.getSubject();
-		//TODO solucionar el nombre del usuario y actualizar LastActivity + Last Login
-		Event ev = new Event(userId, text, multiMedia);
-		ev.setCreatorName(creatorName);
+	
+		Optional<User> ou = uRep.findById(userId);
+		if (ou.isEmpty())
+			return new jsonStatus("NOT OK", "Invalid User");
+		User u = ou.get();
 		
-		if (eRep.save(ev) != null)
+		Event ev = new Event(userId, text, multiMedia);
+		ev.setCreatorMail(creatorMail);
+		ev.setCreatorName(u.getName());
+		
+		if (eRep.save(ev) != null) {
+			u.setLastPost(new Date());
+			u.setLastActivity(u.getLastPost());
+			uRep.save(u);
 			return new jsonStatus("OK", "Event saved");
+		}
 		else
 			return new jsonStatus("NOT OK", "Cannot save event");
 	}

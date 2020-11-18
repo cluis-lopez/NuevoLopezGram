@@ -8,11 +8,12 @@
 	function Controller($scope, $http, $localStorage, $location) {
 
 		var pageNumber = 0;
-		var weekdays=["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+		const weekdays=["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+		
 		initController();
 
 		function initController() {
-			$http.get('/api/event', { pagenumber: pageNumber, number: 5 })
+			$http.get('/api/event', { pagenumber: pageNumber, number: 10 })
 				.success(function(data) {
 					$scope.events = data;
 				})
@@ -24,25 +25,29 @@
 					}
 				});
 		}
+		
+	$scope.refresh = function() {
+			//No se como solucionarlo !!
+	}
 	
 	$scope.formatDates = function(x){
 		let now = new Date().getTime();
 		let dev = Date.parse(x);
 		let startOfToday = new Date();
 		startOfToday.setHours(0,0,0,0);
-		let sot = Date.parse(startOfToday);
+		let sot = startOfToday.getTime();
 		let timeDiff = Math.round((now-dev)/1000); //Diferencia en segundos
-		let seconds = Math.floor(timeDiff % 60);
-		let secondsAsString = seconds < 10 ? "0" + seconds : seconds;
+		// let seconds = Math.floor(timeDiff % 60);
+		// let secondsAsString = seconds < 10 ? "0" + seconds : seconds;
 		timeDiff = Math.floor(timeDiff / 60);
 		let minutes = timeDiff % 60;
-		let minutesAsString = minutes < 10 ? "0" + minutes : minutes;
+		// let minutesAsString = minutes < 10 ? "0" + minutes : minutes;
 		timeDiff = Math.floor(timeDiff / 60);
 		let hours = timeDiff % 24;
 			// return "Hace "+hours+ (hours ==1 ? " hora" : " horas")+" y "+minutes+" minutos";
 		timeDiff = Math.floor(timeDiff / 24);
 		let days = timeDiff;
-		if (dev > sot)
+		if (dev > sot) {
 			if (hours == 0)
 				if (minutes < 5)
 					return "Hace un momento";
@@ -50,14 +55,18 @@
 					return "Hace "+minutes+ " minutos";
 			else
 				return "Hace " + hours + (hours<1? " hora ":" horas ") +" y " + minutes + " minutos";
-		else if (days <=7) {
+		} else if (days <=7) {
 			let d = new Date(dev)
 			hours = d.getHours();
-			minutes = d.getMilliseconds();
-			return "El " + weekdays[d.getDay()] +" a las " + (hours<10 ? hours : "0"+hours) + ":" + (minutes<10 ? minutes : "0"+minutes);
-			}
+			minutes = d.getMinutes();
+			return "El " + weekdays[d.getDay()] +" a las " + (hours < 10 ? "0"+hours : hours) + 
+			":" + (minutes<10 ? "0"+minutes : minutes);
+		} else {
+			return new Date(dev).toLocaleDateString('es-ES', 
+			{day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric'});
 		}
 		
+	}
 	};
 
 	angular.module('app').controller('EventController', function($uibModal, $log) {
@@ -82,6 +91,7 @@
 
 			modalInstance.result.then(function() {
 				//Aqui refresh de la página
+				angular.element(document.getElementById('event')).scope().refresh();
 			});
 		};
 	});
@@ -94,7 +104,7 @@
 		$scope.textRows = 5;
 		$scope.foto = '';
 		$scope.data = {};
-		$scope.data.creatorName = $localStorage.currentUser.username;
+		$scope.data.creatorMail = $localStorage.currentUser.username;
 		$scope.data.text = '';
 		$scope.data.multiMedia = '';
 		$scope.data.location = {};
@@ -107,15 +117,10 @@
 
 			//TODO hay que refrescar después de enviar un post
 
-			urlEncodedData = 'creatorName=' + encodeURIComponent($scope.data.creatorName);
-			urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
-			urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
-			urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
-
 			if ($scope.foto != '') {
 				// Upload picture
 				var fd = new FormData();
-				fd.append("file", dataURLToBlob($scope.foto), $scope.data.creatorName + ":");
+				fd.append("file", dataURLToBlob($scope.foto), $scope.data.creatorMail + ":");
 				$http({
 					url: '/api/upload',
 					method: 'POST',
@@ -128,7 +133,7 @@
 
 						//Now upload the event
 
-						urlEncodedData = 'creatorName=' + encodeURIComponent($scope.data.creatorName);
+						urlEncodedData = 'creatorMail=' + encodeURIComponent($scope.data.creatorMail);
 						urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
 						urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
 						urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
@@ -156,7 +161,7 @@
 					});
 			} else { //No hay foto que subir, solo subimos el texto
 			
-				urlEncodedData = 'creatorName=' + encodeURIComponent($scope.data.creatorName);
+				urlEncodedData = 'creatorMail=' + encodeURIComponent($scope.data.creatorMail);
 				urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
 				urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
 				urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
@@ -228,24 +233,6 @@
 				reader.readAsDataURL(input.files[0]);
 			};
 		};
-
-		function uploadPicture() {
-			var fd = new FormData();
-			fd.append("file", dataURLToBlob($scope.foto), $scope.data.creatorName + ":");
-			$http({
-				url: '/api/upload',
-				method: 'POST',
-				data: fd,
-				headers: { 'Content-Type': undefined }
-			})
-				.success(function(data) {
-					console.log("Uploaded: " + data.key);
-					return data.key;
-				})
-				.error(function(status) {
-					console.log("Failed to Upload picture " + status.status + " " + status.error);
-				});
-		}
 
 		function resize(src, maxWidth, maxHeight, callback) {
 			//TODO chequear tamaño final foto: no se comprime

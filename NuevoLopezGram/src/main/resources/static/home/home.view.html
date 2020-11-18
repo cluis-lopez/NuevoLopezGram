@@ -10,13 +10,10 @@
 </nav>
 
 <!-- Contenedor para cada uno de los eventos -->
-<div class='jumbotron' id="event" ng-controller="Home.IndexController"
-	ng-repeat="x in events">
+<div class='jumbotron' id="event" ng-repeat="x in events">
 	<div class="row">
-		<!--TODO arreglar creatorName => alias -->
-		<div class="col-xs-6">{{x.creatorName}}</div>
+		<div class="col-xs-6"><a href="/userdetails">{{x.creatorName}}</a></div>
 		<div class="col-xs-6">
-		<!--TODO arreglar formato fecha -->
 			<span class="pull-right">{{formatDates(x.createdAt)}}</span>
 		</div>
 	</div>
