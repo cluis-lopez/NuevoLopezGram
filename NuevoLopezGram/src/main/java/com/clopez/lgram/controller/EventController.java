@@ -49,6 +49,9 @@ public class EventController {
 			return new jsonStatus("NOT OK", "Invalid User");
 		User u = ou.get();
 		
+		if (! creatorMail.equals(u.getEmail()))
+			return new jsonStatus("NOT OK", "User does not match");
+		
 		Event ev = new Event(userId, text, multiMedia);
 		ev.setCreatorMail(creatorMail);
 		ev.setCreatorName(u.getName());

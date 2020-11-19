@@ -144,11 +144,11 @@
 							data: urlEncodedData,
 							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 						})
-							.success(function(data) {
-								console.log("Sent");
+							.success(function(status) {
+								console.log("Sent " +  status.status + " " + status.message);
 							})
 							.error(function(status) {
-								console.log("Failed to Upload event " + status.status + " " + status.error);
+								console.log("Failed to Upload event " + status.status + " " + status.message);
 								if (status.status === 401) {
 									$localStorage.removeItem('currentUser');
 									$location.path('/login');
@@ -157,7 +157,7 @@
 
 					})
 					.error(function(status) {
-						console.log("Failed to Upload picture " + status.status + " " + status.error);
+						console.log("Failed to Upload picture " + status.status + " " + status.message);
 					});
 			} else { //No hay foto que subir, solo subimos el texto
 			
@@ -172,11 +172,11 @@
 					data: urlEncodedData,
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				})
-					.success(function(data) {
-						console.log("Sent");
+					.success(function(status) {
+						console.log("Sent"+ status.status + " " + status.message);
 					})
 					.error(function(status) {
-						console.log("Failed to Upload event " + status.status + " " + status.error);
+						console.log("Failed to Upload event " + status.status + " " + status.message);
 						if (status.status === 401) {
 							$localStorage.removeItem('currentUser');
 							$location.path('/login');

@@ -1,5 +1,6 @@
 package com.clopez.lgram.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class JwtAuthenticationController {
 		final UserDetails userDetails = userDetailsService
 				.loadUserByUsername(username);
 		final String token = jwtTokenUtil.generateToken(userDetails);
+		//salvamos el Date del último login del usuario
+		userList.get(0).setLastLogin(new Date());
+		uRep.save(userList.get(0));
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 	
