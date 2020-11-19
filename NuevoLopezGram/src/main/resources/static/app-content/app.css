@@ -26,11 +26,11 @@ body {
 
 .jumbotron {
 	padding-top: 5px;
-	padding-bottom: 10px;
+	padding-bottom: 0px;
 }
 
-#event {
-	margin-bottom: 5px;
+.eventContainer {
+	padding-bottom: 5px;
 	background-position: 0% 25%;
 	background-size: cover;
 	background-repeat: no-repeat;

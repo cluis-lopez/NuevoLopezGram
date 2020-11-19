@@ -1,36 +1,58 @@
-<nav class="navbar navbar-default navbar-fixed-top" ng-controller='EventController as pc'>
-		<div class="row" >
-		<div class="col-xs-2" align="center" ng-click="pc.openModal()"><a href="#"><i
-						class="icon-export-outline" style="font-size: 32px;"></i></a></div>
-		<div class="col-xs-8" align="center"><a href="#"><img class="img-responsive" src="icons/Logo.png" height="75"></a></div>				
+<nav class="navbar navbar-default navbar-fixed-top"
+	ng-controller='EventController as pc'>
+	<div class="row">
+		<div class="col-xs-2" align="center" ng-click="pc.openModal()">
+			<a href="#"><i class="icon-export-outline"
+				style="font-size: 32px;"></i></a>
+		</div>
+		<div class="col-xs-8" align="center">
+			<a href="#"><img class="img-responsive" src="icons/Logo.png"
+				height="75"></a>
+		</div>
 		<div class="col-xs-2" align="center">
 			<a href="/userdetails"><i class="icon-user-outline"
-						style="font-size: 32px;"></i></a></div>
+				style="font-size: 32px;"></i></a>
+		</div>
 	</div>
 </nav>
 
 <!-- Contenedor para cada uno de los eventos -->
-<div class='jumbotron' id="event" ng-repeat="x in events">
-	<div class="row">
-		<div class="col-xs-6"><a href="/userdetails">{{x.creatorName}}</a></div>
-		<div class="col-xs-6">
-			<span class="pull-right">{{formatDates(x.createdAt)}}</span>
+<div class='jumbotron' ng-repeat="x in events">
+	<div class="eventContainer">
+		<div class="row">
+			<div class="col-xs-6">
+				<a href="#">{{x.creatorName}}</a>
+			</div>
+			<div class="col-xs-6">
+				<span class="pull-right">{{formatDates(x.createdAt)}}</span>
+			</div>
 		</div>
-	</div>
-	<div ng-if="x.multiMedia.length > 0 ">
-		<img class="img-responsive" src="{{x.multiMedia}}" width="50%"
-			height="50%"></img>
-	</div>
-	<p>{{x.text}}</p>
-	<hr style="width: 80%; size: 3; color: black;">
-	<div class="row">
-		<div class="col-xs-6">
-			<a href="#"><i class="icon-thumbs-up" style="font-size: 24px;"></i>{{x.likes.length}}</a>
+		<div ng-if="x.multiMedia.length > 0 ">
+			<img class="img-responsive" src="{{x.multiMedia}}"></img>
 		</div>
-		<div class="col-xs-6">
-			<span class="pull-right"> <a href="#"><i
-					class="icon-thumbs-down" style="font-size: 24px;"></i>{{x.dislikes.length}}</a>
-			</span>
+		<p>{{x.text}}</p>
+		<hr style="width: 80%; size: 3; color: black;">
+		<div class="row">
+			<div class="col-xs-4">
+					<a href="" ng-if="x.creatorMail == user"><i class="icon-thumbs-up"
+						style="font-size: 24px;"></i>{{x.likes.length}}</a>
+					<a href="" ng-if="x.creatorMail != user" ng-click="eventDetails('thumbsUp', x.id)">
+					<i class="icon-thumbs-up" style="font-size: 24px;"></i>{{x.likes.length}}</a>
+			</div>
+			<div class="col-xs-4" align="center">
+				<button class="btn btn-warning" ng-if="x.creatorMail === user"
+					ng-click="eventDetails('remove', x.id)">Borrar</button>
+			</div>
+			<div class="col-xs-4">
+				<span class="pull-right"> 
+				<a href="" ng-if="x.creatorMail == user">{{x.dislikes.length}}
+						<i class="icon-thumbs-down" style="font-size: 24px;"></i>
+				</a>
+				<a href="" ng-if="x.creatorMail != user" ng-click="eventDetails('thumbsDown', x.id)">{{x.dislikes.length}}
+						<i class="icon-thumbs-down" style="font-size: 24px;"></i>
+				</a>
+				</span>
+			</div>
 		</div>
 	</div>
 </div>

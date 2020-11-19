@@ -8,14 +8,16 @@
 	function Controller($scope, $http, $localStorage, $location) {
 
 		var pageNumber = 0;
-		const weekdays=["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
-		
+		const weekdays = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+
 		initController();
 
 		function initController() {
 			$http.get('/api/event', { pagenumber: pageNumber, number: 10 })
 				.success(function(data) {
 					$scope.events = data;
+					$scope.user = $localStorage.currentUser.username;
+					console.log();
 				})
 				.error(function(status) {
 					console.log("Failed to get events " + status.status + " " + status.error);
@@ -25,53 +27,75 @@
 					}
 				});
 		}
-		
-	$scope.refresh = function() {
+
+		$scope.refresh = function() {
 			//No se como solucionarlo !!
-	}
-	
-	$scope.formatDates = function(x){
-		let now = new Date().getTime();
-		let dev = Date.parse(x);
-		let startOfToday = new Date();
-		startOfToday.setHours(0,0,0,0);
-		let sot = startOfToday.getTime();
-		let timeDiff = Math.round((now-dev)/1000); //Diferencia en segundos
-		// let seconds = Math.floor(timeDiff % 60);
-		// let secondsAsString = seconds < 10 ? "0" + seconds : seconds;
-		timeDiff = Math.floor(timeDiff / 60);
-		let minutes = timeDiff % 60;
-		// let minutesAsString = minutes < 10 ? "0" + minutes : minutes;
-		timeDiff = Math.floor(timeDiff / 60);
-		let hours = timeDiff % 24;
-			// return "Hace "+hours+ (hours ==1 ? " hora" : " horas")+" y "+minutes+" minutos";
-		timeDiff = Math.floor(timeDiff / 24);
-		let days = timeDiff;
-		if (dev > sot) {
-			if (hours == 0)
-				if (minutes < 5)
-					return "Hace un momento";
-				else
-					return "Hace "+minutes+ " minutos";
-			else
-				return "Hace " + hours + (hours<1? " hora ":" horas ") +" y " + minutes + " minutos";
-		} else if (days <=7) {
-			let d = new Date(dev)
-			hours = d.getHours();
-			minutes = d.getMinutes();
-			return "El " + weekdays[d.getDay()] +" a las " + (hours < 10 ? "0"+hours : hours) + 
-			":" + (minutes<10 ? "0"+minutes : minutes);
-		} else {
-			return new Date(dev).toLocaleDateString('es-ES', 
-			{day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric'});
 		}
-		
-	}
+
+		$scope.eventDetails = function(command, eventId) {
+			console.log("eventDetails " + command + " : " + eventId);
+			var urlEncodedData = 'command=' + command + '&eventId=' + eventId;
+
+			$http({
+				url: '/api/eventDetails',
+				method: 'POST',
+				data: urlEncodedData,
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+			})
+				.success(function(status) {
+					console.log("Sent" + status.status + " " + status.message);
+				})
+				.error(function(status) {
+					console.log("Failed to Upload event " + status.status + " " + status.message);
+					if (status.status === 401) {
+						console.log('Unauthorized');
+						$localStorage.removeItem('currentUser');
+						$location.path('/login');
+					}
+				});
+		}
+
+		$scope.formatDates = function(x) {
+			let now = new Date().getTime();
+			let dev = Date.parse(x);
+			let startOfToday = new Date();
+			startOfToday.setHours(0, 0, 0, 0);
+			let sot = startOfToday.getTime();
+			let timeDiff = Math.round((now - dev) / 1000); //Diferencia en segundos
+			// let seconds = Math.floor(timeDiff % 60);
+			// let secondsAsString = seconds < 10 ? "0" + seconds : seconds;
+			timeDiff = Math.floor(timeDiff / 60);
+			let minutes = timeDiff % 60;
+			// let minutesAsString = minutes < 10 ? "0" + minutes : minutes;
+			timeDiff = Math.floor(timeDiff / 60);
+			let hours = timeDiff % 24;
+			// return "Hace "+hours+ (hours ==1 ? " hora" : " horas")+" y "+minutes+" minutos";
+			timeDiff = Math.floor(timeDiff / 24);
+			let days = timeDiff;
+			if (dev > sot) {
+				if (hours == 0)
+					if (minutes < 5)
+						return "Hace un momento";
+					else
+						return "Hace " + minutes + " minutos";
+				else
+					return "Hace " + hours + (hours < 1 ? " hora " : " horas ") + " y " + minutes + " minutos";
+			} else if (days <= 7) {
+				let d = new Date(dev)
+				hours = d.getHours();
+				minutes = d.getMinutes();
+				return "El " + weekdays[d.getDay()] + " a las " + (hours < 10 ? "0" + hours : hours) +
+					":" + (minutes < 10 ? "0" + minutes : minutes);
+			} else {
+				return new Date(dev).toLocaleDateString('es-ES',
+					{ day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' });
+			}
+
+		}
 	};
 
 	angular.module('app').controller('EventController', function($uibModal, $log) {
 		var pc = this;
-		pc.data = "Lorem Name Test";
 
 		pc.openModal = function(size) {
 			var modalInstance = $uibModal.open({
@@ -84,7 +108,7 @@
 				size: 'l',
 				resolve: {
 					data: function() {
-						return pc.data;
+						return;
 					}
 				}
 			});
@@ -145,7 +169,7 @@
 							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 						})
 							.success(function(status) {
-								console.log("Sent " +  status.status + " " + status.message);
+								console.log("Sent " + status.status + " " + status.message);
 							})
 							.error(function(status) {
 								console.log("Failed to Upload event " + status.status + " " + status.message);
@@ -160,7 +184,7 @@
 						console.log("Failed to Upload picture " + status.status + " " + status.message);
 					});
 			} else { //No hay foto que subir, solo subimos el texto
-			
+
 				urlEncodedData = 'creatorMail=' + encodeURIComponent($scope.data.creatorMail);
 				urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
 				urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
@@ -173,7 +197,7 @@
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 				})
 					.success(function(status) {
-						console.log("Sent"+ status.status + " " + status.message);
+						console.log("Sent" + status.status + " " + status.message);
 					})
 					.error(function(status) {
 						console.log("Failed to Upload event " + status.status + " " + status.message);

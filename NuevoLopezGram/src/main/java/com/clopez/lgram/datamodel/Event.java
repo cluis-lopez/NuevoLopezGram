@@ -2,7 +2,9 @@ package com.clopez.lgram.datamodel;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
@@ -24,8 +26,8 @@ public class Event {
 	private String text;
 	private String multiMedia; //URL to storage picture or video
 	private String location; // To be Implemented (location of the event)
-	private List<String> likes; //ArrayList to user id's
-	private List<String> dislikes; // ArrayList to user id's
+	private Set<String> likes; //ArrayList to user id's
+	private Set<String> dislikes; // ArrayList to user id's
 	
 	public Event(String creatorId, String text, String multiMedia) {
 		this.id = UUID.randomUUID().toString();
@@ -38,8 +40,8 @@ public class Event {
 		this.createdAt = new Date();
 		this.lastSeen = this.createdAt;
 		this.numberAccess = 0;
-		this.likes = new ArrayList<String>();
-		this.dislikes = new ArrayList<String>();
+		this.likes = new HashSet<String>();
+		this.dislikes = new HashSet<String>();
 		
 	}
 
@@ -103,20 +105,13 @@ public class Event {
 		this.multiMedia = multiMedia;
 	}
 
-	public List<String> getLikes() {
+	public Set<String> getLikes() {
 		return likes;
 	}
 
-	public void setLikes(List<String> likes) {
-		this.likes = likes;
-	}
 
-	public List<String> getDislikes() {
+	public Set<String> getDislikes() {
 		return dislikes;
-	}
-
-	public void setDislikes(List<String> dislikes) {
-		this.dislikes = dislikes;
 	}
 	
 	public int getNumLikes() {
@@ -127,5 +122,11 @@ public class Event {
 		return dislikes.size();
 	}
 	
+	public boolean addLike(String id) {
+		return likes.add(id);
+	}
 	
+	public boolean addDislike(String id) {
+		return dislikes.add(id);
+	}
 }

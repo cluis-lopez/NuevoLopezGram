@@ -98,6 +98,54 @@ public class EventController {
 			return null;
 		}
 	}
+	
+	@PostMapping("/api/eventDetails")
+	public @ResponseBody jsonStatus eventDetails(@RequestHeader (name="Authorization") String token,
+			@RequestParam String command, @RequestParam String eventId) {
+		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", ""))
+				.getBody()
+				.getSubject();
+		Optional evo = eRep.findById(eventId);
+		
+		jsonStatus ret = new jsonStatus ();
+		
+		if (evo.isEmpty())
+			ret.setStatus("NOT OK", "Invalid eventId");
+		Event ev = (Event) evo.get();
+		switch (command) {
+			case "remove":
+				if (ev.getCreatorId().equals(userId)) {
+					eRep.delete(ev);
+					ret.setStatus("OK", "Event removed");
+				}
+				else 
+					ret.setStatus("NOT OK", "Unathorized user");
+			
+			case "thumbsUp":
+				if (ev.getCreatorId().equals(userId))
+					ret.setStatus("NOT OK", "No te des likes a ti mismo capuyo");
+				else
+					if (ev.addLike(userId)) {
+						eRep.save(ev);
+						ret.setStatus("OK", "You like this");
+					}
+					else
+						ret.setStatus("OK", "You already liked this");
+			
+			case "thumbsSown":
+				if (ev.getCreatorId().equals(userId))
+					ret.setStatus("NOT OK", "No te des dislikes a ti mismo capuyo");
+				else
+					if (ev.addDislike(userId)) {
+						eRep.save(ev);
+						ret.setStatus("OK", "You hate this");
+					}
+					else
+						ret.setStatus("OK", "You already hated this");
+					
+		}
+		return ret;
+	}
 
 	@PostMapping("/createuser")
 	public @ResponseBody jsonStatus createUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
