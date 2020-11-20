@@ -4,7 +4,7 @@
 	</div>
 	<div class="modal-body" id="modal-body">
 		<div id="inputpicture" ng-if=" foto != '' ">
-			<button class="btn btn-primary" type="button" ng-click="pc.removeFoto()">Remove</button>
+			<button class="btn btn-primary" type="button" style="margin: 5px;""ng-click="pc.removeFoto()">Remove</button>
 			<div id="inputfoto">
 				<img class="img-responsive" src="{{foto}}" id="foto"></img>
 			</div>
@@ -18,7 +18,7 @@
 		<button class="btn btn-default btn-lg" type="button" ng-click="pc.camera()" style="float: left;">
 			<i class="icon-camera-outline" style="font-size: 32px;"></i>
 		</button>
-		<button class="btn btn-primary" type="button" ng-click="pc.send()">Send !!</button>
+		<button class="btn btn-primary" type="button" ng-click="pc.send()">Enviar !!</button>
 		<button class="btn btn-warning" type="button" ng-click="pc.cancel()">Cancel</button>
 		<button class="btn btn-default btn-lg" type="button" ng-click="pc.location()">
 			<i class="icon-globe-outline" style="font-size: 32px;"></i>

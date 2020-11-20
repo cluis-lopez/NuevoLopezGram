@@ -5,7 +5,7 @@
 		.module('app')
 		.controller('Home.IndexController', Controller);
 
-	function Controller($scope, $http, $localStorage, $location) {
+	function Controller($scope, $http, $localStorage, $location, $state) {
 
 		var pageNumber = 0;
 		const weekdays = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
@@ -29,7 +29,7 @@
 		}
 
 		$scope.refresh = function() {
-			//No se como solucionarlo !!
+			$state.reload();
 		}
 
 		$scope.eventDetails = function(command, eventId) {
@@ -44,6 +44,7 @@
 			})
 				.success(function(status) {
 					console.log("Sent" + status.status + " " + status.message);
+					$scope.refresh();
 				})
 				.error(function(status) {
 					console.log("Failed to Upload event " + status.status + " " + status.message);
@@ -115,7 +116,6 @@
 
 			modalInstance.result.then(function() {
 				//Aqui refresh de la página
-				angular.element(document.getElementById('event')).scope().refresh();
 			});
 		};
 	});
@@ -170,6 +170,7 @@
 						})
 							.success(function(status) {
 								console.log("Sent " + status.status + " " + status.message);
+								angular.element(document.getElementById('events')).scope().refresh();
 							})
 							.error(function(status) {
 								console.log("Failed to Upload event " + status.status + " " + status.message);
@@ -198,6 +199,7 @@
 				})
 					.success(function(status) {
 						console.log("Sent" + status.status + " " + status.message);
+						angular.element(document.getElementById('events')).scope().refresh();
 					})
 					.error(function(status) {
 						console.log("Failed to Upload event " + status.status + " " + status.message);
