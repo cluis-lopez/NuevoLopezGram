@@ -21,6 +21,10 @@ import com.clopez.lgram.datamodel.UserPublic;
 import com.clopez.lgram.datamodel.UserRepository;
 import com.clopez.lgram.datamodel.jsonStatus;
 import com.clopez.lgram.security.JwtTokenUtil;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import com.google.cloud.storage.Storage.CopyRequest;
 
 import io.jsonwebtoken.Jwts;
 
@@ -28,7 +32,13 @@ import io.jsonwebtoken.Jwts;
 public class EventController {
 
 	@Value("${jwt.secret}")
-	String SECRET;
+	private String SECRET;
+	@Value("${gcp_storage_bucket}")
+	private String bucket;
+	@Value("${pictures_folder}")
+	private String picFolder;
+	@Value("${trash_folder}")
+	private String trashFolder;
 
 	@Autowired
 	private EventRepository eRep;
@@ -36,40 +46,40 @@ public class EventController {
 	@Autowired
 	private UserRepository uRep;
 
+	private static Storage storage = StorageOptions.getDefaultInstance().getService();
+
 	@PostMapping("/api/event")
-	public @ResponseBody jsonStatus createEvent(@RequestHeader (name="Authorization") String token, 
+	public @ResponseBody jsonStatus createEvent(@RequestHeader(name = "Authorization") String token,
 			@RequestParam String creatorMail, @RequestParam String text, @RequestParam String multiMedia) {
-		//userId extracted from the auth token
-		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", ""))
-				.getBody()
+		// userId extracted from the auth token
+		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", "")).getBody()
 				.getSubject();
-	
+
 		Optional<User> ou = uRep.findById(userId);
 		if (ou.isEmpty())
 			return new jsonStatus("NOT OK", "Invalid User");
 		User u = ou.get();
-		
-		if (! creatorMail.equals(u.getEmail()))
+
+		if (!creatorMail.equals(u.getEmail()))
 			return new jsonStatus("NOT OK", "User does not match");
-		
+
 		Event ev = new Event(userId, text, multiMedia);
 		ev.setCreatorMail(creatorMail);
 		ev.setCreatorName(u.getName());
-		
+
 		if (eRep.save(ev) != null) {
 			u.setLastPost(new Date());
 			u.setLastActivity(u.getLastPost());
 			uRep.save(u);
 			return new jsonStatus("OK", "Event saved");
-		}
-		else
+		} else
 			return new jsonStatus("NOT OK", "Cannot save event");
 	}
 
 	@GetMapping("/api/event")
-	public @ResponseBody List<Event> requestEvent(@RequestParam (value = "number", defaultValue = "5") String number, 
-			@RequestParam (value ="pagenumber", defaultValue= "0") String pagenumber){
-		
+	public @ResponseBody List<Event> requestEvent(@RequestParam(value = "number", defaultValue = "5") String number,
+			@RequestParam(value = "pagenumber", defaultValue = "0") String pagenumber) {
+
 		int pageNumber, numEvents;
 		try {
 			numEvents = Integer.parseInt(number);
@@ -79,86 +89,70 @@ public class EventController {
 			numEvents = 5;
 		}
 
-		// Implement something like "SELECT * FROM c ORDER BY c.createdAt DESC OFFSET 0 LIMIT number"
-		
+		// Implement something like "SELECT * FROM c ORDER BY c.createdAt DESC OFFSET 0
+		// LIMIT number"
+
 		List<Event> ret = eRep.getLastEvents(numEvents);
 		return ret;
 	}
-	
-	@GetMapping("/api/userdetails")
-	public @ResponseBody UserPublic userDetails(@RequestHeader (name="Authorization") String token) {
-		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", ""))
-				.getBody()
-				.getSubject();
-		Optional<User> u = uRep.findById(userId);
-		if (u.isPresent()) {
-			UserPublic ud = new UserPublic(u.get());
-			return ud;
-		} else {
-			return null;
-		}
-	}
-	
+
 	@PostMapping("/api/eventDetails")
-	public @ResponseBody jsonStatus eventDetails(@RequestHeader (name="Authorization") String token,
+	public @ResponseBody jsonStatus eventDetails(@RequestHeader(name = "Authorization") String token,
 			@RequestParam String command, @RequestParam String eventId) {
-		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", ""))
-				.getBody()
+		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", "")).getBody()
 				.getSubject();
 		Optional evo = eRep.findById(eventId);
-		
-		jsonStatus ret = new jsonStatus ();
-		
+
+		jsonStatus ret = new jsonStatus();
+
 		if (evo.isEmpty())
 			ret.setStatus("NOT OK", "Invalid eventId");
-		Event ev = (Event) evo.get();
-		switch (command) {
+		else {
+			Event ev = (Event) evo.get();
+			switch (command) {
 			case "remove":
 				if (ev.getCreatorId().equals(userId)) {
+					if (ev.getMultiMedia() != "")
+						if (!moveToTrash(ev.getMultiMedia(), ev.getCreatorMail()))
+							;
+					String deleteWarning = "Warning!! Multimedia content cannot be deleted";
 					eRep.delete(ev);
-					ret.setStatus("OK", "Event removed");
-				}
-				else 
+					ret.setStatus("OK", "Event removed " + deleteWarning);
+				} else
 					ret.setStatus("NOT OK", "Unathorized user");
-			
+				break;
 			case "thumbsUp":
 				if (ev.getCreatorId().equals(userId))
 					ret.setStatus("NOT OK", "No te des likes a ti mismo capuyo");
-				else
-					if (ev.addLike(userId)) {
-						eRep.save(ev);
-						ret.setStatus("OK", "You like this");
-					}
-					else
-						ret.setStatus("OK", "You already liked this");
-			
-			case "thumbsSown":
+				else if (ev.addLike(userId)) {
+					eRep.save(ev);
+					ret.setStatus("OK", "You like this");
+				} else
+					ret.setStatus("OK", "You already liked this");
+				break;
+			case "thumbsDown":
 				if (ev.getCreatorId().equals(userId))
 					ret.setStatus("NOT OK", "No te des dislikes a ti mismo capuyo");
-				else
-					if (ev.addDislike(userId)) {
-						eRep.save(ev);
-						ret.setStatus("OK", "You hate this");
-					}
-					else
-						ret.setStatus("OK", "You already hated this");
-					
+				else if (ev.addDislike(userId)) {
+					eRep.save(ev);
+					ret.setStatus("OK", "You hate this");
+				} else
+					ret.setStatus("OK", "You already hated this");
+				break;
+			}
 		}
 		return ret;
 	}
 
-	@PostMapping("/createuser")
-	public @ResponseBody jsonStatus createUser(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
-		// Email must be unique
-		List<User> ul = uRep.findByEmail(email);
-		if (ul.size()>0)
-			return new jsonStatus("NOT OK", email + " Email address already used");
-		
-		User u = new User(name, email, password);
-		u.encryptPassword();
-		if (uRep.save(u)!= null)
-			return new jsonStatus("OK", "Creado el usuario con Id: "+u.getId()+" Usuarios en la BBDD :"+uRep.count());
-		else
-			return new jsonStatus("NOT OK", "algo chungo ocurre");
+	private boolean moveToTrash(String urlMedia, String creatorMail) {
+		String objectName = urlMedia.substring(urlMedia.indexOf(creatorMail));
+		objectName = objectName.substring(0, objectName.indexOf('?'));
+		String blobName = picFolder + "/" + objectName;
+		String copyBlobName = trashFolder + "/" + blobName.substring(blobName.indexOf('/') + 1);
+		CopyRequest request = CopyRequest.newBuilder().setSource(BlobId.of(bucket, blobName))
+				.setTarget(BlobId.of(bucket, copyBlobName)).build();
+		com.google.cloud.storage.Blob blob = storage.copy(request).getResult();
+		return storage.delete(BlobId.of(bucket, blobName));
+
 	}
 }
