@@ -4,6 +4,7 @@
 	</div>
 	<div class="modal-body" id="modal-body">
 		<div id="inputpicture" ng-if=" foto != '' ">
+		<!--FIXME arreglar borrar foto -->
 			<button class="btn btn-primary" type="button" style="margin: 5px;""ng-click="pc.removeFoto()">Remove</button>
 			<div id="inputfoto">
 				<img class="img-responsive" src="{{foto}}" id="foto"></img>
@@ -24,7 +25,7 @@
 			<i class="icon-globe-outline" style="font-size: 32px;"></i>
 		</button>
 	</div>
-	<input type="file" name="foto" id="hiddeninput" accept="image/*" style="display: none;"
+	<input type="file" name="foto" id="hiddeninput" accept="image/*, video/*" style="display: none;"
 	 ng-model="foto" onchange="angular.element(this).scope().pc.readURL(this)"/>
 </div>
 <div>

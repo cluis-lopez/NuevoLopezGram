@@ -33,6 +33,7 @@
 		<p>{{x.text}}</p>
 		<hr style="width: 80%; size: 3; color: black;">
 		<div class="row">
+		<!-- FIXME el link debe de abarcar al grupo div -->
 			<div class="col-xs-4">
 					<a href="" ng-if="x.creatorMail == user"><i class="icon-thumbs-up"
 						style="font-size: 24px;"></i>{{x.likes.length}}</a>
@@ -43,6 +44,7 @@
 				<button class="btn btn-warning" ng-if="x.creatorMail === user"
 					ng-click="eventDetails('remove', x.id)">Borrar</button>
 			</div>
+			<!-- TODO Comentarios -->
 			<div class="col-xs-4">
 				<span class="pull-right"> 
 				<a href="" ng-if="x.creatorMail == user">{{x.dislikes.length}}

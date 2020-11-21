@@ -5,7 +5,7 @@
         .module('app')
         .controller('Login.IndexController', Controller);
 
-    function Controller($location, AuthenticationService) {
+    function Controller($location, AuthenticationService, $scope) {
         var vm = this;
 
         vm.login = login;
@@ -28,5 +28,9 @@
                 }
             });
         };
+
+		$scope.userRegistration = function() {
+			$location.path('/userReg');
+		}
     }
 })();

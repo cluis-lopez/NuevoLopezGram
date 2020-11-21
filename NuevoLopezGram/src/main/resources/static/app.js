@@ -24,9 +24,15 @@
                 controller: 'Login.IndexController',
                 controllerAs: 'vm'
             })
-			.state('userdetails', {
-				url: '/userdetails',
-				templateUrl: 'userdetails/userdetails.view,html',
+			.state('userReg', {
+				url: '/userReg',
+				templateUrl: 'userReg/userReg.view.html',
+				controller: 'UserRegController',
+				controllerAs: 'vm'
+				})
+			.state('userDetails', {
+				url: '/userDetails',
+				templateUrl: 'userDetails/userDetails.view,html',
 				controller: 'UserDetails.IndexController',
 				controllerAs: 'vm'
 				});
@@ -40,7 +46,7 @@
 
         // redirect to login page if not logged in and trying to access a restricted page
         $rootScope.$on('$locationChangeStart', function (event, next, current) {
-            var publicPages = ['/login'];
+            var publicPages = ['/login', '/userReg'];
             var restrictedPage = publicPages.indexOf($location.path()) === -1;
             if (restrictedPage && !$localStorage.currentUser) {
                 $location.path('/login');

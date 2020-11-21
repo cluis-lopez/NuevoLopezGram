@@ -17,7 +17,6 @@
 				.success(function(data) {
 					$scope.events = data;
 					$scope.user = $localStorage.currentUser.username;
-					console.log();
 				})
 				.error(function(status) {
 					console.log("Failed to get events " + status.status + " " + status.error);
@@ -81,7 +80,7 @@
 						return "Hace " + minutes + " minutos";
 				else
 					return "Hace " + hours + (hours < 1 ? " hora " : " horas ") + " y " + minutes + " minutos";
-			} else if (days <= 7) {
+			} else if (days <= 6) {
 				let d = new Date(dev)
 				hours = d.getHours();
 				minutes = d.getMinutes();
@@ -115,7 +114,6 @@
 			});
 
 			modalInstance.result.then(function() {
-				//Aqui refresh de la página
 			});
 		};
 	});
@@ -138,8 +136,6 @@
 				window.alert("Nada que enviar");
 				return;
 			}
-
-			//TODO hay que refrescar después de enviar un post
 
 			if ($scope.foto != '') {
 				// Upload picture
