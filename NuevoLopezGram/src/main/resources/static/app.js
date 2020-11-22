@@ -33,7 +33,7 @@
 			.state('userDetails', {
 				url: '/userDetails',
 				templateUrl: 'userDetails/userDetails.view,html',
-				controller: 'UserDetails.IndexController',
+				controller: 'UserDetailsController',
 				controllerAs: 'vm'
 				});
     }

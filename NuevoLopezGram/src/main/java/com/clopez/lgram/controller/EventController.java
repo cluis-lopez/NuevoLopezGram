@@ -2,8 +2,10 @@ package com.clopez.lgram.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,7 +52,9 @@ public class EventController {
 
 	@PostMapping("/api/event")
 	public @ResponseBody jsonStatus createEvent(@RequestHeader(name = "Authorization") String token,
-			@RequestParam String creatorMail, @RequestParam String text, @RequestParam String multiMedia) {
+			@RequestParam String creatorMail, @RequestParam String text, @RequestParam String multiMedia,
+			@RequestParam(defaultValue = "false") boolean isComment,
+			@RequestParam(defaultValue = "") String eventCommented) {
 		// userId extracted from the auth token
 		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", "")).getBody()
 				.getSubject();
@@ -67,6 +71,21 @@ public class EventController {
 		ev.setCreatorMail(creatorMail);
 		ev.setCreatorName(u.getName());
 
+		if (isComment) { // Es un comentario a otro evento
+			if(eventCommented == null || eventCommented.equals(""))
+				return new jsonStatus("NOT OK", "Trying to comment an inexistent event");
+			Optional<Event> evo = eRep.findById(eventCommented);
+			if (evo.isEmpty())
+				return new jsonStatus("NOT OK", "Trying to comment an inexistent event");
+			Event evParent = evo.get();
+			evParent.addComment(ev.getId());
+			evParent.incNumberAccess();
+			evParent.setLastSeen(new Date());
+			ev.setComment(true);
+			if (eRep.save(evParent) == null)
+				return new jsonStatus("NOT OK", "Cannot save parent event");
+		}
+
 		if (eRep.save(ev) != null) {
 			u.setLastPost(new Date());
 			u.setLastActivity(u.getLastPost());
@@ -77,22 +96,39 @@ public class EventController {
 	}
 
 	@GetMapping("/api/event")
-	public @ResponseBody List<Event> requestEvent(@RequestParam(value = "number", defaultValue = "5") String number,
-			@RequestParam(value = "pagenumber", defaultValue = "0") String pagenumber) {
+	public @ResponseBody List<Event> requestEvent(@RequestParam(defaultValue = "5") String number,
+			@RequestParam(defaultValue = "0") String pagenumber,
+			@RequestParam(defaultValue = "false") String isComment,
+			@RequestParam(defaultValue = "") String eventCommented) {
 
-		int pageNumber, numEvents;
-		try {
-			numEvents = Integer.parseInt(number);
-			pageNumber = Integer.parseInt(pagenumber);
-		} catch (NumberFormatException e) {
-			pageNumber = 0;
-			numEvents = 5;
+		List<Event> ret = new ArrayList();
+		boolean isCom = Boolean.parseBoolean(isComment);
+			
+		if (! isCom) { // Return root events
+			int pageNumber, numEvents;
+			try {
+				numEvents = Integer.parseInt(number);
+				pageNumber = Integer.parseInt(pagenumber);
+			} catch (NumberFormatException e) {
+				pageNumber = 0;
+				numEvents = 5;
+			}
+
+			// Implements "SELECT * FROM event WHERE isComment = false ORDER BY createdAt
+			// DESC OFFSET 0
+			// LIMIT number"
+
+			ret = eRep.getLastParentEvents(numEvents);
+		} else if (eventCommented != null && !eventCommented.equals("")){ // Return comments belonging to a certain event
+			Optional<Event> evo = eRep.findById(eventCommented);
+			if (evo.isEmpty()) //No "root" event ??
+				return null;
+			Event rootEvent = evo.get();
+			Set<String> comments = rootEvent.getComments();
+			for (String c : comments) {
+				ret.add(eRep.findById(c).get());
+			}
 		}
-
-		// Implement something like "SELECT * FROM c ORDER BY c.createdAt DESC OFFSET 0
-		// LIMIT number"
-
-		List<Event> ret = eRep.getLastEvents(numEvents);
 		return ret;
 	}
 

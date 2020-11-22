@@ -27,8 +27,7 @@ public class Event {
 	private Set<String> likes; //ArrayList to user id's
 	private Set<String> dislikes; // ArrayList to user id's
 	private boolean isComment;
-	private boolean isCommented;
-	private Set<String> commentIds; //Array of eventIds of comments about this post
+	private Set<String> comments; //Array of eventIds of comments about this post
 	
 	public Event(String creatorId, String text, String multiMedia) {
 		this.id = UUID.randomUUID().toString();
@@ -44,8 +43,7 @@ public class Event {
 		this.likes = new HashSet<String>();
 		this.dislikes = new HashSet<String>();
 		this.isComment = false;
-		this.isCommented = false;
-		this.commentIds = new HashSet<String>();
+		this.comments = new HashSet<String>();
 		
 	}
 
@@ -89,8 +87,8 @@ public class Event {
 		return numberAccess;
 	}
 
-	public void setNumberAccess(int numberAccess) {
-		this.numberAccess = numberAccess;
+	public void incNumberAccess() {
+		this.numberAccess =+ 1;
 	}
 
 	public String getText() {
@@ -136,18 +134,16 @@ public class Event {
 	public boolean isComment() {
 		return isComment;
 	}
-
-	public void setComment(boolean isComment) {
-		this.isComment = isComment;
-	}
-
-	public boolean isCommented() {
-		return isCommented;
-	}
-
-	public void setCommented(boolean isCommented) {
-		this.isCommented = isCommented;
-	}
 	
+	public void setComment(boolean b) {
+		this.isComment = b;
+	}
+
+	public void addComment(String eventId) {
+		this.comments.add(eventId);
+	}
+	public Set<String> getComments() {
+		return comments;
+	}
 	
 }

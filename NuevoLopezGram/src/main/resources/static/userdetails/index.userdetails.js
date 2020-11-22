@@ -3,7 +3,7 @@
 
     angular
         .module('app')
-        .controller('UserDetails.IndexController', Controller);
+        .controller('UserDetailsController', Controller);
 
     function Controller($) {
         var vm = this;

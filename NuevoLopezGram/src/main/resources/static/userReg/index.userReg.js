@@ -5,7 +5,7 @@
         .module('app')
         .controller('UserRegController', Controller);
 
-    function Controller($http, $location, $uibModal) {
+    function Controller($http, $location) {
         var vm = this;
 		
 		vm.register = register;
@@ -32,7 +32,6 @@
 				})
 					.success(function(data) {
 						console.log("Uploaded: " + data.status + ": " + data.message);
-						//TODO Modal 
 						$location.path('/login');
 						})
 					.error(function(status){
