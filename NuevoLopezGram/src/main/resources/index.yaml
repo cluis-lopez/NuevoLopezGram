@@ -1,0 +1,8 @@
+indexes:
+
+- kind: event
+  ancestor: no
+  properties:
+  - name: isComment
+  - name: createdAt
+    direction: desc

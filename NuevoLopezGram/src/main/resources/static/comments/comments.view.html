@@ -1,0 +1,81 @@
+<nav class="navbar navbar-default navbar-fixed-top" id="comments">
+	<div class="row">
+		<div class="col-xs-2" align="center" ng-click="pc.getBack()">
+			<a href="#">Atras</i></a>
+		</div>
+		<div class="col-xs-10"></div>
+	</div>
+		<div class="eventContainer">
+		<div class="row">
+			<div class="col-xs-6">
+				<a href="#">{{eId.creatorName}}</a>
+			</div>
+			<div class="col-xs-6">
+				<span class="pull-right">{{formatDates(eId.createdAt)}}</span>
+			</div>
+		</div>
+		<div ng-if="eId.multiMedia.length > 0 ">
+			<img src="{{eId.multiMedia}}" style="max-height: 250px"></img>
+		</div>
+		<p>{{eId.text}}</p>
+		<hr style="width: 80%; size: 3; color: black;">
+		<div class="row">
+		<!-- FIXME el link debe de abarcar al grupo div -->
+			<div class="col-xs-3">
+					<a href=""><i class="icon-thumbs-up"
+						style="font-size: 24px;"></i>{{eId.likes.length}}</a>
+			</div>
+			<div class="col-xs-6" align="center"></div>
+			<div class="col-xs-3">
+				<span class="pull-right"> 
+				<a href="" >{{eId.dislikes.length}}
+						<i class="icon-thumbs-down" style="font-size: 24px;"></i>
+				</a>
+				</span>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<!--  COntenedor para los comentarios -->
+ <!-- Contenedor para cada uno de los eventos -->
+<div class='jumbotron' ng-repeat="x in comments">
+	<div class="eventContainer">
+		<div class="row">
+			<div class="col-xs-6">
+				<a href="#">{{x.creatorName}}</a>
+			</div>
+			<div class="col-xs-6">
+				<span class="pull-right">{{formatDates(x.createdAt)}}</span>
+			</div>
+		</div>
+		<div ng-if="x.multiMedia.length > 0 ">
+			<img class="img-responsive" src="{{x.multiMedia}}"></img>
+		</div>
+		<p>{{x.text}}</p>
+		<hr style="width: 80%; size: 3; color: black;">
+		<div class="row">
+		<!-- FIXME el link debe de abarcar al grupo div -->
+			<div class="col-xs-3">
+					<a href="" ng-if="x.creatorMail == user"><i class="icon-thumbs-up"
+						style="font-size: 24px;"></i>{{x.likes.length}}</a>
+					<a href="" ng-if="x.creatorMail != user" ng-click="eventDetails('thumbsUp', x.id)">
+					<i class="icon-thumbs-up" style="font-size: 24px;"></i>{{x.likes.length}}</a>
+			</div>
+			<div class="col-xs-6" align="center">
+				<button class="btn btn-warning" ng-if="x.creatorMail === user"
+					ng-click="eventDetails('remove', x.id)">Borrar</button>
+			</div>
+			<div class="col-xs-3">
+				<span class="pull-right"> 
+				<a href="" ng-if="x.creatorMail == user">{{x.dislikes.length}}
+						<i class="icon-thumbs-down" style="font-size: 24px;"></i>
+				</a>
+				<a href="" ng-if="x.creatorMail != user" ng-click="eventDetails('thumbsDown', x.id)">{{x.dislikes.length}}
+						<i class="icon-thumbs-down" style="font-size: 24px;"></i>
+				</a>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>

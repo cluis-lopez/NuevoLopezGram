@@ -5,7 +5,7 @@
 		.module('app')
 		.controller('Home.IndexController', Controller);
 
-	function Controller($scope, $http, $localStorage, $location, $state) {
+	function Controller($scope, $http, $localStorage, $location, $state, $rootScope) {
 
 		var pageNumber = 0;
 		const weekdays = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
@@ -29,6 +29,11 @@
 
 		$scope.refresh = function() {
 			$state.reload();
+		}
+		
+		$scope.eventComments = function(event){
+			console.log("Vamos a comentarios..." + event.id);
+			$location.path('/comments').search({event: event});
 		}
 
 		$scope.eventDetails = function(command, eventId) {
@@ -54,44 +59,11 @@
 					}
 				});
 		}
-
-		$scope.formatDates = function(x) {
-			let now = new Date().getTime();
-			let dev = Date.parse(x);
-			let startOfToday = new Date();
-			startOfToday.setHours(0, 0, 0, 0);
-			let sot = startOfToday.getTime();
-			let timeDiff = Math.round((now - dev) / 1000); //Diferencia en segundos
-			// let seconds = Math.floor(timeDiff % 60);
-			// let secondsAsString = seconds < 10 ? "0" + seconds : seconds;
-			timeDiff = Math.floor(timeDiff / 60);
-			let minutes = timeDiff % 60;
-			// let minutesAsString = minutes < 10 ? "0" + minutes : minutes;
-			timeDiff = Math.floor(timeDiff / 60);
-			let hours = timeDiff % 24;
-			// return "Hace "+hours+ (hours ==1 ? " hora" : " horas")+" y "+minutes+" minutos";
-			timeDiff = Math.floor(timeDiff / 24);
-			let days = timeDiff;
-			if (dev > sot) {
-				if (hours == 0)
-					if (minutes < 5)
-						return "Hace un momento";
-					else
-						return "Hace " + minutes + " minutos";
-				else
-					return "Hace " + hours + (hours < 1 ? " hora " : " horas ") + " y " + minutes + " minutos";
-			} else if (days <= 6) {
-				let d = new Date(dev)
-				hours = d.getHours();
-				minutes = d.getMinutes();
-				return "El " + weekdays[d.getDay()] + " a las " + (hours < 10 ? "0" + hours : hours) +
-					":" + (minutes < 10 ? "0" + minutes : minutes);
-			} else {
-				return new Date(dev).toLocaleDateString('es-ES',
-					{ day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' });
-			}
-
-		}
+		
+		$scope.formatDates = function(x){
+			return $rootScope.$formatDates(x);
+		};
+		
 	};
 
 	angular.module('app').controller('EventController', function($uibModal, $log) {

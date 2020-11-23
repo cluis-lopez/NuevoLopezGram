@@ -72,7 +72,7 @@ public class EventController {
 		ev.setCreatorName(u.getName());
 
 		if (isComment) { // Es un comentario a otro evento
-			if(eventCommented == null || eventCommented.equals(""))
+			if (eventCommented == null || eventCommented.equals(""))
 				return new jsonStatus("NOT OK", "Trying to comment an inexistent event");
 			Optional<Event> evo = eRep.findById(eventCommented);
 			if (evo.isEmpty())
@@ -97,14 +97,13 @@ public class EventController {
 
 	@GetMapping("/api/event")
 	public @ResponseBody List<Event> requestEvent(@RequestParam(defaultValue = "5") String number,
-			@RequestParam(defaultValue = "0") String pagenumber,
-			@RequestParam(defaultValue = "false") String isComment,
+			@RequestParam(defaultValue = "0") String pagenumber, @RequestParam(defaultValue = "false") String isComment,
 			@RequestParam(defaultValue = "") String eventCommented) {
 
 		List<Event> ret = new ArrayList();
 		boolean isCom = Boolean.parseBoolean(isComment);
-			
-		if (! isCom) { // Return root events
+
+		if (!isCom) { // Return root events
 			int pageNumber, numEvents;
 			try {
 				numEvents = Integer.parseInt(number);
@@ -119,9 +118,10 @@ public class EventController {
 			// LIMIT number"
 
 			ret = eRep.getLastParentEvents(numEvents);
-		} else if (eventCommented != null && !eventCommented.equals("")){ // Return comments belonging to a certain event
+		} else if (eventCommented != null && !eventCommented.equals("")) { // Return comments belonging to a certain
+																			// event
 			Optional<Event> evo = eRep.findById(eventCommented);
-			if (evo.isEmpty()) //No "root" event ??
+			if (evo.isEmpty()) // No "root" event ??
 				return null;
 			Event rootEvent = evo.get();
 			Set<String> comments = rootEvent.getComments();
@@ -148,12 +148,21 @@ public class EventController {
 			switch (command) {
 			case "remove":
 				if (ev.getCreatorId().equals(userId)) {
-					if (ev.getMultiMedia() != "")
-						if (!moveToTrash(ev.getMultiMedia(), ev.getCreatorMail()))
-							;
-					String deleteWarning = "Warning!! Multimedia content cannot be deleted";
-					eRep.delete(ev);
-					ret.setStatus("OK", "Event removed " + deleteWarning);
+					String deleteWarning = "";
+					if (ev.getComments().size() > 0) {// Hay comentarios que tenemos que borrar
+						int i = 0;
+						for (String commentId : ev.getComments()) {
+							Optional<Event> c = eRep.findById(commentId);
+							if (c.isPresent()) {
+								moveToTrash(c.get());
+								i++;
+							}
+						}
+						deleteWarning = " along with " + i + " comments";
+					}
+					// Ahora borramos el evento "raiz"
+					moveToTrash(ev);
+					ret.setStatus("OK", "Event Deleted " + deleteWarning);
 				} else
 					ret.setStatus("NOT OK", "Unathorized user");
 				break;
@@ -180,15 +189,28 @@ public class EventController {
 		return ret;
 	}
 
-	private boolean moveToTrash(String urlMedia, String creatorMail) {
-		String objectName = urlMedia.substring(urlMedia.indexOf(creatorMail));
-		objectName = objectName.substring(0, objectName.indexOf('?'));
-		String blobName = picFolder + "/" + objectName;
-		String copyBlobName = trashFolder + "/" + blobName.substring(blobName.indexOf('/') + 1);
-		CopyRequest request = CopyRequest.newBuilder().setSource(BlobId.of(bucket, blobName))
-				.setTarget(BlobId.of(bucket, copyBlobName)).build();
-		com.google.cloud.storage.Blob blob = storage.copy(request).getResult();
-		return storage.delete(BlobId.of(bucket, blobName));
+	private String moveToTrash(Event ev) {
+		String deleteWarning = "";
+		if (ev.getMultiMedia() != "")
+			if (!mediaMoveToTrash(ev.getMultiMedia(), ev.getCreatorMail()))
+				deleteWarning = "Warning!! Multimedia content cannot be deleted";
+		eRep.delete(ev);
+		return deleteWarning;
+	}
+
+	private boolean mediaMoveToTrash(String urlMedia, String creatorMail) {
+		try {
+			String objectName = urlMedia.substring(urlMedia.indexOf(creatorMail));
+			objectName = objectName.substring(0, objectName.indexOf('?'));
+			String blobName = picFolder + "/" + objectName;
+			String copyBlobName = trashFolder + "/" + blobName.substring(blobName.indexOf('/') + 1);
+			CopyRequest request = CopyRequest.newBuilder().setSource(BlobId.of(bucket, blobName))
+					.setTarget(BlobId.of(bucket, copyBlobName)).build();
+			com.google.cloud.storage.Blob blob = storage.copy(request).getResult();
+			return storage.delete(BlobId.of(bucket, blobName));
+		} catch (StringIndexOutOfBoundsException e) {
+			return false;
+		}
 
 	}
 }
