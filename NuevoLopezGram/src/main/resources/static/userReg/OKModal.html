@@ -1,13 +1,11 @@
 <div clasds="modal fade bd-example-modal-lg OKmodal">
 	<div class="modal-header">
-		<h4 class="modal-title" id="modal-title">Ya estás en LopezGram</h4>
+		<h3 class="modal-title" id="modal-title">{{pc.data.title}}</h3>
 	</div>
-	<div class="modal-body" id="modal-body">
-		<p>Estás registrado con la dirección de correo: {{vm.email}}</p>
-		<p>Tu nombre en la red es: {{vm.name}}
+	<div class="modal-body" id="modal-body" ng-bind-html="pc.data.varHtml">
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-normal">OK</button>
+		<button class="btn btn-primary" ng-click="pc.closeModal()">OK</button>
 	</div>
 </div>
 <div>

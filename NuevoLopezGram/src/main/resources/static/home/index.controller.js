@@ -13,10 +13,12 @@
 		initController();
 
 		function initController() {
+			$scope.loading = true;
 			$http.get('/api/event', { pagenumber: pageNumber, number: 10 })
 				.success(function(data) {
 					$scope.events = data;
 					$scope.user = $localStorage.currentUser.username;
+					$scope.loading = false;
 				})
 				.error(function(status) {
 					console.log("Failed to get events " + status.status + " " + status.error);

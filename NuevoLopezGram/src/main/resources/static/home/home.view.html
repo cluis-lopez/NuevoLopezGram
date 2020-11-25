@@ -15,6 +15,13 @@
 		</div>
 	</div>
 </nav>
+<div class="loading" ng-if="loading">
+	<div class="row">
+		<div class="col-xs-12">
+		<img src="icons/spinner.gif" width="75px" height="auto">
+		</div>
+	</div>
+</div>
 
 <!-- Contenedor para cada uno de los eventos -->
 <div class='jumbotron' ng-repeat="x in events">
