@@ -34,7 +34,7 @@
 						openModal({title: "Bienvenido a LopezGram", varHtml: $sce.trustAsHtml(OKhtml)});
 						$location.path('/login');
 					} else {
-						var NotOKhtml = "<p><b>Ha ocurrido un error al darte de alta como usuario: </b>"+
+						var NotOKhtml = "<p><b>Ha ocurrido un error al darte de alta como usuario: </b></p><p>"+
 						data.message + "</p>";
 						openModal({title: "Se ha producido un error", varHtml: $sce.trustAsHtml(NotOKhtml)});
 						vm.loading = false;

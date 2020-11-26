@@ -5,7 +5,7 @@
         .module('app')
         .controller('UserDetailsController', Controller);
 
-    function Controller($) {
+    function Controller($scope, $location) {
         var vm = this;
 		
         initController();

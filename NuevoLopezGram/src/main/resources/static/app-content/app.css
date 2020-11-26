@@ -50,6 +50,7 @@ body {
 }
 
 #inputfoto {
+	image-orientation: from-image;
 	margin-left: 10%;
 	width: 80%;
 	margin-right: 10%;
