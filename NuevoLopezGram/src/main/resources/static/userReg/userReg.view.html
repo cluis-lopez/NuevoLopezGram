@@ -29,8 +29,17 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<button ng-disabled="vm.loading" class="btn btn-primary">Enviar</button>
-			<div ng-if="vm.error" class="alert alert-danger">{{vm.error}}</div>
+			<div class="row">
+				<div class="col-xs-4">
+					<button ng-disabled="vm.loading" class="btn btn-primary">Enviar</button>
+					<div ng-if="vm.error" class="alert alert-danger">{{vm.error}}</div>
+				</div>
+				<div class="col-xs-4"></div>
+				<div class="col-xs-4" class=pull-right">
+					<button type="button" class="btn btn-warning" class="pull-right"
+					 ng-click="cancelar()" style="color: black;">Cancel</button>
+				</div>
+			</div>
 		</div>
 	</form>
 </div>

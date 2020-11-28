@@ -1,5 +1,14 @@
+html {
+    height  : 100%;
+    overflow: hidden;
+    position: relative;
+}
+
 body {
-	padding-top: 120px;
+    height  : 100%;
+    overflow: auto;
+    position: relative;
+    padding-top: 120px;
 }
 
 .loading {
@@ -16,10 +25,10 @@ body {
 
 .footer {
 	padding-top: 5px;
-	padding-bottom: 10px;
+	padding-bottom: 5px;
 }
 
-.navbar {
+.header {
 	height: 120px;
 	padding-top: 10px;
 	padding-bottom: 10px;

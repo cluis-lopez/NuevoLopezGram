@@ -5,7 +5,7 @@
 		.module('app')
 		.controller('UserRegController', Controller);
 
-	function Controller($http, $location, $uibModal, $sce) {
+	function Controller($scope, $http, $location, $uibModal, $sce) {
 		var vm = this;
 
 		vm.register = register;
@@ -66,6 +66,10 @@
 
 			modalInstance.result.then(function() {
 			});
+		};
+		
+		$scope.cancelar = function (){
+			$location.path('/login');
 		};
 
 	};
