@@ -282,7 +282,6 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	};
 
 	function resize(src, maxWidth, maxHeight, callback) {
-		//TODO chequear tamaño final foto: no se comprime
 		var img = document.createElement('img');
 		img.src = src;
 		img.onload = () => {
