@@ -31,13 +31,14 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-xs-4">
-					<button ng-disabled="vm.loading" class="btn btn-primary">Enviar</button>
+					<button ng-disabled="vm.loading" class="btn btn-link">
+					<i class="icon-ok" style="font-size: 32px; color: green;"></i></button>
 					<div ng-if="vm.error" class="alert alert-danger">{{vm.error}}</div>
 				</div>
 				<div class="col-xs-4"></div>
 				<div class="col-xs-4" class=pull-right">
-					<button type="button" class="btn btn-warning" class="pull-right"
-					 ng-click="cancelar()" style="color: black;">Cancel</button>
+					<button type="button" class="btn btn-link" class="pull-right"
+					 ng-click="cancelar()"><i class="icon-cancel" style="font-size:32px; color: red;"></i></button>
 				</div>
 			</div>
 		</div>

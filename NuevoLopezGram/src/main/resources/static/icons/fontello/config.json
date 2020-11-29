@@ -1,0 +1,148 @@
+{
+  "name": "",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "b94db9f012742fbdde9cb59413e14e9b",
+      "css": "github",
+      "code": 59394,
+      "src": "typicons"
+    },
+    {
+      "uid": "25a30265650b260ef03df4cbbff80272",
+      "css": "linkedin",
+      "code": 59395,
+      "src": "typicons"
+    },
+    {
+      "uid": "b7cf8dba5f349cb92b536d76db4a4178",
+      "css": "power-outline",
+      "code": 59396,
+      "src": "typicons"
+    },
+    {
+      "uid": "05de65980bb8a3711da037c2cc25f4f8",
+      "css": "camera-outline",
+      "code": 59397,
+      "src": "typicons"
+    },
+    {
+      "uid": "44a6b866f720a1d2b11bf05023a4e089",
+      "css": "export-outline",
+      "code": 59399,
+      "src": "typicons"
+    },
+    {
+      "uid": "40c9502d45c736a0a6ec45e6fbc28656",
+      "css": "ok-outline",
+      "code": 59392,
+      "src": "typicons"
+    },
+    {
+      "uid": "24aba8757d4a7b49568c98a577a85df3",
+      "css": "cancel-outline",
+      "code": 59393,
+      "src": "typicons"
+    },
+    {
+      "uid": "tau7t0t38662eqxrb80ozeiase5em2x9",
+      "css": "thumbs-up",
+      "code": 59398,
+      "src": "typicons"
+    },
+    {
+      "uid": "ani12ucvy2plqmykysnk4zd9i24cmxqp",
+      "css": "thumbs-down",
+      "code": 59408,
+      "src": "typicons"
+    },
+    {
+      "uid": "8ed4884bf9b840729eef8f0bbd2b1dbb",
+      "css": "user-outline",
+      "code": 59402,
+      "src": "typicons"
+    },
+    {
+      "uid": "b90868gfogj970a1g0dnot6hm5r4uj55",
+      "css": "comment",
+      "code": 59403,
+      "src": "typicons"
+    },
+    {
+      "uid": "2hqh2lidoqvaujgq29tdkrtiay5s6tyk",
+      "css": "chat",
+      "code": 59405,
+      "src": "typicons"
+    },
+    {
+      "uid": "43fl9m553j1z5937vfjz0lgolrlspxwl",
+      "css": "ok",
+      "code": 59404,
+      "src": "typicons"
+    },
+    {
+      "uid": "1dq4tek4k8ea7zlj4kc3w83itnutaxg5",
+      "css": "cancel",
+      "code": 59406,
+      "src": "typicons"
+    },
+    {
+      "uid": "6a7ed3214c9049148cbdb01825e5efc2",
+      "css": "picture",
+      "code": 59407,
+      "src": "typicons"
+    },
+    {
+      "uid": "rp4bhvranczqlvvwzerni2uuanp2gvqb",
+      "css": "attention-filled",
+      "code": 59409,
+      "src": "typicons"
+    },
+    {
+      "uid": "ccf71c505b173c61a2e4e8c8cb907dfa",
+      "css": "chat-alt",
+      "code": 59410,
+      "src": "typicons"
+    },
+    {
+      "uid": "13289e807e02b1d46f2fe10d81d6fba6",
+      "css": "location-outline",
+      "code": 59411,
+      "src": "typicons"
+    },
+    {
+      "uid": "gjt8ba5q0n3nn8ptw6324sflr8qoaeam",
+      "css": "location",
+      "code": 59412,
+      "src": "typicons"
+    },
+    {
+      "uid": "2626e3a1bbcd90e45849af3b58a1d594",
+      "css": "trash",
+      "code": 59413,
+      "src": "entypo"
+    },
+    {
+      "uid": "b9cd6e266f74ac97272b2fabbfbd0b85",
+      "css": "user-add-outline",
+      "code": 59414,
+      "src": "typicons"
+    },
+    {
+      "uid": "1fb50a37bc38da3863187931ac44ae5e",
+      "css": "cw-outline",
+      "code": 59415,
+      "src": "typicons"
+    },
+    {
+      "uid": "ec3be32c1330a17ef251b378ebd7d3ac",
+      "css": "left-outline",
+      "code": 59400,
+      "src": "typicons"
+    }
+  ]
+}

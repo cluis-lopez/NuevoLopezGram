@@ -4,8 +4,7 @@
 	</div>
 	<div class="modal-body" id="modal-body">
 		<div id="inputpicture" ng-if=" foto != '' ">
-		<!--FIXME arreglar borrar foto -->
-			<button class="btn btn-primary" type="button" style="margin: 5px;" ng-click="pc.removeFoto()">Quitar</button>
+			<a href="#" ng-click="pc.removeFoto()"><i class="icon-trash" style="font-size: 32px; color: tomato"></i></a>
 			<div id="inputfoto">
 				<img class="img-responsive" src="{{foto}}" id="foto"></img>
 			</div>
@@ -16,16 +15,25 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-default btn-lg" type="button" ng-click="pc.camera()" style="float: left;">
-			<i class="icon-camera-outline" style="font-size: 32px;"></i>
+	<div class="row">
+		<div class="col-xs-3">
+		<button class="btn btn-default btn-lg" type="button" ng-click="pc.camera()">
+			<i class="icon-camera-outline" style="font-size: 24px;"></i>
 		</button>
-		<button class="btn btn-primary" type="button" ng-click="pc.send()">Enviar !!</button>
-		<button class="btn btn-warning" type="button" ng-click="pc.cancel()">Cancel</button>
+		</div>
+		<div class="col-xs-3">
+		<a her="#" ng-click="pc.send()"><i class="icon-ok" style="font-size: 32px; color: green"></i></a>
+		</div>
+		<div class="col-xs-3">
+		<a her="#" ng-click="pc.cancel()"><i class="icon-cancel" style="font-size: 32px; color: red"></i></a>
+		</div>
+		<div class="col-xs-3">
 		<button class="btn btn-default btn-lg" type="button" ng-click="pc.location()">
-			<i class="icon-globe-outline" style="font-size: 32px;"></i>
+			<i class="icon-location" style="font-size: 24px;"></i>
 		</button>
+		</div>
+	</div>
 	</div>
 	<input type="file" name="foto" id="hiddeninput" accept="image/*, video/*" style="display: none;"
 	 ng-model="foto" onchange="angular.element(this).scope().pc.readURL(this)"/>
 </div>
-<div>

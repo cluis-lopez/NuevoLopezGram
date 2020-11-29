@@ -40,7 +40,6 @@
 		<p>{{x.text}}</p>
 		<hr style="width: 80%; size: 3; color: black;">
 		<div class="row">
-		<!-- FIXME el link debe de abarcar al grupo div -->
 			<div class="col-xs-3">
 					<a href="" ng-if="x.creatorMail == user"><i class="icon-thumbs-up"
 						style="font-size: 24px;"></i>{{x.likes.length}}</a>
@@ -49,11 +48,11 @@
 			</div>
 			<div class="col-xs-3" align="center">
 				<a href="" ng-click="eventComments(x)">
-				{{x.comments.length}}<i class="icon-export-outline" style="font-size: 24px;"></i></a>
+				{{x.comments.length}}<i class="icon-chat-alt" style="font-size: 24px;"></i></a>
 			</div>
 			<div class="col-xs-3" align="center">
-				<button class="btn btn-warning" ng-if="x.creatorMail === user"
-					ng-click="deleteEvent(x.id)">Borrar</button>
+				<button class="btn btn-link" ng-if="x.creatorMail === user"
+					ng-click="deleteEvent(x.id)"><i class="icon-trash" style="font-size: 24px;"></i></button>
 			</div>
 			<div class="col-xs-3">
 				<span class="pull-right"> 
