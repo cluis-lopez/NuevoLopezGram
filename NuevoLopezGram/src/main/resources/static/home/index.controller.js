@@ -39,8 +39,7 @@
 
 		$scope.deleteEvent = function(eventId) {
 			console.log("Borrando evento " + eventId);
-			var urlEncodedData = 'eventId=' + encodeURIComponent(eventId);
-			confirmModal("Confirmar por favor");
+			confirmModal(eventId);
 
 		};
 
@@ -74,7 +73,7 @@
 		};
 
 
-	confirmModal = function() {
+	var confirmModal = function(eventId) {
 		var modalInstance = $uibModal.open({
 			animation: true,
 			ariaLabelledBy: 'modal-title',
@@ -85,7 +84,8 @@
 			size: 'l',
 			resolve: {
 				data: function() {
-					return;
+					var varHtml = $sce.trustAsHtml("<p>Al borrar este post borrarás también todos sus comentarios</p>");
+					return {title: '¿Seguro que quieres borrar este post?', varHtml: varHtml, eventId: eventId};
 				}
 			}
 		});
@@ -95,7 +95,7 @@
 	}
 };
 
-angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance, data) {
+angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance, $http, data) {
 		var pc = this;
 		pc.data = data;
 
@@ -104,6 +104,7 @@ angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance,
 		}
 		
 		pc.confirmModal = function () {
+			var urlEncodedData = 'eventId=' + encodeURIComponent(data.eventId);
 			$http({
 				url: '/api/event',
 				method: 'DELETE',
@@ -111,7 +112,7 @@ angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance,
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 			}).success(function(status) {
 				console.log("Deleted event " + status.status + " : " + status.message);
-				$scope.refresh();
+				angular.element(document.getElementById('events')).scope().refresh();
 			}).error(function(status) {
 				console.log("Failed to Upload event " + status.status + " " + status.message);
 				if (status.status === 401) {
@@ -120,6 +121,7 @@ angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance,
 					$location.path('/login');
 				}
 			});
+			$uibModalInstance.close();
 			}
 	});
 
@@ -280,35 +282,6 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 			reader.readAsDataURL(input.files[0]);
 		};
 	};
-
-	function resize(src, maxWidth, maxHeight, callback) {
-		var img = document.createElement('img');
-		img.src = src;
-		img.onload = () => {
-			var oc = document.createElement('canvas');
-			var ctx = oc.getContext('2d');
-			// resize to maxWidth px (either width or height)
-			var width = img.width;
-			var height = img.height;
-			if (width > height) {
-				if (width > maxWidth) {
-					height *= maxWidth / width;
-					width = maxWidth;
-				}
-			} else {
-				if (height > maxHeight) {
-					width *= maxHeight / height;
-					height = maxHeight;
-				}
-			}
-			oc.width = width;
-			oc.height = height;
-			ctx.drawImage(img, 0, 0, oc.width, oc.height);
-			//var resizedImage = dataURLToBlob(oc.toDataURL());
-			// convert canvas back to dataurl
-			callback(oc.toDataURL());
-		}
-	}
 
 	/* Utility function to convert a canvas to a BLOB */
 	var dataURLToBlob = function(dataURL) {
