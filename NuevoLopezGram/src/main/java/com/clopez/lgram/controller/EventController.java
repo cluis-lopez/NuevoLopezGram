@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -131,6 +132,43 @@ public class EventController {
 		}
 		return ret;
 	}
+	
+	@DeleteMapping("/api/event")
+	public @ResponseBody jsonStatus deleteEvent(@RequestHeader(name = "Authorization") String token,
+			@RequestParam String eventId) {
+		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", "")).getBody()
+				.getSubject();
+		Optional evo = eRep.findById(eventId);
+		
+		jsonStatus ret = new jsonStatus();
+		
+		if (evo.isEmpty())
+			ret.setStatus("NOT OK", "Invalid eventId");
+		else {
+			Event ev = (Event) evo.get();
+		
+			if (ev.getCreatorId().equals(userId)) {
+				String deleteWarning = "";
+				if (ev.getComments().size() > 0) {// Hay comentarios que tenemos que borrar
+					int i = 0;
+					for (String commentId : ev.getComments()) {
+						Optional<Event> c = eRep.findById(commentId);
+						if (c.isPresent()) {
+							moveToTrash(c.get());
+							i++;
+						}
+					}	
+					deleteWarning = " along with " + i + " comments";
+				}
+				// Ahora borramos el evento "raiz"
+				moveToTrash(ev);
+				ret.setStatus("OK", "Event Deleted " + deleteWarning);
+			} else
+			ret.setStatus("NOT OK", "Unathorized user");
+		}
+		return ret;
+	}
+	
 
 	@PostMapping("/api/eventDetails")
 	public @ResponseBody jsonStatus eventDetails(@RequestHeader(name = "Authorization") String token,

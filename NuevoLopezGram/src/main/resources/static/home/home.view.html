@@ -35,7 +35,7 @@
 			</div>
 		</div>
 		<div ng-if="x.multiMedia.length > 0 ">
-			<img class="img-responsive" src="{{x.multiMedia}}"></img>
+			<img class="img-responsive" src="{{x.multiMedia}}" id="foto"></img>
 		</div>
 		<p>{{x.text}}</p>
 		<hr style="width: 80%; size: 3; color: black;">
@@ -53,7 +53,7 @@
 			</div>
 			<div class="col-xs-3" align="center">
 				<button class="btn btn-warning" ng-if="x.creatorMail === user"
-					ng-click="eventDetails('remove', x.id)">Borrar</button>
+					ng-click="deleteEvent(x.id)">Borrar</button>
 			</div>
 			<div class="col-xs-3">
 				<span class="pull-right"> 

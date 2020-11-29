@@ -1,0 +1,17 @@
+<div clasds="modal fade bd-example-modal-lg confirmModal">
+	<div class="modal-header">
+		<h3 class="modal-title" id="modal-title">{{pc.data.title}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body" ng-bind-html="pc.data.varHtml">
+	</div>
+	<div class="modal-footer">
+		<div class="row">
+			<div class="col-xs-6">
+				<button class="btn btn-primary" ng-click="pc.OKModal()">OK</button>
+			</div>
+			<div class="col-xs-6">
+				<button class="btn btn-danger" ng-click="pc.cancelModal()">OK</button>
+			</div>
+		</div>
+	</div>
+	<div>
