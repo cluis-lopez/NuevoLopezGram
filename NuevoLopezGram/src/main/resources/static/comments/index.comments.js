@@ -5,7 +5,7 @@
 		.module('app')
 		.controller('commentsController', Controller);
 
-	function Controller($scope, $rootScope, $http, $localStorage, $location, $state) {
+	function Controller($scope, $rootScope, $http, $localStorage, $location, $state, $uibModal) {
 
 		$scope.eId = $location.search().event;
 		console.log($scope.eId.id);
@@ -67,8 +67,36 @@
 				});
 		}
 
+		$scope.newComment = function() {
+			openModal($scope.eId.id);
+		}
 
+		$scope.refresh = function() {
+			// $state.reload().search({ event: $scope.eId  });;
+			$state.go ('.', { event: $scope.eId } )
+
+
+		}
+		function openModal(eId) {
+			var modalInstance = $uibModal.open({
+				animation: true,
+				ariaLabelledBy: 'User Reg',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'home/eventModal.html',
+				controller: 'ModalEventCtrl',
+				controllerAs: 'pc',
+				size: 'l',
+				resolve: {
+					data: function() {
+						return eId;
+					}
+				}
+			});
+
+			modalInstance.result.then(function() {
+			});
+		};
 	};
 
 
-})();
+}) ();

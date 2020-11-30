@@ -143,6 +143,12 @@
       "css": "left-outline",
       "code": 59400,
       "src": "typicons"
+    },
+    {
+      "uid": "1gf923f9wvaezxmfon515dglxa3drf0e",
+      "css": "plus",
+      "code": 59401,
+      "src": "typicons"
     }
   ]
 }

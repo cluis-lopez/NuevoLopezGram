@@ -3,7 +3,7 @@
   "name": "LopezGram", 
   "short_name": "LopezGram", 
   "start_url": "index.html", 
-  "display": "standalone", 
+  "display": "fullscreen", 
   "icons": [{ 
     "src": "icons/logo-pwa_192.png", 
     "sizes": "192x192", 
@@ -17,6 +17,11 @@
   {
     "src": "icons/logo-pwa_128.png", 
     "sizes": "128x128", 
+    "type": "image/png" 
+   },
+     {
+    "src": "icons/logo-pwa_512.png", 
+    "sizes": "512x512", 
     "type": "image/png" 
    }] 
 

@@ -1,10 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top" id="comments">
-	<div class="row">
-		<div class="col-xs-2" align="center" ng-click="pc.getBack()">
-			<a href="#">Atras</i></a>
-		</div>
-		<div class="col-xs-10"></div>
-	</div>
+<nav class="navbar navbar-default navbar-fixed-top" id="events">
 		<div class="eventContainer">
 		<div class="row">
 			<div class="col-xs-6">
@@ -24,7 +18,14 @@
 					<a href=""><i class="icon-thumbs-up"
 						style="font-size: 24px;"></i>{{eId.likes.length}}</a>
 			</div>
-			<div class="col-xs-6" align="center"></div>
+			<div class="col-xs-3" align="center">
+				<a href="" ng-click="getBack()"><i class="icon-left-outline"
+						style="font-size: 24px;"></i></a>
+			</div>
+			<div class="col-xs-3" align="center">
+				<a href="" ng-click="newComment()"><i class="icon-export-outline"
+						style="font-size: 24px;"></i></a>
+			</div>
 			<div class="col-xs-3">
 				<span class="pull-right"> 
 				<a href="" >{{eId.dislikes.length}}
@@ -63,7 +64,7 @@
 			<div class="col-xs-6" align="center">
 			</div>
 			<div class="col-xs-3">
-				<span class="pull-right"> 
+				<span class="pull-right">
 				<a href="" ng-if="x.creatorMail == user">{{x.dislikes.length}}
 						<i class="icon-thumbs-down" style="font-size: 24px;"></i>
 				</a>
