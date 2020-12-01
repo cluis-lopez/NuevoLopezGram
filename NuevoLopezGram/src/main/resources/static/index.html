@@ -20,6 +20,8 @@
 <link href="app-content/app.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css"
 	href="icons/fontello/css/fontello.css">
+<link rel="stylesheet" type="text/css"
+	href="app-helpers/angular-pull-to-refresh.css">
 </head>
 <body>
 	<!-- main app container -->
@@ -28,7 +30,7 @@
 		<div class="container" style="padding-right: 0px; padding-left: 0px">
 			<div class="col-sm-12" style="padding-right: 0px; padding-left: 0px">
 			-->
-				<ui-view></ui-view>
+	<ui-view></ui-view>
 	<!--
 			</div>
 		</div>
@@ -70,6 +72,7 @@
 
 	<!-- application scripts -->
 	<script src="app.js"></script>
+	<script src="app-helpers/angular-pull-to-refresh.js"></script>
 	<script src="eventManager.js"></script>
 	<script src="app-services/authentication.service.js"></script>
 	<script src="home/index.controller.js"></script>

@@ -54,6 +54,7 @@ public class EventController {
 	@PostMapping("/api/event")
 	public @ResponseBody jsonStatus createEvent(@RequestHeader(name = "Authorization") String token,
 			@RequestParam String creatorMail, @RequestParam String text, @RequestParam String multiMedia,
+			@RequestParam(defaultValue = "image") String mediaType,
 			@RequestParam(defaultValue = "false") boolean isComment,
 			@RequestParam(defaultValue = "") String eventCommented) {
 		// userId extracted from the auth token
@@ -68,7 +69,7 @@ public class EventController {
 		if (!creatorMail.equals(u.getEmail()))
 			return new jsonStatus("NOT OK", "User does not match");
 
-		Event ev = new Event(userId, text, multiMedia);
+		Event ev = new Event(userId, text, multiMedia, mediaType);
 		ev.setCreatorMail(creatorMail);
 		ev.setCreatorName(u.getName());
 

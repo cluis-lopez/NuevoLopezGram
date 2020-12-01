@@ -46,7 +46,7 @@
 		$scope.eventDetails = function(command, eventId) {
 			console.log("eventDetails " + command + " : " + eventId);
 			var urlEncodedData = 'command=' + command + '&eventId=' + eventId;
-			//FIXME error al borrar comentarios
+			
 			$http({
 				url: '/api/eventDetails',
 				method: 'POST',
@@ -72,6 +72,7 @@
 		}
 
 		$scope.refresh = function() {
+			//FIXME .. refresh no funciona
 			// $state.reload().search({ event: $scope.eId  });;
 			$state.go ('.', { event: $scope.eId } )
 

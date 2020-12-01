@@ -5,8 +5,11 @@
 	<div class="modal-body" id="modal-body">
 		<div id="inputpicture" ng-if=" foto != '' ">
 			<a href="#" ng-click="pc.removeFoto()"><i class="icon-trash" style="font-size: 32px; color: tomato"></i></a>
-			<div id="inputfoto">
+			<div id="inputfoto" ng-if="mediaType === 'image'">
 				<img class="img-responsive" src="{{foto}}" id="foto"></img>
+			</div>
+			<div id="inputfoto" ng-if="mediaType === 'video'">
+				<video id="foto" controls><source src="{{foto}}"></video>
 			</div>
 		</div>
 		<div class="form-group">

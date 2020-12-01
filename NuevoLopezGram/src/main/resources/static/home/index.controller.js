@@ -5,7 +5,7 @@
 		.module('app')
 		.controller('Home.IndexController', Controller);
 
-	function Controller($scope, $http, $localStorage, $location, $state, $rootScope, $uibModal, $sce) {
+	function Controller($scope, $http, $localStorage, $location, $state, $rootScope, $uibModal, $sce, $q) {
 
 		var pageNumber = 0;
 
@@ -27,6 +27,21 @@
 					}
 				});
 		}
+		
+		$scope.trustURL = function (src){
+			return $sce.trustAsResourceUrl(src);
+		}
+
+		$scope.onReload = function() {
+			console.warn('reload');
+			window.alert("swipe");
+			var deferred = $q.defer();
+			setTimeout(function() {
+				deferred.resolve(true);
+			}, 1000);
+			$state.reload();
+			return deferred.promise;
+		};
 
 		$scope.refresh = function() {
 			$state.reload();
@@ -73,37 +88,37 @@
 		};
 
 
-	var confirmModal = function(eventId) {
-		var modalInstance = $uibModal.open({
-			animation: true,
-			ariaLabelledBy: 'modal-title',
-			ariaDescribedBy: 'modal-body',
-			templateUrl: 'home/confirmModal.html',
-			controller: 'ModalConfirmCtrl',
-			controllerAs: 'pc',
-			size: 'l',
-			resolve: {
-				data: function() {
-					var varHtml = $sce.trustAsHtml("<p>Al borrar este post borrarás también todos sus comentarios</p>");
-					return {title: '¿Seguro que quieres borrar este post?', varHtml: varHtml, eventId: eventId};
+		var confirmModal = function(eventId) {
+			var modalInstance = $uibModal.open({
+				animation: true,
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'home/confirmModal.html',
+				controller: 'ModalConfirmCtrl',
+				controllerAs: 'pc',
+				size: 'l',
+				resolve: {
+					data: function() {
+						var varHtml = $sce.trustAsHtml("<p>Al borrar este post borrarás también todos sus comentarios</p>");
+						return { title: '¿Seguro que quieres borrar este post?', varHtml: varHtml, eventId: eventId };
+					}
 				}
-			}
-		});
+			});
 
-		modalInstance.result.then(function() {
-		});
-	}
-};
+			modalInstance.result.then(function() {
+			});
+		}
+	};
 
-angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance, $http, data) {
+	angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance, $http, data) {
 		var pc = this;
 		pc.data = data;
 
-		 pc.cancelModal = function () {
+		pc.cancelModal = function() {
 			$uibModalInstance.close();
 		}
-		
-		pc.confirmModal = function () {
+
+		pc.confirmModal = function() {
 			var urlEncodedData = 'eventId=' + encodeURIComponent(data.eventId);
 			$http({
 				url: '/api/event',
@@ -122,32 +137,32 @@ angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance,
 				}
 			});
 			$uibModalInstance.close();
-			}
+		}
 	});
 
-angular.module('app').controller('EventController', function($uibModal, $log) {
-	var pc = this;
+	angular.module('app').controller('EventController', function($uibModal, $log) {
+		var pc = this;
 
-	pc.openModal = function(size) {
-		var modalInstance = $uibModal.open({
-			animation: true,
-			ariaLabelledBy: 'modal-title',
-			ariaDescribedBy: 'modal-body',
-			templateUrl: 'home/eventModal.html',
-			controller: 'ModalEventCtrl',
-			controllerAs: 'pc',
-			size: 'l',
-			resolve: {
-				data: function() {
-					return;
+		pc.openModal = function(size) {
+			var modalInstance = $uibModal.open({
+				animation: true,
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'home/eventModal.html',
+				controller: 'ModalEventCtrl',
+				controllerAs: 'pc',
+				size: 'l',
+				resolve: {
+					data: function() {
+						return;
+					}
 				}
-			}
-		});
+			});
 
-		modalInstance.result.then(function() {
-		});
-	};
-});
+			modalInstance.result.then(function() {
+			});
+		};
+	});
 
-}) ();
+})();
 

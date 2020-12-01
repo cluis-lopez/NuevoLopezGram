@@ -3,7 +3,8 @@
   "name": "LopezGram", 
   "short_name": "LopezGram", 
   "start_url": "index.html", 
-  "display": "fullscreen", 
+  "display": "fullscreen",
+  "prefer_related_applications": true,
   "icons": [{ 
     "src": "icons/logo-pwa_192.png", 
     "sizes": "192x192", 

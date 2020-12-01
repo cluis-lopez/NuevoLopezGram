@@ -24,6 +24,8 @@
 </div>
 
 <!-- Contenedor para cada uno de los eventos -->
+<div class="content">
+<div pull-to-refresh="onReload()">
 <div class='jumbotron' ng-repeat="x in events">
 	<div class="eventContainer">
 		<div class="row">
@@ -35,7 +37,12 @@
 			</div>
 		</div>
 		<div ng-if="x.multiMedia.length > 0 ">
-			<img class="img-responsive" src="{{x.multiMedia}}" id="foto"></img>
+			<div ng-if="x.mediaType === 'image'">
+				<img class="img-responsive" id="foto" src="{{x.multiMedia}}"></img>
+			</div>
+			<div align="center" ng-if="x.mediaType === 'video'">
+				<video id="foto" controls="true"><source src="{{trustURL(x.multiMedia)}}" type="video/mp4"></video>
+			</div>
 		</div>
 		<p>{{x.text}}</p>
 		<hr style="width: 80%; size: 3; color: black;">
@@ -66,4 +73,6 @@
 			</div>
 		</div>
 	</div>
+</div>
+</div>
 </div>

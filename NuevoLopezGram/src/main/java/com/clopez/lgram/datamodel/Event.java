@@ -23,19 +23,21 @@ public class Event {
 	private int numberAccess;
 	private String text;
 	private String multiMedia; //URL to storage picture or video
+	private String mediaType;
 	private String location; // To be Implemented (location of the event)
 	private Set<String> likes; //ArrayList to user id's
 	private Set<String> dislikes; // ArrayList to user id's
 	private boolean isComment;
 	private Set<String> comments; //Array of eventIds of comments about this post
 	
-	public Event(String creatorId, String text, String multiMedia) {
+	public Event(String creatorId, String text, String multiMedia, String mediaType) {
 		this.id = UUID.randomUUID().toString();
 		this.creatorId = creatorId;
 		this.creatorMail = "";
 		this.creatorName = "";
 		this.text = text;
 		this.multiMedia = multiMedia;
+		this.mediaType = mediaType;
 		this.location = "";
 		this.createdAt = new Date();
 		this.lastSeen = this.createdAt;
@@ -105,6 +107,14 @@ public class Event {
 
 	public void setMultiMedia(String multiMedia) {
 		this.multiMedia = multiMedia;
+	}
+	
+	public String getMediaType() {
+		return mediaType;
+	}
+	
+	public void setMediaType(String mediaType) {
+		this.mediaType = mediaType;
 	}
 
 	public Set<String> getLikes() {

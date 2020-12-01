@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ui.router', 'ngMessages', 'ngStorage','ngAnimate', 'ngSanitize', 'ui.bootstrap'])
+        .module('app', ['ui.router', 'ngMessages', 'ngStorage','ngAnimate', 'ngSanitize', 'ui.bootstrap', 'mgcrea.pullToRefresh'])
         .config(config)
         .run(run);
 

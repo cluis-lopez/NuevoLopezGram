@@ -11,6 +11,18 @@ body {
     padding-top: 120px;
 }
 
+.content {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  background-color: #fff;
+  -webkit-backface-visibility: none;
+  -webkit-overflow-scrolling: touch;
+}
+
 .loading {
     margin: 0;
     position: absolute;

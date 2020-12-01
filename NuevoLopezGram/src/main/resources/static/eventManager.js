@@ -1,4 +1,4 @@
-angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $http, $localStorage, $scope, $location, data) {
+angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $http, $localStorage, $scope, $location, $sce, data) {
 	var pc = this;
 	var urlEncodedData;
 	
@@ -7,10 +7,12 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	$scope.cameraState = false;
 	$scope.textRows = 5;
 	$scope.foto = '';
+	$scope.mediaType = '';
 	$scope.data = {};
 	$scope.data.creatorMail = $localStorage.currentUser.username;
 	$scope.data.text = '';
 	$scope.data.multiMedia = '';
+	$scope.data.mediaType = '';
 	$scope.data.location = {};
 	$scope.data.isComment = (typeof data === 'undefined' ? false : true);
 	$scope.data.eventCommented = (typeof data === 'undefined' ? '' : data);
@@ -24,7 +26,7 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 		}
 
 		if ($scope.foto != '') {
-			// Upload picture
+			// Upload picture or video
 			var fd = new FormData();
 			fd.append("file", dataURLToBlob($scope.foto), $scope.data.creatorMail + ":");
 			$http({
@@ -36,15 +38,17 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 				.success(function(data) {
 					console.log("Uploaded: " + data.key);
 					$scope.data.multiMedia = data.key;
+					$scope.data.mediaType = $scope.mediaType;
 
 					//Now upload the event
 
 					urlEncodedData = 'creatorMail=' + encodeURIComponent($scope.data.creatorMail);
 					urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
 					urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
+					urlEncodedData += '&mediaType=' + encodeURIComponent($scope.data.mediaType);
 					urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
-					urlEncodedData += '&isComment=' + encodeURIComponent(isComment);
-					urlEncodedData += '&eventCommented=' + encodeURIComponent(eventCommented);
+					urlEncodedData += '&isComment=' + encodeURIComponent($scope.data.isComment);
+					urlEncodedData += '&eventCommented=' + encodeURIComponent($scope.data.eventCommented);
 
 					$http({
 						url: '/api/event',
@@ -133,7 +137,8 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 			var reader = new FileReader();
 			reader.onload = (function(tf) {
 				return function(evt) {
-					$scope.foto = evt.target.result;
+					$scope.mediaType = input.files[0]['type'].split('/')[0];
+					$scope.foto = $sce.trustAsResourceUrl(evt.target.result);
 					$scope.textRows = 2;
 					$scope.$apply();
 				}
@@ -143,7 +148,8 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	};
 
 	/* Utility function to convert a canvas to a BLOB */
-	var dataURLToBlob = function(dataURL) {
+	var dataURLToBlob = function(data) {
+		var dataURL = $sce.valueOf(data);
 		var BASE64_MARKER = ';base64,';
 		if (dataURL.indexOf(BASE64_MARKER) == -1) {
 			var parts = dataURL.split(',');
