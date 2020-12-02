@@ -116,6 +116,14 @@ public class Event {
 	public void setMediaType(String mediaType) {
 		this.mediaType = mediaType;
 	}
+	
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	
+	public String getLocation() {
+		return location;
+	}
 
 	public Set<String> getLikes() {
 		return likes;

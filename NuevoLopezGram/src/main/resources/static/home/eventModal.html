@@ -36,7 +36,9 @@
 		</button>
 		</div>
 	</div>
-	<div><p>{{textLocation}}</p></div>
+	<div class="row" ng-if=" data.location != '' ">
+		<div class="col-xs-10"><p>{{data.location}}</p></div>
+		<div class="col-xs-2" ng-click="pc.focusLoc()"><i class="icon-cancel-alt" style="font-size: 24px; color: DarkBlue"></i></div>
 	</div>
 	<input type="file" name="foto" id="hiddeninput" accept="image/*, video/*" style="display: none;"
 	 ng-model="foto" onchange="angular.element(this).scope().pc.readURL(this)"/>

@@ -30,12 +30,18 @@
 	<div class="eventContainer">
 		<div class="row">
 			<div class="col-xs-6">
-				<a href="#">{{x.creatorName}}</a>
+				<a href="#"><p style="margin-bottom: 0px;">{{x.creatorName}}</p></a>
 			</div>
 			<div class="col-xs-6">
 				<span class="pull-right">{{formatDates(x.createdAt)}}</span>
 			</div>
 		</div>
+		<div class="row" style="padding-top: 0px; padding-bottom: 0px;">
+			<div class="col-xs-12">
+				<span class="pull-right">{{x.location}}</span>
+			</div>
+		</div>
+		<hr style="width: 80%; size: 3; color: black;">
 		<div ng-if="x.multiMedia.length > 0 ">
 			<div ng-if="x.mediaType === 'image'">
 				<img class="img-responsive" id="foto" src="{{x.multiMedia}}"></img>

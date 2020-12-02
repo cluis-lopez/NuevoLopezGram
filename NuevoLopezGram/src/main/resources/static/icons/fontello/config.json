@@ -149,6 +149,18 @@
       "css": "plus",
       "code": 59401,
       "src": "typicons"
+    },
+    {
+      "uid": "3df1557e2d6e84ec32bd47aee5bfdf59",
+      "css": "cancel-alt",
+      "code": 59416,
+      "src": "typicons"
+    },
+    {
+      "uid": "l11ixzfrief0chds7elurdm2ot98xp4l",
+      "css": "cancel-alt-filled",
+      "code": 59417,
+      "src": "typicons"
     }
   ]
 }

@@ -55,6 +55,7 @@ public class EventController {
 	public @ResponseBody jsonStatus createEvent(@RequestHeader(name = "Authorization") String token,
 			@RequestParam String creatorMail, @RequestParam String text, @RequestParam String multiMedia,
 			@RequestParam(defaultValue = "image") String mediaType,
+			@RequestParam(defaultValue = "") String location,
 			@RequestParam(defaultValue = "false") boolean isComment,
 			@RequestParam(defaultValue = "") String eventCommented) {
 		// userId extracted from the auth token
@@ -72,6 +73,7 @@ public class EventController {
 		Event ev = new Event(userId, text, multiMedia, mediaType);
 		ev.setCreatorMail(creatorMail);
 		ev.setCreatorName(u.getName());
+		ev.setLocation(location);
 
 		if (isComment) { // Es un comentario a otro evento
 			if (eventCommented == null || eventCommented.equals(""))
@@ -139,7 +141,7 @@ public class EventController {
 			@RequestParam String eventId) {
 		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", "")).getBody()
 				.getSubject();
-		Optional evo = eRep.findById(eventId);
+		Optional<Event> evo = eRep.findById(eventId);
 		
 		jsonStatus ret = new jsonStatus();
 		

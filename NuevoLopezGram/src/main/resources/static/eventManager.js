@@ -4,16 +4,17 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	
 	console.log(data);
 
-	$scope.cameraState = false;
 	$scope.textRows = 5;
 	$scope.foto = '';
 	$scope.mediaType = '';
+	$scope.locRaw = [];
+	
 	$scope.data = {};
 	$scope.data.creatorMail = $localStorage.currentUser.username;
 	$scope.data.text = '';
 	$scope.data.multiMedia = '';
 	$scope.data.mediaType = '';
-	$scope.data.location = {};
+	$scope.data.location = '';
 	$scope.data.isComment = (typeof data === 'undefined' ? false : true);
 	$scope.data.eventCommented = (typeof data === 'undefined' ? '' : data);
 	
@@ -46,7 +47,7 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 					urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
 					urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
 					urlEncodedData += '&mediaType=' + encodeURIComponent($scope.data.mediaType);
-					urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
+					urlEncodedData += '&location=' + encodeURIComponent($scope.data.location);
 					urlEncodedData += '&isComment=' + encodeURIComponent($scope.data.isComment);
 					urlEncodedData += '&eventCommented=' + encodeURIComponent($scope.data.eventCommented);
 
@@ -77,7 +78,7 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 			urlEncodedData = 'creatorMail=' + encodeURIComponent($scope.data.creatorMail);
 			urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
 			urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
-			urlEncodedData += '&location=' + encodeURIComponent(JSON.stringify($scope.data.location));
+			urlEncodedData += '&location=' + encodeURIComponent($scope.data.location);
 			urlEncodedData += '&isComment=' + encodeURIComponent($scope.data.isComment);
 			urlEncodedData += '&eventCommented=' + encodeURIComponent($scope.data.eventCommented);
 
@@ -109,7 +110,6 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	pc.removeFoto = function() {
 		$scope.foto = '';
 		$scope.textRows = 5;
-		$scope.cameraState = false;
 	};
 
 	pc.camera = function() {
@@ -122,19 +122,17 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 		}
 	}
 
-	
 	pc.location = function() {
 			navigator.geolocation.getCurrentPosition(function(pos) {
-				$scope.data.location.lat = pos.coords.latitude;
-				$scope.data.location.long = pos.coords.longitude;
 				var latlng =  {lat: pos.coords.latitude, lng: pos.coords.longitude};
 				var geocoder = new google.maps.Geocoder();
 				geocoder.geocode({ location: latlng }, (results, status) => {	
 				if (status === "OK") {
 					if (results[0]) {
-						//TODO implement binding of location in event jumbotron's
-						console.log(results[0]);
-						console.log(formatGeo(results[0]));
+						$scope.locRaw = formatGeo(results[0]);
+						$scope.data.location = $scope.locRaw[0] + ', ' + $scope.locRaw[1] + ', ' + $scope.locRaw[2] + ', ' + $scope.locRaw[3];
+						$scope.$apply();
+						console.log($scope.location);
 					return results[0].formatted_address;
 					} else {
 						window.alert("No results found");
@@ -149,25 +147,32 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	// Funcion de librería para formatear el output de Google Geocoder
 	
 	formatGeo = function (add) {
-		var compAdd = {};
+		var compAdd = [];
 		for (i of add.address_components){
-			console.log(i);
 			switch (i.types[0]){
 				case 'country':
-					compAdd.country = i.long_name;
+					compAdd[0] = i.long_name;
 					break;
 				case 'administrative_area_level_2':
-					compAdd.region = i.long_name;
+					compAdd[1] = i.long_name;
 					break;
 				case 'locality':
-					compAdd.town = i.long_name;
+					compAdd[2] = i.long_name;
 					break;
 				case 'route':
-					compAdd.street = i.long_name;
+					compAdd[3] = i.long_name;
 					break;
 			}
 		}
 		return compAdd;
+	}
+	
+	pc.focusLoc = function(){
+		$scope.locRaw.pop();
+		$scope.data.location = '';
+		for (let i=0; i<$scope.locRaw.length; i++)
+			$scope.data.location += $scope.locRaw[i] + ', ';
+		$scope.data.location = $scope.data.location.slice(0,-2);
 	}
 
 	//Codigo importado (JQuery) para tratamiento de las fotos
