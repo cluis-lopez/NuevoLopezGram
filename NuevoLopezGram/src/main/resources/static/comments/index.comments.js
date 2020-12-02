@@ -72,12 +72,10 @@
 		}
 
 		$scope.refresh = function() {
-			//FIXME .. refresh no funciona
-			// $state.reload().search({ event: $scope.eId  });;
 			$state.go ('.', { event: $scope.eId } )
-
-
 		}
+		
+		
 		function openModal(eId) {
 			var modalInstance = $uibModal.open({
 				animation: true,

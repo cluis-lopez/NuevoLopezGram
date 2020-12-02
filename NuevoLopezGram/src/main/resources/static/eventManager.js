@@ -122,11 +122,52 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 		}
 	}
 
+	
 	pc.location = function() {
-		navigator.geolocation.getCurrentPosition(function(pos) {
-			$scope.data.location.lat = pos.coords.latitude;
-			$scope.data.location.long = pos.coords.longitude;
-		});
+			navigator.geolocation.getCurrentPosition(function(pos) {
+				$scope.data.location.lat = pos.coords.latitude;
+				$scope.data.location.long = pos.coords.longitude;
+				var latlng =  {lat: pos.coords.latitude, lng: pos.coords.longitude};
+				var geocoder = new google.maps.Geocoder();
+				geocoder.geocode({ location: latlng }, (results, status) => {	
+				if (status === "OK") {
+					if (results[0]) {
+						//TODO implement binding of location in event jumbotron's
+						console.log(results[0]);
+						console.log(formatGeo(results[0]));
+					return results[0].formatted_address;
+					} else {
+						window.alert("No results found");
+					}
+				} else {
+					window.alert("Geocoder ha fallado due to: " + status);
+				}
+				});
+			})
+		}
+			
+	// Funcion de librería para formatear el output de Google Geocoder
+	
+	formatGeo = function (add) {
+		var compAdd = {};
+		for (i of add.address_components){
+			console.log(i);
+			switch (i.types[0]){
+				case 'country':
+					compAdd.country = i.long_name;
+					break;
+				case 'administrative_area_level_2':
+					compAdd.region = i.long_name;
+					break;
+				case 'locality':
+					compAdd.town = i.long_name;
+					break;
+				case 'route':
+					compAdd.street = i.long_name;
+					break;
+			}
+		}
+		return compAdd;
 	}
 
 	//Codigo importado (JQuery) para tratamiento de las fotos
