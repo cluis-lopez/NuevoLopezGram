@@ -1,14 +1,14 @@
 angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $http, $localStorage, $scope, $location, $sce, data) {
 	var pc = this;
 	var urlEncodedData;
-	
+
 	console.log(data);
 
 	$scope.textRows = 5;
 	$scope.foto = '';
 	$scope.mediaType = '';
 	$scope.locRaw = [];
-	
+
 	$scope.data = {};
 	$scope.data.creatorMail = $localStorage.currentUser.username;
 	$scope.data.text = '';
@@ -17,91 +17,65 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	$scope.data.location = '';
 	$scope.data.isComment = (typeof data === 'undefined' ? false : true);
 	$scope.data.eventCommented = (typeof data === 'undefined' ? '' : data);
-	
-	$scope.titulo = (typeof data === 'undefined' ? "Nuevo mensaje" : "Nuevo comentario" );
+
+	$scope.titulo = (typeof data === 'undefined' ? "Nuevo mensaje" : "Nuevo comentario");
 
 	pc.send = function() {
-		if ($scope.text == '' && $scope.foto == '') {
-			window.alert("Nada que enviar");
+		if ($scope.data.text === '' && $scope.foto === '') {
+			window.alert("Mensaje vacío");
 			return;
 		}
 
-		if ($scope.foto != '') {
-			// Upload picture or video
-			var fd = new FormData();
-			fd.append("file", dataURLToBlob($scope.foto), $scope.data.creatorMail + ":");
-			$http({
-				url: '/api/upload',
-				method: 'POST',
-				data: fd,
-				headers: { 'Content-Type': undefined }
-			})
-				.success(function(data) {
-					console.log("Uploaded: " + data.key);
-					$scope.data.multiMedia = data.key;
-					$scope.data.mediaType = $scope.mediaType;
+		if ($scope.foto != '')
+			uploadMedia();
+		else
+			uploadEvent();
+	}
 
-					//Now upload the event
+	function uploadMedia(callback) {
+		// Upload picture or video
+		var fd = new FormData();
+		fd.append("file", dataURLToBlob($scope.foto), $scope.data.creatorMail + ":");
+		$http({
+			url: '/api/upload',
+			method: 'POST',
+			data: fd,
+			headers: { 'Content-Type': undefined }
+		}).success(function(dataReturned) {
+			console.log("Uploaded: " + dataReturned.key);
+			$scope.data.multiMedia = dataReturned.key;
+			$scope.data.mediaType = $scope.mediaType;
+			uploadEvent();
+		}).error(function(status) {
+			console.log("Failed to Upload picture " + status.status + " " + status.message);
+			window.alert("Error al subir contenido al servidor " + status);
+		})
+	}
 
-					urlEncodedData = 'creatorMail=' + encodeURIComponent($scope.data.creatorMail);
-					urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
-					urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
-					urlEncodedData += '&mediaType=' + encodeURIComponent($scope.data.mediaType);
-					urlEncodedData += '&location=' + encodeURIComponent($scope.data.location);
-					urlEncodedData += '&isComment=' + encodeURIComponent($scope.data.isComment);
-					urlEncodedData += '&eventCommented=' + encodeURIComponent($scope.data.eventCommented);
+	function uploadEvent() {
+		urlEncodedData = 'creatorMail=' + encodeURIComponent($scope.data.creatorMail);
+		urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
+		urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
+		urlEncodedData += '&mediaType=' + encodeURIComponent($scope.data.mediaType);
+		urlEncodedData += '&location=' + encodeURIComponent($scope.data.location);
+		urlEncodedData += '&isComment=' + encodeURIComponent($scope.data.isComment);
+		urlEncodedData += '&eventCommented=' + encodeURIComponent($scope.data.eventCommented);
 
-					$http({
-						url: '/api/event',
-						method: 'POST',
-						data: urlEncodedData,
-						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-					})
-						.success(function(status) {
-							console.log("Sent " + status.status + " " + status.message);
-							angular.element(document.getElementById('events')).scope().refresh();
-						})
-						.error(function(status) {
-							console.log("Failed to Upload event " + status.status + " " + status.message);
-							if (status.status === 401) {
-								$localStorage.removeItem('currentUser');
-								$location.path('/login');
-							}
-						});
-
-				})
-				.error(function(status) {
-					console.log("Failed to Upload picture " + status.status + " " + status.message);
-				});
-		} else { //No hay foto que subir, solo subimos el texto
-
-			urlEncodedData = 'creatorMail=' + encodeURIComponent($scope.data.creatorMail);
-			urlEncodedData += '&text=' + encodeURIComponent($scope.data.text);
-			urlEncodedData += '&multiMedia=' + encodeURIComponent($scope.data.multiMedia);
-			urlEncodedData += '&location=' + encodeURIComponent($scope.data.location);
-			urlEncodedData += '&isComment=' + encodeURIComponent($scope.data.isComment);
-			urlEncodedData += '&eventCommented=' + encodeURIComponent($scope.data.eventCommented);
-
-			$http({
-				url: '/api/event',
-				method: 'POST',
-				data: urlEncodedData,
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-			})
-				.success(function(status) {
-					console.log("Sent" + status.status + " " + status.message);
-					angular.element(document.getElementById('events')).scope().refresh();
-				})
-				.error(function(status) {
-					console.log("Failed to Upload event " + status.status + " " + status.message);
-					if (status.status === 401) {
-						$localStorage.removeItem('currentUser');
-						$location.path('/login');
-					}
-				});
-		}
-		$uibModalInstance.close();
-	};
+		$http({
+			url: '/api/event',
+			method: 'POST',
+			data: urlEncodedData,
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+		}).success(function(status) {
+			console.log("Sent " + status.status + " " + status.message);
+			angular.element(document.getElementById('events')).scope().refresh();
+			$uibModalInstance.close();
+		}).error(function(status) {
+			console.log("Failed to Upload event " + status.status + " " + status.message);
+			window.alert("Error al subir contenido al servidor " + status);
+		})
+	}
+	
 
 	pc.cancel = function() {
 		$uibModalInstance.dismiss('cancel');
@@ -123,33 +97,33 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	}
 
 	pc.location = function() {
-			navigator.geolocation.getCurrentPosition(function(pos) {
-				var latlng =  {lat: pos.coords.latitude, lng: pos.coords.longitude};
-				var geocoder = new google.maps.Geocoder();
-				geocoder.geocode({ location: latlng }, (results, status) => {	
+		navigator.geolocation.getCurrentPosition(function(pos) {
+			var latlng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+			var geocoder = new google.maps.Geocoder();
+			geocoder.geocode({ location: latlng }, (results, status) => {
 				if (status === "OK") {
 					if (results[0]) {
 						$scope.locRaw = formatGeo(results[0]);
 						$scope.data.location = $scope.locRaw[0] + ', ' + $scope.locRaw[1] + ', ' + $scope.locRaw[2] + ', ' + $scope.locRaw[3];
 						$scope.$apply();
 						console.log($scope.location);
-					return results[0].formatted_address;
+						return results[0].formatted_address;
 					} else {
 						window.alert("No results found");
 					}
 				} else {
 					window.alert("Geocoder ha fallado due to: " + status);
 				}
-				});
-			})
-		}
-			
+			});
+		})
+	}
+
 	// Funcion de librería para formatear el output de Google Geocoder
-	
-	formatGeo = function (add) {
+
+	formatGeo = function(add) {
 		var compAdd = [];
-		for (i of add.address_components){
-			switch (i.types[0]){
+		for (i of add.address_components) {
+			switch (i.types[0]) {
 				case 'country':
 					compAdd[0] = i.long_name;
 					break;
@@ -166,13 +140,13 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 		}
 		return compAdd;
 	}
-	
-	pc.focusLoc = function(){
+
+	pc.focusLoc = function() {
 		$scope.locRaw.pop();
 		$scope.data.location = '';
-		for (let i=0; i<$scope.locRaw.length; i++)
+		for (let i = 0; i < $scope.locRaw.length; i++)
 			$scope.data.location += $scope.locRaw[i] + ', ';
-		$scope.data.location = $scope.data.location.slice(0,-2);
+		$scope.data.location = $scope.data.location.slice(0, -2);
 	}
 
 	//Codigo importado (JQuery) para tratamiento de las fotos

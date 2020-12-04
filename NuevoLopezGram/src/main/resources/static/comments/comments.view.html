@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top" id="events">
+<nav class="navbar navbar-default navbar-fixed-top" id="comments">
 		<div class="eventContainer">
 		<div class="row">
 			<div class="col-xs-6">
@@ -20,7 +20,7 @@
 			</div>
 			<div class="col-xs-3" align="center">
 				<a href="" ng-click="getBack()"><i class="icon-left-outline"
-						style="font-size: 24px;"></i></a>
+						style="font-size: 24px; color: tomato"></i></a>
 			</div>
 			<div class="col-xs-3" align="center">
 				<a href="" ng-click="newComment()"><i class="icon-export-outline"
@@ -37,8 +37,9 @@
 	</div>
 </nav>
 
-<!--  COntenedor para los comentarios -->
- <!-- Contenedor para cada uno de los eventos -->
+<!--  Contenedor para los comentarios -->
+ <!-- Contenedor para cada uno de los comentarios -->
+ <div id="commentsContainer">
 <div class='jumbotron' ng-repeat="x in comments">
 	<div class="eventContainer">
 		<div class="row">
@@ -62,6 +63,8 @@
 					<i class="icon-thumbs-up" style="font-size: 24px;"></i>{{x.likes.length}}</a>
 			</div>
 			<div class="col-xs-6" align="center">
+				<button class="btn btn-link" ng-if="x.creatorMail === user"
+					ng-click="deleteComment(x.id)"><i class="icon-trash" style="font-size: 24px;"></i></button>
 			</div>
 			<div class="col-xs-3">
 				<span class="pull-right">
@@ -75,4 +78,5 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>

@@ -21,17 +21,17 @@
 					pagenumber: 0, number: 10,
 					isComment: true, eventCommented: $scope.eId.id
 				}
-			})
-				.success(function(data) {
-					$scope.comments = data;
-				})
-				.error(function(status) {
-					console.log("Failed to get events " + status.status + " " + status.error);
-					if (status.status === 401) {
-						$localStorage.currentUser = '';
-						$location.path('/login');
-					}
-				});
+			}).success(function(data) {
+				var alt = document.getElementById("comments").clientHeight -110;
+				$scope.comments = data;
+				document.getElementById("commentsContainer").style.paddingTop = alt + 'px';
+			}).error(function(status) {
+				console.log("Failed to get events " + status.status + " " + status.error);
+				if (status.status === 401) {
+					$localStorage.currentUser = '';
+					$location.path('/login');
+				}
+			});
 		}
 
 
@@ -69,6 +69,10 @@
 
 		$scope.newComment = function() {
 			openModal($scope.eId.id);
+		}
+		
+		$scope.deleteComment = function(id) {
+			
 		}
 
 		$scope.refresh = function() {
