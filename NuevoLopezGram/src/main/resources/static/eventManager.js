@@ -68,7 +68,12 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 		}).success(function(status) {
 			console.log("Sent " + status.status + " " + status.message);
-			angular.element(document.getElementById('events')).scope().refresh();
+			var ref = null;
+			if (document.getElementById('events') === null)
+				ref = document.getElementById('comments');
+			else
+				ref = document.getElementById('events');
+			angular.element(ref).scope().refresh();
 			$uibModalInstance.close();
 		}).error(function(status) {
 			console.log("Failed to Upload event " + status.status + " " + status.message);

@@ -44,7 +44,8 @@
 		};
 
 		$scope.refresh = function() {
-			$state.reload();
+			initController();
+			//$state.reload();
 		}
 
 		$scope.eventComments = function(event) {
@@ -99,8 +100,9 @@
 				size: 'l',
 				resolve: {
 					data: function() {
-						var varHtml = $sce.trustAsHtml("<p>Al borrar este post borrarás también todos sus comentarios</p>");
-						return { title: '¿Seguro que quieres borrar este post?', varHtml: varHtml, eventId: eventId };
+						var varHtml = $sce.trustAsHtml("<p>Al borrar este post borrar&aacute;s tambi&eacute;n todos sus comentarios</p>");
+						var title = $sce.trustAsHtml("&iquest;Seguro que quieres borrar este post?")
+						return { title: title, varHtml: varHtml, eventId: eventId };
 					}
 				}
 			});

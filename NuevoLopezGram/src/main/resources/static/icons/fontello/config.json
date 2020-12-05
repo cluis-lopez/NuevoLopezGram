@@ -161,6 +161,12 @@
       "css": "cancel-alt-filled",
       "code": 59417,
       "src": "typicons"
+    },
+    {
+      "uid": "d12574a0151c84ddf56f4fd7b4aff678",
+      "css": "arrows-cw-outline",
+      "code": 59418,
+      "src": "typicons"
     }
   ]
 }

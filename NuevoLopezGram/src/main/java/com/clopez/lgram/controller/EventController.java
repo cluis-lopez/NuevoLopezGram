@@ -54,8 +54,7 @@ public class EventController {
 	@PostMapping("/api/event")
 	public @ResponseBody jsonStatus createEvent(@RequestHeader(name = "Authorization") String token,
 			@RequestParam String creatorMail, @RequestParam String text, @RequestParam String multiMedia,
-			@RequestParam(defaultValue = "image") String mediaType,
-			@RequestParam(defaultValue = "") String location,
+			@RequestParam(defaultValue = "image") String mediaType, @RequestParam(defaultValue = "") String location,
 			@RequestParam(defaultValue = "false") boolean isComment,
 			@RequestParam(defaultValue = "") String eventCommented) {
 		// userId extracted from the auth token
@@ -135,43 +134,56 @@ public class EventController {
 		}
 		return ret;
 	}
-	
+
 	@DeleteMapping("/api/event")
 	public @ResponseBody jsonStatus deleteEvent(@RequestHeader(name = "Authorization") String token,
-			@RequestParam String eventId) {
+			@RequestParam String eventId, @RequestParam(defaultValue = "") String parentId) {
 		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", "")).getBody()
 				.getSubject();
 		Optional<Event> evo = eRep.findById(eventId);
-		
-		jsonStatus ret = new jsonStatus();
-		
+
 		if (evo.isEmpty())
-			ret.setStatus("NOT OK", "Invalid eventId");
-		else {
-			Event ev = (Event) evo.get();
-		
-			if (ev.getCreatorId().equals(userId)) {
-				String deleteWarning = "";
-				if (ev.getComments().size() > 0) {// Hay comentarios que tenemos que borrar
-					int i = 0;
-					for (String commentId : ev.getComments()) {
-						Optional<Event> c = eRep.findById(commentId);
-						if (c.isPresent()) {
-							moveToTrash(c.get());
-							i++;
-						}
-					}	
-					deleteWarning = " along with " + i + " comments";
+			return new jsonStatus("NOT OK", "Invalid eventId");
+
+		Event ev = evo.get();
+
+		if (!ev.getCreatorId().equals(userId))
+			return new jsonStatus("NOT OK", "Unathorized user");
+
+		if (ev.isComment()) { // Es un comentario asi que hay que eliminar su referencia del evento raiz
+			if (parentId != null && !parentId.equals("")) {
+				Optional<Event> pevo = eRep.findById(parentId);
+				Event pev = null;
+				if (pevo.isPresent()) {
+					pev = pevo.get();
+					pev.removeComment(eventId);
+					eRep.save(pev);
+				} else {
+					return new jsonStatus("NOT OK", "No accedo al evento al que pertenece este comentario");
 				}
-				// Ahora borramos el evento "raiz"
-				moveToTrash(ev);
-				ret.setStatus("OK", "Event Deleted " + deleteWarning);
-			} else
-			ret.setStatus("NOT OK", "Unathorized user");
+			} else {
+				return new jsonStatus("NOT OK", "No se puede acceder al evento al que pertenece este comentario");
+			}
 		}
-		return ret;
+
+		String deleteWarning = "";
+
+		if (!ev.getComments().isEmpty()) {// Hay comentarios que tenemos que borrar
+			int i = 0;
+			for (String commentId : ev.getComments()) {
+				Optional<Event> c = eRep.findById(commentId);
+				if (c.isPresent()) {
+					moveToTrash(c.get());
+					i++;
+				}
+			}
+			deleteWarning = " along with " + i + " comments";
+		}
+
+		// Ahora borramos el evento "raiz"
+		deleteWarning += moveToTrash(ev);
+		return new jsonStatus("OK", "Event Deleted " + deleteWarning);
 	}
-	
 
 	@PostMapping("/api/eventDetails")
 	public @ResponseBody jsonStatus eventDetails(@RequestHeader(name = "Authorization") String token,
@@ -187,26 +199,6 @@ public class EventController {
 		else {
 			Event ev = (Event) evo.get();
 			switch (command) {
-			case "remove":
-				if (ev.getCreatorId().equals(userId)) {
-					String deleteWarning = "";
-					if (ev.getComments().size() > 0) {// Hay comentarios que tenemos que borrar
-						int i = 0;
-						for (String commentId : ev.getComments()) {
-							Optional<Event> c = eRep.findById(commentId);
-							if (c.isPresent()) {
-								moveToTrash(c.get());
-								i++;
-							}
-						}
-						deleteWarning = " along with " + i + " comments";
-					}
-					// Ahora borramos el evento "raiz"
-					moveToTrash(ev);
-					ret.setStatus("OK", "Event Deleted " + deleteWarning);
-				} else
-					ret.setStatus("NOT OK", "Unathorized user");
-				break;
 			case "thumbsUp":
 				if (ev.getCreatorId().equals(userId))
 					ret.setStatus("NOT OK", "No te des likes a ti mismo capuyo");

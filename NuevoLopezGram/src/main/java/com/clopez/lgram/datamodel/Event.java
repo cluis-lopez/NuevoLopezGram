@@ -90,7 +90,7 @@ public class Event {
 	}
 
 	public void incNumberAccess() {
-		this.numberAccess =+ 1;
+		this.numberAccess += 1;
 	}
 
 	public String getText() {
@@ -160,6 +160,11 @@ public class Event {
 	public void addComment(String eventId) {
 		this.comments.add(eventId);
 	}
+	
+	public boolean removeComment(String commentId) {
+		return comments.remove(commentId);
+	}
+	
 	public Set<String> getComments() {
 		return comments;
 	}
