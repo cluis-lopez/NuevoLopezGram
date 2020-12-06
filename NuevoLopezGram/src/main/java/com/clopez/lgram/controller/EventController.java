@@ -2,7 +2,6 @@ package com.clopez.lgram.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -20,10 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clopez.lgram.datamodel.Event;
 import com.clopez.lgram.datamodel.EventRepository;
 import com.clopez.lgram.datamodel.User;
-import com.clopez.lgram.datamodel.UserPublic;
 import com.clopez.lgram.datamodel.UserRepository;
 import com.clopez.lgram.datamodel.jsonStatus;
-import com.clopez.lgram.security.JwtTokenUtil;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
@@ -54,7 +51,7 @@ public class EventController {
 	@PostMapping("/api/event")
 	public @ResponseBody jsonStatus createEvent(@RequestHeader(name = "Authorization") String token,
 			@RequestParam String creatorMail, @RequestParam String text, @RequestParam String multiMedia,
-			@RequestParam(defaultValue = "image") String mediaType, @RequestParam(defaultValue = "") String location,
+			@RequestParam(defaultValue = "") String mediaType, @RequestParam(defaultValue = "") String location,
 			@RequestParam(defaultValue = "false") boolean isComment,
 			@RequestParam(defaultValue = "") String eventCommented) {
 		// userId extracted from the auth token
@@ -64,14 +61,14 @@ public class EventController {
 		Optional<User> ou = uRep.findById(userId);
 		if (ou.isEmpty())
 			return new jsonStatus("NOT OK", "Invalid User");
-		User u = ou.get();
+		User user = ou.get();
 
-		if (!creatorMail.equals(u.getEmail()))
+		if (!creatorMail.equals(user.getEmail()))
 			return new jsonStatus("NOT OK", "User does not match");
 
 		Event ev = new Event(userId, text, multiMedia, mediaType);
 		ev.setCreatorMail(creatorMail);
-		ev.setCreatorName(u.getName());
+		ev.setCreatorName(user.getName());
 		ev.setLocation(location);
 
 		if (isComment) { // Es un comentario a otro evento
@@ -90,36 +87,27 @@ public class EventController {
 		}
 
 		if (eRep.save(ev) != null) {
-			u.setLastPost(new Date());
-			u.setLastActivity(u.getLastPost());
-			uRep.save(u);
+			user.setLastPost(new Date());
+			user.setLastActivity(user.getLastPost());
+			user.incNumPosts();
+			uRep.save(user);
 			return new jsonStatus("OK", "Event saved");
 		} else
 			return new jsonStatus("NOT OK", "Cannot save event");
 	}
 
 	@GetMapping("/api/event")
-	public @ResponseBody List<Event> requestEvent(@RequestParam(defaultValue = "5") String number,
-			@RequestParam(defaultValue = "0") String pagenumber, @RequestParam(defaultValue = "false") String isComment,
+	public @ResponseBody List<Event> requestEvent(@RequestParam(defaultValue = "5") int numEvents,
+			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "false") boolean isComment,
 			@RequestParam(defaultValue = "") String eventCommented) {
 
-		List<Event> ret = new ArrayList();
-		boolean isCom = Boolean.parseBoolean(isComment);
+		List<Event> ret = new ArrayList<Event>();
 
-		if (!isCom) { // Return root events
-			int pageNumber, numEvents;
-			try {
-				numEvents = Integer.parseInt(number);
-				pageNumber = Integer.parseInt(pagenumber);
-			} catch (NumberFormatException e) {
-				pageNumber = 0;
-				numEvents = 5;
-			}
+		if (!isComment) { // Return root events
 
 			// Implements "SELECT * FROM event WHERE isComment = false ORDER BY createdAt
 			// DESC OFFSET 0
 			// LIMIT number"
-
 			ret = eRep.getLastParentEvents(numEvents);
 		} else if (eventCommented != null && !eventCommented.equals("")) { // Return comments belonging to a certain
 																			// event
@@ -190,7 +178,7 @@ public class EventController {
 			@RequestParam String command, @RequestParam String eventId) {
 		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", "")).getBody()
 				.getSubject();
-		Optional evo = eRep.findById(eventId);
+		Optional<Event> evo = eRep.findById(eventId);
 
 		jsonStatus ret = new jsonStatus();
 

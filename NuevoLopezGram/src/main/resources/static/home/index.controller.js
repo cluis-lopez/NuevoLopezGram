@@ -8,6 +8,7 @@
 	function Controller($scope, $http, $localStorage, $location, $state, $rootScope, $uibModal, $sce, $q) {
 
 		var pageNumber = 0;
+		$scope.loading = false;
 
 		initController();
 
@@ -61,6 +62,7 @@
 
 		$scope.eventDetails = function(command, eventId) {
 			console.log("eventDetails " + command + " : " + eventId);
+			$scope.loading = true;
 			var urlEncodedData = 'command=' + encodeURIComponent(command)
 				+ '&eventId=' + encodeURIComponent(eventId);
 
@@ -72,6 +74,7 @@
 			})
 				.success(function(status) {
 					console.log("Sent" + status.status + " " + status.message);
+					$scope.loading = false;
 					$scope.refresh();
 				})
 				.error(function(status) {
@@ -94,8 +97,8 @@
 				animation: true,
 				ariaLabelledBy: 'modal-title',
 				ariaDescribedBy: 'modal-body',
-				templateUrl: 'home/confirmModal.html',
-				controller: 'ModalConfirmCtrl',
+				templateUrl: 'home/homeModal.html',
+				controller: 'homeConfirmCtrl',
 				controllerAs: 'pc',
 				size: 'l',
 				resolve: {
@@ -112,7 +115,7 @@
 		}
 	};
 
-	angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance, $http, data) {
+	angular.module('app').controller('homeConfirmCtrl', function($uibModalInstance, $http, data) {
 		var pc = this;
 		pc.data = data;
 

@@ -106,8 +106,8 @@
 				animation: true,
 				ariaLabelledBy: 'User Reg',
 				ariaDescribedBy: 'modal-body',
-				templateUrl: 'home/confirmModal.html',
-				controller: 'ModalConfirmCtrl',
+				templateUrl: 'comments/commentsModal.html',
+				controller: 'commentsConfirmCtrl',
 				controllerAs: 'pc',
 				size: 'l',
 				resolve: {
@@ -123,7 +123,7 @@
 		}
 	};
 
-	angular.module('app').controller('ModalConfirmCtrl', function($uibModalInstance, $http, data) {
+	angular.module('app').controller('commentsConfirmCtrl', function($uibModalInstance, $http, data) {
 		var pc = this;
 		pc.data = data;
 

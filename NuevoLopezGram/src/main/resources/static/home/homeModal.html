@@ -1,0 +1,19 @@
+<div clasds="modal fade bd-example-modal-lg confirmModal">
+	<div class="modal-header">
+		<h3 class="modal-title" id="modal-title" ng-bind-html="pc.data.title"></h3>
+	</div>
+	<div class="modal-body" id="modal-body" ng-bind-html="pc.data.varHtml">
+	</div>
+	<div class="modal-footer">
+		<div class="row">
+			<div class="col-xs-6" align="center">
+				<a href="#" ng-click="pc.confirmModal()" ng-disabled="loading"><i class="icon-ok"
+					style="font-size: 32px; color: green;"></i></a>
+			</div>
+			<div class="col-xs-6" align="center">
+				<a href="#" ng-click="pc.cancelModal()"><i class="icon-cancel"
+					style="font-size: 32px; color: red;"></i></a>
+			</div>
+		</div>
+	</div>
+</div>

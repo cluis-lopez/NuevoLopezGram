@@ -22,6 +22,7 @@ public class User {
 	private Date lastLogin;
 	private Date lastActivity;
 	private Date lastPost;
+	private int numPosts;
 	private boolean lockedUser;
 	private Set<String> friends;//List of friends uid's
 	private String avatar; //URL to avatar pictute
@@ -34,6 +35,7 @@ public class User {
 		this.lastLogin = new Date(0);
 		this.lastActivity = new Date(0);
 		this.lastPost = new Date(0);
+		this.numPosts = 0;
 		this.lockedUser = false;
 		this.friends = new HashSet<String>();
 		this.password = password;
@@ -61,6 +63,10 @@ public class User {
 
 	public String getPassword() {
 		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	public void encryptPassword() {
@@ -97,6 +103,14 @@ public class User {
 
 	public void setLastPost(Date lastPost) {
 		this.lastPost = lastPost;
+	}
+	
+	public int getNumPosts() {
+		return numPosts;
+	}
+	
+	public void incNumPosts() {
+		this.numPosts += 1;
 	}
 
 	public boolean isLockedUser() {
