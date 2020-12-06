@@ -29,19 +29,19 @@
 				templateUrl: 'userReg/userReg.view.html',
 				controller: 'UserRegController',
 				controllerAs: 'vm'
-				})
+			})
 			.state('userDetails', {
 				url: '/userDetails',
-				templateUrl: 'userDetails/userDetails.view.html',
+				templateUrl: 'userdetails/userDetails.view.html',
 				controller: 'UserDetailsController',
 				controllerAs: 'vm'
-				})
+			})
 			.state('comments', {
 				url: '/comments',
 				templateUrl: 'comments/comments.view.html',
 				controller: 'commentsController',
 				controllerAs: 'vm'
-				});
+			});
     }
 
     function run($rootScope, $http, $location, $localStorage) {

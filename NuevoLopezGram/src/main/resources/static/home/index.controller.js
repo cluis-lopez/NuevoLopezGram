@@ -53,6 +53,11 @@
 			console.log("Vamos a comentarios..." + event.id);
 			$location.path('/comments').search({ event: event });
 		}
+		
+		$scope.userDetails = function(){
+			console.log("Detalles de usuario");
+			$location.path('/userDetails');
+		}
 
 		$scope.deleteEvent = function(eventId) {
 			console.log("Borrando evento " + eventId);

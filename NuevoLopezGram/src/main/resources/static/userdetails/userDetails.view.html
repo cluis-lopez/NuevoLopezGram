@@ -1,0 +1,18 @@
+<div class="container">
+	<div class="jumbotron" id="userDetails">
+		<div class="row">
+			<div class="col-xs-9">
+				<div class="jumbotron">
+					<p style="color:blue; font-size: 1em;"><b>{{data.name}}</b></p>
+					<p><b>Email</b>: {{data.email}}</p>
+					<p><b>Ultimo Post</b>: {{data.lastPost}}</p>
+					<p><b>N&uacute;mero de Posts</b>: {{data.numPosts}}</p>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<img src="data.avatar" ng-if="data.avatar != ''">
+				<i ng-if="data.avatar == '' || data.avatar=='null'" class="icon-user-outline" style="font-size: 48px; color: tomato"></i>
+			</div>
+		</div>
+	</div>
+</div>

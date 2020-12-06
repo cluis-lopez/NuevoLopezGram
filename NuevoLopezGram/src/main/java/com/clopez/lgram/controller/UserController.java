@@ -74,9 +74,10 @@ public class UserController {
 		
 		User user = u.get();
 		
-		String codedOldPassword = new BCryptPasswordEncoder().encode(oldPassword);
-		if ( ! codedOldPassword.equals(user.getPassword()))
-			return new jsonStatus("NOT OK", "Invalid Password");
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+		if ( ! passwordEncoder.matches(oldPassword, user.getPassword()))
+		    return new jsonStatus("NOT OK", "Invalid Password");
 		
 		user.setPassword(newPassword);
 		user.encryptPassword();

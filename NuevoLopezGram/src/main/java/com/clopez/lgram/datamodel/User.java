@@ -39,6 +39,7 @@ public class User {
 		this.lockedUser = false;
 		this.friends = new HashSet<String>();
 		this.password = password;
+		this.avatar = "";
 	}
 
 	public String getId() {
