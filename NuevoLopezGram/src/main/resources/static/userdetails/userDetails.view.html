@@ -3,7 +3,7 @@
 		<div class="row">
 			<div class="col-xs-9">
 				<div class="jumbotron">
-					<p style="color:blue; font-size: 1em;"><b>{{data.name}}</b></p>
+					<p style="color:blue; font-size: 1.25em;"><b>{{data.name}}</b></p>
 					<p><b>Email</b>: {{data.email}}</p>
 					<p><b>Ultimo Post</b>: {{data.lastPost}}</p>
 					<p><b>N&uacute;mero de Posts</b>: {{data.numPosts}}</p>
@@ -14,5 +14,17 @@
 				<i ng-if="data.avatar == '' || data.avatar=='null'" class="icon-user-outline" style="font-size: 48px; color: tomato"></i>
 			</div>
 		</div>
+	</div>
+	<div class="botoncont">
+		<button type="button" class="btn btn-block btn-primary" ng-click="logout()">
+		<i class="icon-power-outline" style="font-size: 24px"></i>Logout</button>
+	</div>
+		<div class="botoncont">
+		<button type="button" class="btn btn-block btn-warning" ng-click="changePassword()">
+		<i class="icon-cw-outline" style="font-size: 24px"></i>Cambiar password</button>
+	</div>
+		<div class="botoncont" style="margin-top:20px;">
+		<button type="button" class="btn btn-block btn-danger" ng-click="removeUser()">
+		<i class="icon-attention-filled" style="font-size: 24px"></i> Salirse de LopezGram</button>
 	</div>
 </div>

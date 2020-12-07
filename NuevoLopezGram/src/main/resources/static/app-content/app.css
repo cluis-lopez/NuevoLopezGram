@@ -1,36 +1,37 @@
 html {
-    height  : 100%;
-    overflow: hidden;
-    position: relative;
+	height: 100%;
+	overflow: hidden;
+	position: relative;
 }
 
 body {
-    height  : 100%;
-    overflow: auto;
-    position: relative;
-    padding-top: 120px;
+	height: 100%;
+	overflow: auto;
+	position: relative;
+	padding-top: 120px;
 }
 
 .content {
-  position: fixed;
-  top: 60px;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: auto;
-  background-color: #fff;
-  -webkit-backface-visibility: none;
-  -webkit-overflow-scrolling: touch;
+	position: fixed;
+	top: 60px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	overflow: auto;
+	background-color: #fff;
+	-webkit-backface-visibility: none;
+	-webkit-overflow-scrolling: touch;
 }
 
 .loading {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
 }
+
 .help-block {
 	font-size: 12px;
 }
@@ -93,6 +94,14 @@ body {
 	padding: 5px;
 }
 
-#userDetails p{
-	font-size: 0.75em;
+#userDetails p {
+	font-size: 1em;
+}
+
+.botoncont {
+	font-size: 1em;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
