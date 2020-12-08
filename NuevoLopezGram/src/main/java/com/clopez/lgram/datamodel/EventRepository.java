@@ -13,4 +13,6 @@ public interface EventRepository extends DatastoreRepository<Event, String>{
 	
 	@Query("SELECT comments FROM event WHERE __key__ = KEY(event, @eventId)")
 	List<String> getCommentsFromId(@Param ("eventId") String eventId);
+	@Query("SELECT * FROM event WHERE creatorMail = @email")
+	List<Event> getEventsFromUserEmail(@Param ("email") String email);
 }

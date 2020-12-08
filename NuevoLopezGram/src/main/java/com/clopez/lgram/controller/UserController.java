@@ -1,5 +1,6 @@
 package com.clopez.lgram.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.clopez.lgram.datamodel.RemovedUser;
+import com.clopez.lgram.datamodel.RemovedUserRepository;
 import com.clopez.lgram.datamodel.User;
 import com.clopez.lgram.datamodel.UserPublic;
 import com.clopez.lgram.datamodel.UserRepository;
@@ -30,6 +33,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository uRep;
+	
+	@Autowired
+	private RemovedUserRepository uremRep;;
 
 
 	@GetMapping("/api/userdetails")
@@ -56,8 +62,11 @@ public class UserController {
 			return new jsonStatus("NOT OK", "Invalid user");
 		User user = u.get();
 		String email = user.getEmail();
+		RemovedUser remuser = new RemovedUser(user);
+		//Save the deleted user in the queue of remove users
+		uremRep.save(remuser);
+		//Delete de user from the users database
 		uRep.delete(user);
-		//TODO Remove all user's posts before deleting from database
 		return new jsonStatus("OK", "User " + email + " with id: "+ userId + " has been deleted");
 	}
 	
