@@ -3,10 +3,13 @@ package com.clopez.lgram.controller;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,12 +46,14 @@ public class CleanUsers {
 
 	private static Storage storage = StorageOptions.getDefaultInstance().getService();
 	
-	@GetMapping("/cleanusers") 
-	public @ResponseBody jsonStatus cleanUsers(@RequestParam String keyword) {
-		if (! keyword.equals(batch_keyword))
+	@PostMapping("/cleanusers") 
+	public @ResponseBody jsonStatus cleanUsers(@RequestBody Map<String, String> keyword) {
+		if (! keyword.get("Key").equals(batch_keyword))
 			return new jsonStatus("NOT OK", "Not Allowed");
 		
-		int cleanedUsers = 0, removedPosts = 0, removedFiles = 0;
+		int cleanedUsers = 0;
+		int removedPosts = 0;
+		int removedFiles = 0;
 		
 		ArrayList<RemovedUser> remlist = (ArrayList) uremRep.findAll();
 		for (RemovedUser ru : remlist) {
@@ -63,7 +68,6 @@ public class CleanUsers {
 		List<Event> elist = eRep.getEventsFromUserEmail(ru.getEmail()); //List of event id's belonging to removed user
 		eRep.deleteAll(elist);
 		return elist.size();
-	
 	}
 	
 	private int removeMulti(RemovedUser ru) {

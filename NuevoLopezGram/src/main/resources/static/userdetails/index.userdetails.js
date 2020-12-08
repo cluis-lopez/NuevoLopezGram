@@ -92,8 +92,8 @@
 
 		pc.confirmModal = function() {
 			$localStorage.currentUser = null;
+			$uibModalInstance.close();
 			$location.path("/");
-
 		}
 
 		pc.cancelModal = function() {

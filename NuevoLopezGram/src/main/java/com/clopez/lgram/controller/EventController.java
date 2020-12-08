@@ -108,7 +108,7 @@ public class EventController {
 			// Implements "SELECT * FROM event WHERE isComment = false ORDER BY createdAt
 			// DESC OFFSET 0
 			// LIMIT number"
-			ret = eRep.getLastParentEvents(numEvents);
+			ret = eRep.getLastParentEvents(numEvents, offset);
 		} else if (eventCommented != null && !eventCommented.equals("")) { // Return comments belonging to a certain
 																			// event
 			Optional<Event> evo = eRep.findById(eventCommented);

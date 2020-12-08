@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface EventRepository extends DatastoreRepository<Event, String>{
 
-	@Query("SELECT * FROM event WHERE isComment = false ORDER BY createdAt DESC LIMIT @number")
-	List<Event> getLastParentEvents(@Param ("number") int number);
+	@Query("SELECT * FROM event WHERE isComment = false ORDER BY createdAt DESC LIMIT @number OFFSET @offset")
+	List<Event> getLastParentEvents(@Param ("number") int number, @Param ("offset") int offset);
 	
 	@Query("SELECT comments FROM event WHERE __key__ = KEY(event, @eventId)")
 	List<String> getCommentsFromId(@Param ("eventId") String eventId);

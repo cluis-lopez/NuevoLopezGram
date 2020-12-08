@@ -32,6 +32,16 @@
 		$scope.trustURL = function (src){
 			return $sce.trustAsResourceUrl(src);
 		}
+		
+		$scope.swipe = function (event){
+			console.log("swipe " + event);
+			if (event === "up"){
+				pageNumber++;
+				initController();
+				}
+			if (event === "down")
+				initController();
+		}
 
 		$scope.onReload = function() {
 			console.warn('reload');
@@ -56,7 +66,8 @@
 		
 		$scope.userDetails = function(){
 			console.log("Detalles de usuario");
-			$location.path('/userDetails');
+        	$location.path("/userDetails");
+			console.log($location.path());
 		}
 
 		$scope.deleteEvent = function(eventId) {
