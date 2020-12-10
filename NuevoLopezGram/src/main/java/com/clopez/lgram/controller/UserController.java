@@ -62,8 +62,10 @@ public class UserController {
 			return new jsonStatus("NOT OK", "Invalid user");
 		User user = u.get();
 		String email = user.getEmail();
+		//Remove user password (even if encrypted) before store it in the removed users database
+		user.setPassword("");
 		RemovedUser remuser = new RemovedUser(user);
-		//Save the deleted user in the queue of remove users
+		//Save the deleted user in the queue of removed users
 		uremRep.save(remuser);
 		//Delete de user from the users database
 		uRep.delete(user);

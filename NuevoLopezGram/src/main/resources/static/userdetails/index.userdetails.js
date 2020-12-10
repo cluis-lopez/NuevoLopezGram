@@ -36,6 +36,12 @@
 			});
 		}
 
+		$scope.swipe = function(event) {
+			console.log("swipe " + event);
+			if (event === "goBack")
+				$scope.load('/home');
+		}
+
 		$scope.logout = function() {
 			console.log("logout");
 			var modalInstance = $uibModal.open({
@@ -111,7 +117,7 @@
 				url: '/api/userdetails',
 				method: 'DELETE'
 			}).success(function(data) {
-				window.alert("Ha sido un placer\n"+data.message);
+				window.alert("Ha sido un placer\n" + data.message);
 				$scope.loading = false;
 				$localStorage.currentUser = null;
 				$uibModalInstance.close();

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container noPreventDefault" ng-swipe-right="swipe('goBack')"">
 	<div class="jumbotron" id="userDetails">
 		<div class="row">
 			<div class="col-xs-9">
@@ -26,5 +26,13 @@
 		<div class="botoncont" style="margin-top:20px;">
 		<button type="button" class="btn btn-block btn-danger" ng-click="removeUser()">
 		<i class="icon-attention-filled" style="font-size: 24px"></i> Salirse de LopezGram</button>
+	</div>
+</div>
+
+<div class="loading" ng-if="loading">
+	<div class="row">
+		<div class="col-xs-12">
+		<img src="icons/spinner.gif" width="75px" height="auto">
+		</div>
 	</div>
 </div>

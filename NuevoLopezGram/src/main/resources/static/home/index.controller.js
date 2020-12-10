@@ -35,11 +35,11 @@
 		
 		$scope.swipe = function (event){
 			console.log("swipe " + event);
-			if (event === "up"){
+			if (event === "loadMore"){
 				pageNumber++;
 				initController();
 				}
-			if (event === "down")
+			if (event === "refresh")
 				initController();
 		}
 
