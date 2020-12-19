@@ -7,17 +7,18 @@
 
 	function Controller($scope, $http, $localStorage, $location, $state, $rootScope, $uibModal, $sce, $q) {
 
-		var pageNumber = 0;
+		var offset = 0;
 		$scope.loading = false;
 
 		initController();
 
 		function initController() {
 			$scope.loading = true;
-			$http.get('/api/event', { pagenumber: pageNumber, number: 10 })
+			$http.get('/api/event', { offset: offset, numEvents: 5 })
 				.success(function(data) {
 					$scope.events = data;
 					$scope.user = $localStorage.currentUser.username;
+					offset = offset + data.length;
 					$scope.loading = false;
 				})
 				.error(function(status) {

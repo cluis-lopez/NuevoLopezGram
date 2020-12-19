@@ -1,6 +1,7 @@
 package com.clopez.lgram.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class CleanUsers {
 
 	private static Storage storage = StorageOptions.getDefaultInstance().getService();
 	
-	@PostMapping("/cleanusers") 
+	@PostMapping("/cleanusers")
 	public @ResponseBody jsonStatus cleanUsers(@RequestBody Map<String, String> keyword) {
 		if (! keyword.get("Key").equals(batch_keyword))
 			return new jsonStatus("NOT OK", "Not Allowed");
@@ -60,6 +61,8 @@ public class CleanUsers {
 			removedPosts += removePosts(ru);
 			removedFiles += removeMulti(ru);
 			cleanedUsers++;
+			ru.setCleanedAt(new Date());
+			uremRep.save(ru);
 		}
 		return new jsonStatus("OK","Processed "+cleanedUsers+" removing "+removedPosts+"and "+removedFiles+" media files");
 	}
