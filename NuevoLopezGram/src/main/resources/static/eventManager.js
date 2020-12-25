@@ -2,8 +2,8 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	var pc = this;
 	var urlEncodedData;
 
-	console.log(data);
-
+	$scope.loading = false;
+	
 	$scope.textRows = 5;
 	$scope.foto = '';
 	$scope.mediaType = '';
@@ -21,6 +21,8 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 	$scope.titulo = (typeof data === 'undefined' ? "Nuevo mensaje" : "Nuevo comentario");
 
 	pc.send = function() {
+		if ($scope.loading == true)
+			return;
 		if ($scope.data.text === '' && $scope.foto === '') {
 			window.alert("Mensaje vacío");
 			return;
@@ -34,6 +36,8 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 
 	function uploadMedia(callback) {
 		// Upload picture or video
+		$scope.loading = true;
+		
 		var fd = new FormData();
 		fd.append("file", dataURLToBlob($scope.foto), $scope.data.creatorMail + ":");
 		$http({
@@ -49,6 +53,7 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 		}).error(function(status) {
 			console.log("Failed to Upload picture " + status.status + " " + status.message);
 			window.alert("Error al subir contenido al servidor " + status);
+			$scope.loading = false;
 		})
 	}
 
@@ -61,6 +66,8 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 		urlEncodedData += '&isComment=' + encodeURIComponent($scope.data.isComment);
 		urlEncodedData += '&eventCommented=' + encodeURIComponent($scope.data.eventCommented);
 
+		$scope.loading = true;
+		
 		$http({
 			url: '/api/event',
 			method: 'POST',
@@ -74,10 +81,12 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 			else
 				ref = document.getElementById('events');
 			angular.element(ref).scope().refresh();
+			$scope.loading = false;
 			$uibModalInstance.close();
 		}).error(function(status) {
 			console.log("Failed to Upload event " + status.status + " " + status.message);
 			window.alert("Error al subir contenido al servidor " + status);
+			$scope.loading = false;
 		})
 	}
 	

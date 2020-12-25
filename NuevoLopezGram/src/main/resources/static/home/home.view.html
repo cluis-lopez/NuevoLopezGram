@@ -24,7 +24,7 @@
 </div>
 
 <!-- Contenedor para cada uno de los eventos -->
-<div class="content noPreventDefault" ng-swipe-down="swipe('refresh')" ng-swipe-up="swipe('loadMore')">
+<div class="content" infinite-scroll="loadMore()">
 <div class='jumbotron' ng-repeat="x in events">
 	<div class="eventContainer">
 		<div class="row">

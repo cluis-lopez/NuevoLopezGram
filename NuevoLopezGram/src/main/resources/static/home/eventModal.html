@@ -20,18 +20,18 @@
 	<div class="modal-footer">
 	<div class="row">
 		<div class="col-xs-3">
-		<button class="btn btn-default btn-lg" type="button" ng-click="pc.camera()">
+		<button class="btn btn-default btn-lg" type="button" ng-click="pc.camera()" ng-disabled="loading">
 			<i class="icon-camera-outline" style="font-size: 24px;"></i>
 		</button>
 		</div>
 		<div class="col-xs-3">
-		<a her="#" ng-click="pc.send()"><i class="icon-ok" style="font-size: 32px; color: green"></i></a>
+		<a href="#" ng-click="pc.send()" ng-class="{disabled: loading}"><i class="icon-ok" style="font-size: 32px; color: green"></i></a>
 		</div>
 		<div class="col-xs-3">
-		<a her="#" ng-click="pc.cancel()"><i class="icon-cancel" style="font-size: 32px; color: red"></i></a>
+		<a href="#" ng-click="pc.cancel()"><i class="icon-cancel" style="font-size: 32px; color: red"></i></a>
 		</div>
 		<div class="col-xs-3">
-		<button class="btn btn-default btn-lg" type="button" ng-click="pc.location()">
+		<button class="btn btn-default btn-lg" type="button" ng-click="pc.location()" ng-disabled="loading">
 			<i class="icon-location" style="font-size: 24px;"></i>
 		</button>
 		</div>

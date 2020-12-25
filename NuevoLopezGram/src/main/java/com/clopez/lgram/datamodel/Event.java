@@ -2,6 +2,7 @@ package com.clopez.lgram.datamodel;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,10 +43,10 @@ public class Event {
 		this.createdAt = new Date();
 		this.lastSeen = this.createdAt;
 		this.numberAccess = 0;
-		this.likes = new HashSet<String>();
-		this.dislikes = new HashSet<String>();
+		this.likes = new HashSet<>();
+		this.dislikes = new HashSet<>();
 		this.isComment = false;
-		this.comments = new HashSet<String>();
+		this.comments = new LinkedHashSet<>();
 		
 	}
 

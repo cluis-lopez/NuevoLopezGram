@@ -1,29 +1,30 @@
-(function () {
-    'use strict';
+(function() {
+	'use strict';
 
-    angular
-        .module('app', ['ui.router', 'ngMessages', 'ngStorage','ngAnimate', 'ngSanitize', 'ui.bootstrap', 'swipe'])
-        .config(config)
-        .run(run);
+	angular
+		.module('app', ['ui.router', 'ngMessages', 'ngStorage', 'ngAnimate', 'ngSanitize',
+		'ui.bootstrap', 'swipe', 'infinite-scroll'])
+		.config(config)
+		.run(run);
 
-    function config($stateProvider, $urlRouterProvider) {
-        // default route
-        $urlRouterProvider.otherwise("/");
+	function config($stateProvider, $urlRouterProvider) {
+		// default route
+		$urlRouterProvider.otherwise("/");
 
-        // app routes
-        $stateProvider
-            .state('home', {
-                url: '/',
-                templateUrl: 'home/home.view.html',
-                controller: 'Home.IndexController',
-                controllerAs: 'vm'
-            })
-            .state('login', {
-                url: '/login',
-                templateUrl: 'login/login.view.html',
-                controller: 'Login.IndexController',
-                controllerAs: 'vm'
-            })
+		// app routes
+		$stateProvider
+			.state('home', {
+				url: '/',
+				templateUrl: 'home/home.view.html',
+				controller: 'Home.IndexController',
+				controllerAs: 'vm'
+			})
+			.state('login', {
+				url: '/login',
+				templateUrl: 'login/login.view.html',
+				controller: 'Login.IndexController',
+				controllerAs: 'vm'
+			})
 			.state('userReg', {
 				url: '/userReg',
 				templateUrl: 'userReg/userReg.view.html',
@@ -42,22 +43,22 @@
 				controller: 'commentsController',
 				controllerAs: 'vm'
 			});
-    }
+	}
 
-    function run($rootScope, $http, $location, $localStorage) {
-        // keep user logged in after page refresh
-        if ($localStorage.currentUser) {
-            $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
-        }
+	function run($rootScope, $http, $location, $localStorage) {
+		// keep user logged in after page refresh
+		if ($localStorage.currentUser) {
+			$http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
+		}
 
-        // redirect to login page if not logged in and trying to access a restricted page
-        $rootScope.$on('$locationChangeStart', function (event, next, current) {
-            var publicPages = ['/login', '/userReg'];
-            var restrictedPage = publicPages.indexOf($location.path()) === -1;
-            if (restrictedPage && !$localStorage.currentUser) {
-                $location.path('/login');
-            }
-        });
+		// redirect to login page if not logged in and trying to access a restricted page
+		$rootScope.$on('$locationChangeStart', function(event, next, current) {
+			var publicPages = ['/login', '/userReg'];
+			var restrictedPage = publicPages.indexOf($location.path()) === -1;
+			if (restrictedPage && !$localStorage.currentUser) {
+				$location.path('/login');
+			}
+		});
 
 		const weekdays = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
 
@@ -98,5 +99,6 @@
 			}
 
 		}
-    }
+	}
+
 })();

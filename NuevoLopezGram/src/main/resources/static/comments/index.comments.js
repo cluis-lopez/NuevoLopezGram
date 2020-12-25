@@ -12,20 +12,37 @@
 		console.log($scope.parentId);
 		$scope.user = $localStorage.currentUser.username;
 		console.log($scope.user);
+		$scope.comments = [];
+		$scope.loading = false;
+		
+		var offset = 0;
+		var numEvents = 5;
+		var unBlock = true;
+		var endOfData = false;
+		
 		initController();
 
 		function initController() {
+			if (endOfData)
+				return;
+			$scope.loading = true;
+			
 			$http({
 				url: '/api/event',
 				method: 'GET',
 				params: {
-					pagenumber: 0, number: 10,
+					offset: offset, numEvents: numEvents,
 					isComment: true, eventCommented: $scope.parentId
 				}
 			}).success(function(data) {
 				var alt = document.getElementById("comments").clientHeight - 110;
-				$scope.comments = data;
+				offset += data.length;
+				$scope.comments = $scope.comments.concat(data);
 				document.getElementById("commentsContainer").style.paddingTop = alt + 'px';
+				$scope.loading = false;
+				$scope.unBlock = true;
+				if (data.length<numEvents)
+					endOfData = true;
 			}).error(function(status) {
 				console.log("Failed to get events " + status.status + " " + status.error);
 				if (status.status === 401) {
@@ -76,7 +93,16 @@
 			confirmModal(id);
 		}
 
+		$scope.loadMore = function() {
+			$scope.unBlock = false;
+			initController();
+		}
+		
 		$scope.refresh = function() {
+			$scope.comments = [];
+			$scope.unBlock = false;
+			endOfData = false;
+			offset = 0;
 			initController();
 		}
 

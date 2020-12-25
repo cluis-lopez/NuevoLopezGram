@@ -2,6 +2,8 @@ package com.clopez.lgram.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -100,13 +102,13 @@ public class EventController {
 	public @ResponseBody List<Event> requestEvent(@RequestParam(defaultValue = "5") int numEvents,
 			@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "false") boolean isComment,
 			@RequestParam(defaultValue = "") String eventCommented) {
-
+		
 		List<Event> ret = new ArrayList<Event>();
 
 		if (!isComment) { // Return root events
 
 			// Implements "SELECT * FROM event WHERE isComment = false ORDER BY createdAt
-			// DESC OFFSET 0
+			// DESC OFFSET offset
 			// LIMIT number"
 			ret = eRep.getLastParentEvents(numEvents, offset);
 		} else if (eventCommented != null && !eventCommented.equals("")) { // Return comments belonging to a certain
@@ -115,9 +117,11 @@ public class EventController {
 			if (evo.isEmpty()) // No "root" event ??
 				return null;
 			Event rootEvent = evo.get();
-			Set<String> comments = rootEvent.getComments();
-			for (String c : comments) {
-				ret.add(eRep.findById(c).get());
+			LinkedList<String> comments = new LinkedList<>(rootEvent.getComments());
+			Iterator<String> itr = comments.descendingIterator();
+			while(itr.hasNext()) {
+			    String c = itr.next();
+				ret.add(eRep.findById(c).orElse(null));
 			}
 		}
 		return ret;

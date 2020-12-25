@@ -23,17 +23,7 @@
 </head>
 <body>
 	<!-- main app container -->
-	<!--
-	<div class="jumbotron">
-		<div class="container" style="padding-right: 0px; padding-left: 0px">
-			<div class="col-sm-12" style="padding-right: 0px; padding-left: 0px">
-			-->
 	<ui-view></ui-view>
-	<!--
-			</div>
-		</div>
-	</div>
-	-->
 
 	<!-- credits -->
 	<nav class="navbar navbar-default navbar-fixed-bottom footer">
@@ -68,11 +58,13 @@
 	<script
 		src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
 	<script
-      src="https://maps.googleapis.com/maps/api/js?key=">
-    </script>
+		src="https://maps.googleapis.com/maps/api/js?key=">
+		
+	</script>
 
 	<!-- application scripts -->
 	<script src="app.js"></script>
+	<script src="app-helpers/infinite-scroll.js"></script>
 	<script src="app-helpers/angular-swipe.min.js"></script>
 	<script src="eventManager.js"></script>
 	<script src="app-services/authentication.service.js"></script>

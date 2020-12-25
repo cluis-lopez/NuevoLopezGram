@@ -11,6 +11,10 @@ body {
 	padding-top: 120px;
 }
 
+.disabled {
+  cursor: not-allowed;
+}
+
 .content {
 	position: fixed;
 	top: 60px;

@@ -5,21 +5,33 @@
 		.module('app')
 		.controller('Home.IndexController', Controller);
 
-	function Controller($scope, $http, $localStorage, $location, $state, $rootScope, $uibModal, $sce, $q) {
+	function Controller($scope, $http, $localStorage, $location, $rootScope, $uibModal, $sce, $q) {
 
 		var offset = 0;
+		var numEvents = 5;
+		var endOfData = false;
 		$scope.loading = false;
+		$scope.events = [];
+		$scope.unBlock = true;
 
 		initController();
 
 		function initController() {
+			if (endOfData)
+				return;
 			$scope.loading = true;
-			$http.get('/api/event', { offset: offset, numEvents: 5 })
-				.success(function(data) {
-					$scope.events = data;
+			$http({
+				url: '/api/event',
+				method: 'GET',
+				params: {offset: offset, numEvents: numEvents}
+			}).success(function(data) {
+					offset += data.length;
+					$scope.events = $scope.events.concat(data);
 					$scope.user = $localStorage.currentUser.username;
-					offset = offset + data.length;
 					$scope.loading = false;
+					$scope.unBlock = true;
+					if (data.length<numEvents)
+						endOfData = true;
 				})
 				.error(function(status) {
 					console.log("Failed to get events " + status.status + " " + status.error);
@@ -29,45 +41,31 @@
 					}
 				});
 		}
-		
-		$scope.trustURL = function (src){
+
+		$scope.trustURL = function(src) {
 			return $sce.trustAsResourceUrl(src);
 		}
-		
-		$scope.swipe = function (event){
-			console.log("swipe " + event);
-			if (event === "loadMore"){
-				pageNumber++;
-				initController();
-				}
-			if (event === "refresh")
-				initController();
+
+		$scope.loadMore = function() {
+			$scope.unBlock = false;
+			initController();
 		}
 
-		$scope.onReload = function() {
-			console.warn('reload');
-			window.alert("swipe");
-			var deferred = $q.defer();
-			setTimeout(function() {
-				deferred.resolve(true);
-			}, 1000);
-			$state.reload();
-			return deferred.promise;
-		};
-
 		$scope.refresh = function() {
+			endOfData = false;
+			offset = 0;
+			$scope.events = [];
 			initController();
-			//$state.reload();
 		}
 
 		$scope.eventComments = function(event) {
 			console.log("Vamos a comentarios..." + event.id);
 			$location.path('/comments').search({ event: event });
 		}
-		
-		$scope.userDetails = function(){
+
+		$scope.userDetails = function() {
 			console.log("Detalles de usuario");
-        	$location.path("/userDetails");
+			$location.path("/userDetails");
 			console.log($location.path());
 		}
 
@@ -135,13 +133,17 @@
 	angular.module('app').controller('homeConfirmCtrl', function($uibModalInstance, $http, data) {
 		var pc = this;
 		pc.data = data;
+		var loading = false;
 
 		pc.cancelModal = function() {
 			$uibModalInstance.close();
 		}
 
 		pc.confirmModal = function() {
+			if (loading == true)
+				return;
 			var urlEncodedData = 'eventId=' + encodeURIComponent(data.eventId);
+			pc.loading = true;
 			$http({
 				url: '/api/event',
 				method: 'DELETE',
@@ -149,11 +151,13 @@
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 			}).success(function(status) {
 				console.log("Deleted event " + status.status + " : " + status.message);
+				pc.loading = false;
 				angular.element(document.getElementById('events')).scope().refresh();
 			}).error(function(status) {
 				console.log("Failed to Upload event " + status.status + " " + status.message);
 				if (status.status === 401) {
 					console.log('Unauthorized');
+					pc.loading = false;
 					$localStorage.removeItem('currentUser');
 					$location.path('/login');
 				}
@@ -187,4 +191,5 @@
 	});
 
 })();
+
 

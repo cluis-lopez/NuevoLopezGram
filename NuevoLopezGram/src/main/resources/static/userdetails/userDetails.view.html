@@ -10,7 +10,9 @@
 				</div>
 			</div>
 			<div class="col-xs-3">
-				<img src="data.avatar" ng-if="data.avatar != ''">
+				<div ng-if=data.avatar != ''">
+					<img src="data.avatar">
+				</div>
 				<i ng-if="data.avatar == '' || data.avatar=='null'" class="icon-user-outline" style="font-size: 48px; color: tomato"></i>
 			</div>
 		</div>
