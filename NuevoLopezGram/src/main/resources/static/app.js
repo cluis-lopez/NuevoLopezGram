@@ -14,7 +14,7 @@
 		// app routes
 		$stateProvider
 			.state('home', {
-				url: '/',
+				url: '/home',
 				templateUrl: 'home/home.view.html',
 				controller: 'Home.IndexController',
 				controllerAs: 'vm'

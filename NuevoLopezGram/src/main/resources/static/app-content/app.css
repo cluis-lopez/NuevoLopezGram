@@ -21,7 +21,8 @@ body {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: auto;
 	background-color: #fff;
 	-webkit-backface-visibility: none;
 	-webkit-overflow-scrolling: touch;

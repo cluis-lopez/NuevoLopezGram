@@ -9,10 +9,9 @@
 		var vm = this;
 
 		vm.register = register;
-		vm.openModal = openModal;
+		//vm.openModal = openModal;
 
 		function register() {
-			console.log("enviando...");
 			vm.loading = true;
 
 			var urlData = 'name=' + vm.username;
@@ -32,7 +31,7 @@
 						var OKhtml = "<p><b>Estás registrado con la dirección de correo: </b>" + vm.email + "</p>"+
 						"<p><b>Tu nombre en la red es: </b>" + vm.username + "</p>";
 						openModal({title: "Bienvenido a LopezGram", varHtml: $sce.trustAsHtml(OKhtml)});
-						$location.path('/login');
+						vm.loading = false;
 					} else {
 						var NotOKhtml = "<p><b>Ha ocurrido un error al darte de alta como usuario: </b></p><p>"+
 						data.message + "</p>";
@@ -81,6 +80,7 @@
 
 		 pc.closeModal = function () {
 			$uibModalInstance.close();
+			$location.path('/login');
 		}
 
 	});

@@ -21,7 +21,7 @@
             vm.loading = true;
             AuthenticationService.Login(vm.username, vm.password, function (result) {
                 if (result === true) {
-                    $location.path('/');
+                    $location.path('/home');
                 } else {
                     vm.error = 'Username or password are incorrect';
                     vm.loading = false;

@@ -5,7 +5,7 @@
 		.module('app')
 		.controller('UserDetailsController', Controller);
 
-	function Controller($scope, $rootScope, $location, $http, $uibModal, $sce) {
+	function Controller($scope, $rootScope, $location, $http, $uibModal, $sce, $window) {
 		var vm = this;
 		$scope.loading = false;
 		$scope.data = {};
@@ -36,10 +36,10 @@
 			});
 		}
 
-		$scope.swipe = function(event) {
-			console.log("swipe " + event);
-			if (event === "goBack")
-				$scope.load('/home');
+		$scope.back = function(event) {
+				console.log("UD path: "+ $location.path());
+				console.log("UD hash: "+ $location.hash());
+				$location.path('/home');
 		}
 
 		$scope.logout = function() {
@@ -75,8 +75,8 @@
 				size: 'l',
 				resolve: {
 					data: function() {
-						var varHtml = $sce.trustAsHtml("<i class='icon-attention-filled' style='font-size: 24px'></i> Atencion !!!");
-						var title = $sce.trustAsHtml("Si borras tu usuario se perder&aacute;n todos tus posts y comentarios")
+						var title = $sce.trustAsHtml("<i class='icon-attention-filled' style='font-size: 24px'></i> Atencion !!!");
+						var varHtml = $sce.trustAsHtml("Si borras tu usuario se perder&aacute;n todos tus posts y comentarios")
 						return { title: title, varHtml: varHtml };
 					}
 				}
@@ -99,7 +99,7 @@
 		pc.confirmModal = function() {
 			AuthenticationService.Logout();
 			$uibModalInstance.close();
-			$location.path("/");
+			$location.path("/login");
 		}
 
 		pc.cancelModal = function() {
@@ -108,7 +108,7 @@
 
 	});
 
-	angular.module('app').controller('userDetailRemoveController', function($uibModalInstance, $localStorage, $location, data) {
+	angular.module('app').controller('userDetailRemoveController', function($uibModalInstance, $localStorage, $location, $http, $scope, data) {
 		var pc = this;
 		pc.data = data;
 
@@ -120,8 +120,8 @@
 				window.alert("Ha sido un placer\n" + data.message);
 				$scope.loading = false;
 				$localStorage.currentUser = null;
+				$location.path("/login");
 				$uibModalInstance.close();
-				$location.path("/");
 			}).error(function(status) {
 				console.log("Failed to ger User Details " + status.status + " " + status.message);
 				if (status.status === 401) {

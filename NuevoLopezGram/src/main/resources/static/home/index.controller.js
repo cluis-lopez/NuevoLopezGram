@@ -53,9 +53,12 @@
 
 		$scope.onReload = function() {
 			console.warn('reload');
+			$scope.loading = true;
 			var deferred = $q.defer();
 			setTimeout(function() {
+				$scope.refresh();
 				deferred.resolve(true);
+				$scope.loading = false;
 			}, 1000);
 			return deferred.promise;
 		}
@@ -73,9 +76,9 @@
 		}
 
 		$scope.userDetails = function() {
-			console.log("Detalles de usuario");
+			console.log("HOME path: "+ $location.path());
+			console.log("HOME hash: "+ $location.hash());
 			$location.path("/userDetails");
-			console.log($location.path());
 		}
 
 		$scope.deleteEvent = function(eventId) {
