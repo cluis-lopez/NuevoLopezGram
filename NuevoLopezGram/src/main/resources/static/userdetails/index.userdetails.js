@@ -92,12 +92,12 @@
 
 	}
 
-	angular.module('app').controller('userDetailLogoutController', function($uibModalInstance, $localStorage, $location, data) {
+	angular.module('app').controller('userDetailLogoutController', function($uibModalInstance, AuthenticationService, $location, data) {
 		var pc = this;
 		pc.data = data;
 
 		pc.confirmModal = function() {
-			$localStorage.currentUser = null;
+			AuthenticationService.Logout();
 			$uibModalInstance.close();
 			$location.path("/");
 		}

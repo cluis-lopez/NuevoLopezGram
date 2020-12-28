@@ -3,7 +3,7 @@
 
 	angular
 		.module('app', ['ui.router', 'ngMessages', 'ngStorage', 'ngAnimate', 'ngSanitize',
-		'ui.bootstrap', 'swipe', 'infinite-scroll'])
+		'ui.bootstrap', 'infinite-scroll', 'mgcrea.pullToRefresh'])
 		.config(config)
 		.run(run);
 

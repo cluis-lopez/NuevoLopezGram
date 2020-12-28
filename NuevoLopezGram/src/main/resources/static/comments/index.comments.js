@@ -56,6 +56,10 @@
 		$scope.getBack = function() {
 			$location.path('/home');
 		}
+		
+		$scope.trustURL = function(src) {
+			return $sce.trustAsResourceUrl(src);
+		}
 
 		$scope.formatDates = function(x) {
 			return $rootScope.$formatDates(x);

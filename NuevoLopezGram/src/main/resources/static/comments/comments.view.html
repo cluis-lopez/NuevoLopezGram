@@ -14,16 +14,21 @@
 			</div>
 		</div>
 		<div ng-if="eId.multiMedia.length > 0 " align="center">
-			<img src="{{eId.multiMedia}}" style="max-height: 250px"></img>
+			<div ng-if="eId.mediaType === 'image'">
+				<img src="{{trustURL(eId.multiMedia)}}" style="max-height: 250px"></img>
+			</div>
+			<div ng-if="eId.mediaType === 'video'">
+				<video id="foto" controls="true"><source src="{{trustURL(eId.multiMedia)}}" type="video/mp4"></video>
+			</div>
 		</div>
-		<p>{{eId.text}}</p>
+		<p style="font-size: 1.5em;">{{eId.text}}</p>
 		<hr style="width: 80%; size: 3; color: black;">
 		<div class="row">
 			<div class="col-xs-2" align="center">
 				<a href="" ng-click="getBack()"><i class="icon-cancel"
-					style="font-size: 24px; color: tomato"></i></a>
+					style="font-size: 40px; color: tomato"></i></a>
 			</div>
-			<div class="col.xs-4"></div>
+			<div class="col-xs-4"></div>
 			<div class="col-xs-2">
 				<a href=""><i class="icon-thumbs-up" style="font-size: 24px;"></i>{{eId.likes.length}}</a>
 			</div>
@@ -67,8 +72,13 @@
 					<span class="pull-right">{{x.location}}</span>
 				</div>
 			</div>
-			<div ng-if="x.multiMedia.length > 0 ">
-				<img class="img-responsive" src="{{x.multiMedia}}"></img>
+			<div ng-if="x.multiMedia.length > 0 " align="center">
+				<div ng-if="x.mediaType === 'image'">
+					<img class="img-responsive" id = "foto" src="{{trustURL(x.multiMedia)}}"></img>
+				</div>
+				<div ng-if="x.mediaType === 'video'">
+					<video id="foto" controls="true"><source src="{{trustURL(x.multiMedia)}}" type="video/mp4"></video>
+				</div>
 			</div>
 			<p>{{x.text}}</p>
 			<hr style="width: 80%; size: 3; color: black;">

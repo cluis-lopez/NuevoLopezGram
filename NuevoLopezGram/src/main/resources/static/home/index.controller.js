@@ -23,16 +23,16 @@
 			$http({
 				url: '/api/event',
 				method: 'GET',
-				params: {offset: offset, numEvents: numEvents}
+				params: { offset: offset, numEvents: numEvents }
 			}).success(function(data) {
-					offset += data.length;
-					$scope.events = $scope.events.concat(data);
-					$scope.user = $localStorage.currentUser.username;
-					$scope.loading = false;
-					$scope.unBlock = true;
-					if (data.length<numEvents)
-						endOfData = true;
-				})
+				offset += data.length;
+				$scope.events = $scope.events.concat(data);
+				$scope.user = $localStorage.currentUser.username;
+				$scope.loading = false;
+				$scope.unBlock = true;
+				if (data.length < numEvents)
+					endOfData = true;
+			})
 				.error(function(status) {
 					console.log("Failed to get events " + status.status + " " + status.error);
 					if (status.status === 401) {
@@ -49,6 +49,15 @@
 		$scope.loadMore = function() {
 			$scope.unBlock = false;
 			initController();
+		}
+
+		$scope.onReload = function() {
+			console.warn('reload');
+			var deferred = $q.defer();
+			setTimeout(function() {
+				deferred.resolve(true);
+			}, 1000);
+			return deferred.promise;
 		}
 
 		$scope.refresh = function() {
