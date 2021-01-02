@@ -71,6 +71,7 @@ public class EventController {
 		Event ev = new Event(userId, text, multiMedia, mediaType);
 		ev.setCreatorMail(creatorMail);
 		ev.setCreatorName(user.getName());
+		ev.setCreatorAvatar(user.getAvatar());
 		ev.setLocation(location);
 
 		if (isComment) { // Es un comentario a otro evento

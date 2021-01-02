@@ -19,6 +19,7 @@ public class Event {
 	private String creatorId;
 	private String creatorMail;
 	private String creatorName;
+	private String creatorAvatar;
 	private Date createdAt;
 	private Date lastSeen;
 	private int numberAccess;
@@ -36,6 +37,7 @@ public class Event {
 		this.creatorId = creatorId;
 		this.creatorMail = "";
 		this.creatorName = "";
+		this.creatorAvatar = "";
 		this.text = text;
 		this.multiMedia = multiMedia;
 		this.mediaType = mediaType;
@@ -170,4 +172,12 @@ public class Event {
 		return comments;
 	}
 	
+	public String getCreatorAvatar() {
+		return creatorAvatar;
+	}
+
+	public void setCreatorAvatar(String creatorAvatar) {
+		this.creatorAvatar = creatorAvatar;
+	}
+
 }

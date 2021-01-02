@@ -23,11 +23,13 @@
 					<p><b>N&uacute;mero de Posts</b>: {{data.numPosts}}</p>
 				</div>
 			</div>
-			<div class="col-xs-3">
-				<div ng-if=data.avatar != ''">
-					<img src="data.avatar">
+			<div class="col-xs-3" ng-click="avatarChange()">
+				<div ng-if="data.avatar == ''">
+					<img src="icons/noAvatar.jpg" class="img-circle" style="max-width: 150px;">
 				</div>
-				<i ng-if="data.avatar == '' || data.avatar=='null'" class="icon-user-outline" style="font-size: 48px; color: tomato"></i>
+				<div ng-if="data.avatar.length > 0">
+					<img src="{{data.avatar}}" class="img-circle" style="max-width: 150px;">
+				</div> 
 			</div>
 		</div>
 	</div>

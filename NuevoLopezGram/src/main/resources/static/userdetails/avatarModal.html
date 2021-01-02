@@ -1,0 +1,36 @@
+<div clasds="modal fade bd-example-modal-lg">
+	<div>
+		<a href="#" ng-click="pc.removeFoto()"><i class="icon-trash"
+		 style="font-size: 32px; color: tomato"></i></a>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<ng-croppie src="pc.inImage" ng-model='pc.outImage'
+			boundry="{w: 300, h: 300}"
+			viewport="{w: 250, h: 250}" orientation="true" rotation="90"
+			exif="true" type="circle">
+		</ng-croppie>
+	</div>
+</div>
+</div>
+<div class="modal-footer">
+	<div class="row">
+		<div class="col-xs-2">
+			<button class="btn btn-default btn-lg" type="button"
+				ng-click="pc.camera()" ng-disabled="loading">
+				<i class="icon-camera-outline" style="font-size: 24px;"></i>
+			</button>
+		</div>
+		<div class="col-xs-4"></div>
+		<div class="col-xs-3">
+			<a href="#" ng-click="pc.upload()" ng-class="{disabled: loading}"><i
+				class="icon-ok" style="font-size: 32px; color: green"></i></a>
+		</div>
+		<div class="col-xs-3">
+			<a href="#" ng-click="pc.cancel()"><i class="icon-cancel"
+				style="font-size: 32px; color: red"></i></a>
+		</div>
+	</div>
+	<input type="file" name="foto" id="hiddeninput" accept="image/*"
+		style="display: none;" ng-model="foto"
+		onchange="angular.element(this).scope().pc.readURL(this)" />
+</div>

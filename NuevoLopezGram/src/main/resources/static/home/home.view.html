@@ -30,7 +30,13 @@
 	<div class="eventContainer">
 		<div class="row">
 			<div class="col-xs-6">
-				<a href="#"><p style="margin-bottom: 0px;">{{x.creatorName}}</p></a>
+				<span ng-if="x.creatorAvatar.length > 0">
+					<img src="{{trustURL(x.creatorAvatar)}}" class="img-circle avatar">
+				</span>
+				<span ng-if="x.creatorAvatar == ''">
+					<i class="icon-user-outline" style="font-size: 20px; color: blue"></i>
+				</span>
+				<a href="#"><span style="font-size: 1.5em;padding-left: 5px;">{{x.creatorName}}</span</a>
 			</div>
 			<div class="col-xs-6">
 				<span class="pull-right">{{formatDates(x.createdAt)}}</span>
