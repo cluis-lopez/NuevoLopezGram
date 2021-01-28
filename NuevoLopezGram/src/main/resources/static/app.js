@@ -1,9 +1,19 @@
 (function() {
 	'use strict';
 
+	if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('sw.js')
+			.then(function(registration) {
+				console.log('Registration successful, scope is:', registration.scope);
+			})
+			.catch(function(error) {
+				console.log('Service worker registration failed, error:', error);
+			});
+	}
+
 	angular
 		.module('app', ['ui.router', 'ngMessages', 'ngStorage', 'ngAnimate', 'ngSanitize',
-		'ui.bootstrap', 'infinite-scroll', 'mgcrea.pullToRefresh', 'ngCroppie'])
+			'ui.bootstrap', 'infinite-scroll', 'mgcrea.pullToRefresh', 'ngCroppie'])
 		.config(config)
 		.run(run);
 
@@ -49,6 +59,7 @@
 		// keep user logged in after page refresh
 		if ($localStorage.currentUser) {
 			$http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.currentUser.token;
+			$location.path("/home");
 		}
 
 		// redirect to login page if not logged in and trying to access a restricted page

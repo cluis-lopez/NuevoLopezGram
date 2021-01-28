@@ -15,7 +15,7 @@
 <div class="container noPreventDefault" ng-swipe-right="swipe('goBack')"">
 	<div class="jumbotron" id="userDetails">
 		<div class="row">
-			<div class="col-xs-9">
+			<div class="col-xs-6">
 				<div class="jumbotron">
 					<p style="color:blue; font-size: 1.25em;"><b>{{data.name}}</b></p>
 					<p><b>Email</b>: {{data.email}}</p>
@@ -23,7 +23,7 @@
 					<p><b>N&uacute;mero de Posts</b>: {{data.numPosts}}</p>
 				</div>
 			</div>
-			<div class="col-xs-3" ng-click="avatarChange()">
+			<div class="col-xs-6" ng-click="avatarChange()">
 				<div ng-if="data.avatar == ''">
 					<img src="icons/noAvatar.jpg" class="img-circle" style="max-width: 150px;">
 				</div>

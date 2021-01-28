@@ -87,7 +87,7 @@ public class UserController {
 		RemovedUser remuser = new RemovedUser(user);
 		//Save the deleted user in the queue of removed users
 		uremRep.save(remuser);
-		//Delete de user from the users database
+		//Delete the user from the users database
 		uRep.delete(user);
 		return new jsonStatus("OK", "User " + email + " with id: "+ userId + " has been deleted");
 	}
@@ -112,6 +112,7 @@ public class UserController {
 		
 		user.setPassword(newPassword);
 		user.encryptPassword();
+		user.setLastActivity(new Date());
 		uRep.save(user);
 		return new jsonStatus("OK", "Password updated");
 	}
@@ -134,6 +135,7 @@ public class UserController {
 		User user = u.get();
 		if (files.getSize() == 1){ //Remove avatar from user
 			user.setAvatar("");
+			user.setLastActivity(new Date());
 			uRep.save(user);
 			ret.put("key", "");
 			ret.put("status", "OK");
@@ -145,6 +147,7 @@ public class UserController {
 		try {
 			ret.put("key", upload(files, user.getEmail()));
 			user.setAvatar(ret.get("key"));
+			user.setLastActivity(new Date());
 			uRep.save(user);
 			ret.put("status", "OK");
 			ret.put("message", "Avatar updated");

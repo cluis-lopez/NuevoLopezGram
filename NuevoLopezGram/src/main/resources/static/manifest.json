@@ -2,7 +2,7 @@
 
   "name": "LopezGram", 
   "short_name": "LopezGram", 
-  "start_url": "index.html", 
+  "start_url": "/home", 
   "display": "fullscreen",
   "prefer_related_applications": true,
   "icons": [{ 

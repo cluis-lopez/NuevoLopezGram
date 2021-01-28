@@ -133,13 +133,15 @@ public class EventController {
 			@RequestParam String eventId, @RequestParam(defaultValue = "") String parentId) {
 		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", "")).getBody()
 				.getSubject();
-		Optional<Event> evo = eRep.findById(eventId);
 
+		Optional<Event> evo = eRep.findById(eventId);
 		if (evo.isEmpty())
 			return new jsonStatus("NOT OK", "Invalid eventId");
 
 		Event ev = evo.get();
 
+		User user = uRep.findById(userId).get();
+		
 		if (!ev.getCreatorId().equals(userId))
 			return new jsonStatus("NOT OK", "Unathorized user");
 
@@ -175,6 +177,8 @@ public class EventController {
 
 		// Ahora borramos el evento "raiz"
 		deleteWarning += moveToTrash(ev);
+		user.setLastActivity(new Date());
+		uRep.save(user);
 		return new jsonStatus("OK", "Event Deleted " + deleteWarning);
 	}
 
