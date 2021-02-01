@@ -54,6 +54,7 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 			console.log("Failed to Upload picture " + status.status + " " + status.message);
 			window.alert("Error al subir contenido al servidor " + status);
 			$scope.loading = false;
+			$uibModalInstance.close();
 		})
 	}
 
@@ -87,6 +88,7 @@ angular.module('app').controller('ModalEventCtrl', function($uibModalInstance, $
 			console.log("Failed to Upload event " + status.status + " " + status.message);
 			window.alert("Error al subir contenido al servidor " + status);
 			$scope.loading = false;
+			$uibModalInstance.close();
 		})
 	}
 	

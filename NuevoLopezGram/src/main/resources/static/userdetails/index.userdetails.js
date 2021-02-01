@@ -132,7 +132,7 @@
 	angular.module('app').controller('userDetailRemoveController', function($uibModalInstance, $localStorage, $location, $http, $scope, data) {
 		var pc = this;
 		pc.data = data;
-		
+
 		pc.confirmModal = function() {
 			$http({
 				url: '/api/userdetails',
@@ -180,19 +180,19 @@
 		pc.upload = function() {
 			$scope.loading = true;
 			var fd = new FormData();
-			if (pc.inImage === '' || pc.inImage === 'icons/noAvatar.jpg'){
+			if (pc.inImage === '' || pc.inImage === 'icons/noAvatar.jpg') {
 				fd.append("file", dataURLToBlob('data:image/jpeg;base64,MA=='));
 			} else {
-				fd.append("file", dataURLToBlob(pc.outImage));	
+				fd.append("file", dataURLToBlob(pc.outImage));
 			}
-			
+
 			$http({
 				url: '/api/changeavatar',
 				method: 'POST',
 				data: fd,
 				headers: { 'Content-Type': undefined }
 			}).success(function(dataReturned) {
-				if (dataReturned.status === 'OK'){
+				if (dataReturned.status === 'OK') {
 					if (dataReturned.message === 'Removed')
 						pc.inImage = 'icons/noAvatar.jpg';
 					else
@@ -201,10 +201,14 @@
 					pc.inImage = 'icons/noAvatar.jpg';
 				}
 				$scope.loading = false;
+				$uibModalInstance.close();
+				$location.path("/userDetails")
 			}).error(function(status) {
 				console.log("Failed to Upload picture " + status.status + " " + status.message);
 				window.alert("Error al subir contenido al servidor " + status.message);
 				$scope.loading = false;
+				$uibModalInstance.close();
+				$location.path("/userDetails")
 			})
 		}
 
@@ -212,50 +216,50 @@
 			$uibModalInstance.close();
 			$location.path("/userDetails")
 		}
-		
-	//Codigo importado (JQuery) para tratamiento de las fotos
 
-	pc.readURL = function(input) {
-		// var ctx = document.getElementById("foto").getContext("2d");
-		$scope.loading = true;
-		if (input.files && input.files[0]) {
-			var reader = new FileReader();
-			reader.onload = (function(tf) {
-				return function(evt) {
-					//pc.inImage = $sce.trustAsResourceUrl(evt.target.result);
-					pc.inImage = evt.target.result;
-				}
-			})(input.files[0]);
-			reader.readAsDataURL(input.files[0]);
+		//Codigo importado (JQuery) para tratamiento de las fotos
+
+		pc.readURL = function(input) {
+			// var ctx = document.getElementById("foto").getContext("2d");
+			$scope.loading = true;
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = (function(tf) {
+					return function(evt) {
+						//pc.inImage = $sce.trustAsResourceUrl(evt.target.result);
+						pc.inImage = evt.target.result;
+					}
+				})(input.files[0]);
+				reader.readAsDataURL(input.files[0]);
+			};
+			$scope.loading = false;
 		};
-		$scope.loading = false;
-	};
 
-	/* Utility function to convert a canvas to a BLOB */
-	var dataURLToBlob = function(data) {
-		var dataURL = $sce.valueOf(data);
-		var BASE64_MARKER = ';base64,';
-		if (dataURL.indexOf(BASE64_MARKER) == -1) {
-			var parts = dataURL.split(',');
+		/* Utility function to convert a canvas to a BLOB */
+		var dataURLToBlob = function(data) {
+			var dataURL = $sce.valueOf(data);
+			var BASE64_MARKER = ';base64,';
+			if (dataURL.indexOf(BASE64_MARKER) == -1) {
+				var parts = dataURL.split(',');
+				var contentType = parts[0].split(':')[1];
+				var raw = parts[1];
+
+				return new Blob([raw], { type: contentType });
+			}
+
+			var parts = dataURL.split(BASE64_MARKER);
 			var contentType = parts[0].split(':')[1];
-			var raw = parts[1];
+			var raw = window.atob(parts[1]);
+			var rawLength = raw.length;
 
-			return new Blob([raw], { type: contentType });
+			var uInt8Array = new Uint8Array(rawLength);
+
+			for (var i = 0; i < rawLength; ++i) {
+				uInt8Array[i] = raw.charCodeAt(i);
+			}
+
+			return new Blob([uInt8Array], { type: contentType });
 		}
-
-		var parts = dataURL.split(BASE64_MARKER);
-		var contentType = parts[0].split(':')[1];
-		var raw = window.atob(parts[1]);
-		var rawLength = raw.length;
-
-		var uInt8Array = new Uint8Array(rawLength);
-
-		for (var i = 0; i < rawLength; ++i) {
-			uInt8Array[i] = raw.charCodeAt(i);
-		}
-
-		return new Blob([uInt8Array], { type: contentType });
-	}
 
 	});
 })();

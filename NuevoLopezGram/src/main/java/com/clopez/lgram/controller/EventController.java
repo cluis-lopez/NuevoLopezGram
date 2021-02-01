@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +41,8 @@ public class EventController {
 	private String picFolder;
 	@Value("${trash_folder}")
 	private String trashFolder;
+	@Value("${max_events}")
+	private int MAX_EVENTS;
 
 	@Autowired
 	private EventRepository eRep;
@@ -105,6 +107,9 @@ public class EventController {
 			@RequestParam(defaultValue = "") String eventCommented) {
 		
 		List<Event> ret = new ArrayList<Event>();
+		
+		if (numEvents > MAX_EVENTS) //Limit the number of events collected
+			numEvents = MAX_EVENTS;
 
 		if (!isComment) { // Return root events
 
@@ -112,17 +117,23 @@ public class EventController {
 			// DESC OFFSET offset
 			// LIMIT number"
 			ret = eRep.getLastParentEvents(numEvents, offset);
+			// Set the avatar of each user's event
+			for (Event e : ret)
+				uRep.findById(e.getCreatorId()).ifPresent(u -> e.setCreatorAvatar(u.getAvatar()));
+			
 		} else if (eventCommented != null && !eventCommented.equals("")) { // Return comments belonging to a certain
 																			// event
 			Optional<Event> evo = eRep.findById(eventCommented);
 			if (evo.isEmpty()) // No "root" event ??
-				return null;
+				return ret; //ret should be empty
 			Event rootEvent = evo.get();
 			LinkedList<String> comments = new LinkedList<>(rootEvent.getComments());
 			Iterator<String> itr = comments.descendingIterator();
 			while(itr.hasNext()) {
 			    String c = itr.next();
-				ret.add(eRep.findById(c).orElse(null));
+			    Event e = eRep.findById(c).orElse(null);
+			    uRep.findById(e.getCreatorId()).ifPresent(u -> e.setCreatorAvatar(u.getAvatar()));
+				ret.add(e);
 			}
 		}
 		return ret;

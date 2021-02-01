@@ -18,7 +18,9 @@
 				<img src="{{trustURL(eId.multiMedia)}}" style="max-height: 250px"></img>
 			</div>
 			<div ng-if="eId.mediaType === 'video'">
-				<video id="foto" controls="true"><source src="{{trustURL(eId.multiMedia)}}" type="video/mp4"></video>
+				<video id="foto" controls="true">
+					<source src="{{trustURL(eId.multiMedia)}}" type="video/mp4">
+				</video>
 			</div>
 		</div>
 		<p style="font-size: 1.5em;">{{eId.text}}</p>
@@ -49,7 +51,7 @@
 <div class="loading" ng-if="loading">
 	<div class="row">
 		<div class="col-xs-12">
-		<img src="icons/spinner.gif" width="75px" height="auto">
+			<img src="icons/spinner.gif" width="75px" height="auto">
 		</div>
 	</div>
 </div>
@@ -61,7 +63,11 @@
 		<div class="eventContainer">
 			<div class="row">
 				<div class="col-xs-6">
-					<a href="#">{{x.creatorName}}</a>
+					<span ng-if="x.creatorAvatar.length > 0"> <img
+						src="{{trustURL(x.creatorAvatar)}}" class="img-circle avatar">
+					</span> <span ng-if="x.creatorAvatar == ''"> <i
+						class="icon-user-outline" style="font-size: 20px; color: blue"></i>
+					</span> <a href="#"><span style="font-size: 1.5em; padding-left: 5px;">{{x.creatorName}}</span</a>
 				</div>
 				<div class="col-xs-6">
 					<span class="pull-right">{{formatDates(x.createdAt)}}</span>
@@ -74,10 +80,13 @@
 			</div>
 			<div ng-if="x.multiMedia.length > 0 " align="center">
 				<div ng-if="x.mediaType === 'image'">
-					<img class="img-responsive" id = "foto" src="{{trustURL(x.multiMedia)}}"></img>
+					<img class="img-responsive" id="foto"
+						src="{{trustURL(x.multiMedia)}}"></img>
 				</div>
 				<div ng-if="x.mediaType === 'video'">
-					<video id="foto" controls="true"><source src="{{trustURL(x.multiMedia)}}" type="video/mp4"></video>
+					<video id="foto" controls="true">
+						<source src="{{trustURL(x.multiMedia)}}" type="video/mp4">
+					</video>
 				</div>
 			</div>
 			<p>{{x.text}}</p>

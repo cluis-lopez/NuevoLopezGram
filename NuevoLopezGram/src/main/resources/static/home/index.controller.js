@@ -32,14 +32,13 @@
 				$scope.unBlock = true;
 				if (data.length < numEvents)
 					endOfData = true;
-			})
-				.error(function(status) {
-					console.log("Failed to get events " + status.status + " " + status.error);
-					if (status.status === 401) {
-						$localStorage.currentUser = '';
-						$location.path('/login');
-					}
-				});
+			}).error(function(status) {
+				console.log("Failed to get events " + status.status + " " + status.error);
+				if (status.status === 401) {
+					$localStorage.currentUser = '';
+					$location.path('/login');
+				}
+			});
 		}
 
 		$scope.trustURL = function(src) {
