@@ -29,7 +29,7 @@
 <div class='jumbotron' ng-repeat="x in events">
 	<div class="eventContainer">
 		<div class="row">
-			<div class="col-xs-6">
+			<div class="col-xs-6" ng-click="creatorDetails(x.creatorMail)">
 				<span ng-if="x.creatorAvatar.length > 0">
 					<img src="{{trustURL(x.creatorAvatar)}}" class="img-circle avatar">
 				</span>

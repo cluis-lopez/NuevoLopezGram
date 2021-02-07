@@ -24,7 +24,8 @@ public class User {
 	private Date lastPost;
 	private int numPosts;
 	private boolean lockedUser;
-	private Set<String> friends;//List of friends uid's
+	private Set<String> following;//List of uid's of users I follow
+	private Set<String> followers;//List of uid's of users that follow me
 	private String avatar; //URL to avatar pictute
 	
 	public User(String name, String email, String password) {
@@ -37,7 +38,8 @@ public class User {
 		this.lastPost = new Date(0);
 		this.numPosts = 0;
 		this.lockedUser = false;
-		this.friends = new HashSet<String>();
+		this.following = new HashSet<String>();
+		this.followers = new HashSet<String>();
 		this.password = password;
 		this.avatar = "";
 	}
@@ -130,22 +132,40 @@ public class User {
 		this.avatar = avatar;
 	}
 	
-	public String addFriend(String uid) {
-		friends.add(uid);
+	public String addFollowing(String uid) {
+		following.add(uid);
 		return uid;
 	}
 	
-	public String removeFriend(String uid) {
-		if (friends.contains(uid)) {
-			friends.remove(uid);
+	public String removeFollowing(String uid) {
+		if (following.contains(uid)) {
+			following.remove(uid);
 			return uid;
 		} else {
 			return null;
 		}
 	}
 	
-	public Set<String> getFriends(){
-		return friends;
+	public Set<String> getFollowing(){
+		return following;
+	}
+	
+	public String addFollower(String uid) {
+		followers.add(uid);
+		return uid;
+	}
+	
+	public String removeFollower(String uid) {
+		if (followers.contains(uid)) {
+			followers.remove(uid);
+			return uid;
+		} else {
+			return null;
+		}
+	}
+	
+	public Set<String> getFollowers(){
+		return followers;
 	}
 	
 	@Override

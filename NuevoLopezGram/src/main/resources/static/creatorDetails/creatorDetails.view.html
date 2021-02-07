@@ -1,0 +1,52 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="row">
+		<div class="col-xs-2" align="center" ng-click="back()">
+			<a href="#"><i class=" icon-cancel-outline"
+				style="font-size: 32px; color: tomato;"></i></a>
+		</div>
+		<div class="col-xs-8" align="center">
+			<a href="#"><img class="img-responsive" src="icons/Logo.png"
+				height="75"></a>
+		</div>
+		<div class="col-xs-2" align="center">
+		</div>
+	</div>
+</nav>
+<div class="container noPreventDefault">
+	<div class="jumbotron" id="userDetails">
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="jumbotron">
+					<p style="color:blue; font-size: 1.25em;"><b>{{data.name}}</b></p>
+					<p><b>Usuario desde</b>: {{data.userSince}}</p>
+					<p><b>Ultimo Post</b>: {{data.lastPost}}</p>
+					<p><b>N&uacute;mero de Posts</b>: {{data.numPosts}}</p>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div ng-if="data.avatar == ''">
+					<img src="icons/noAvatar.jpg" class="img-circle" style="max-width: 150px;">
+				</div>
+				<div ng-if="data.avatar.length > 0">
+					<img src="{{data.avatar}}" class="img-circle" style="max-width: 150px;">
+				</div> 
+			</div>
+		</div>
+		<div class = "row">
+			<div class="col-xs-3"></div>
+			<div class="col-xs-6">
+				<button type="button" class="btn btn-block btn-info" style="color: black;" ng-click="follow()">
+				Sequir</button>
+			</div>
+			<div class="col-xs-3"></div>
+		</div>
+	</div>
+</div>
+
+<div class="loading" ng-if="loading">
+	<div class="row">
+		<div class="col-xs-12">
+		<img src="icons/spinner.gif" width="75px" height="auto">
+		</div>
+	</div>
+</div>

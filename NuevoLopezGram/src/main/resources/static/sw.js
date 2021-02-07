@@ -30,7 +30,9 @@ const filesToCache = [
 	'/login/login.view.html',
 	'/userReg/index.userReg.js',
 	'/userReg/OKModal.html',
-	'/userReg/userReg.view.html'
+	'/userReg/userReg.view.html',
+	'/creatorDetails/creatorDetails.view.html',
+	'/creatorDetails/index.creatordetails.js'
 ];
 
 const staticCacheName = 'LopezGramPages-v1';

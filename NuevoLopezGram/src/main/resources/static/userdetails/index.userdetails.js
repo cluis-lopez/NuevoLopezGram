@@ -8,7 +8,11 @@
 	function Controller($scope, $rootScope, $location, $http, $uibModal, $sce, $window) {
 		var vm = this;
 		$scope.loading = false;
+		$scope.followingView = false;
+		$scope.followersView = false;
 		$scope.data = {};
+		$scope.followingUsers = [];
+		$scope.followersUsers = [];
 
 		initController();
 
@@ -35,9 +39,53 @@
 				}
 			});
 		}
+		
+		$scope.trustURL = function(src) {
+			return $sce.trustAsResourceUrl(src);
+		}
 
 		$scope.back = function(event) {
 			$location.path('/home');
+		}
+		
+		$scope.following = function(){
+			$scope.loading = true;
+			$http({
+				url: '/api/getfollowing',
+				method: 'GET'
+			}).success(function(data) {
+				$scope.followingUsers = data;
+				$scope.loading = false;
+				$scope.followersView = false;
+				$scope.followingView= true;
+			}).error(function(status) {
+				console.log("Failed to ger Following Users " + status.status + " " + status.message);
+				if (status.status === 401) {
+					console.log('Unauthorized');
+					$localStorage.removeItem('currentUser');
+					$location.path('/login');
+				}
+			});
+		}
+		
+		$scope.followers = function(){
+			$scope.loading = true;
+			$http({
+				url: '/api/getfollowers',
+				method: 'GET'
+			}).success(function(data) {
+				$scope.followersUsers = data;
+				$scope.loading = false;
+				$scope.followingView = false;
+				$scope.followersView = true;
+			}).error(function(status) {
+				console.log("Failed to ger Followers Users " + status.status + " " + status.message);
+				if (status.status === 401) {
+					console.log('Unauthorized');
+					$localStorage.removeItem('currentUser');
+					$location.path('/login');
+				}
+			});
 		}
 
 		$scope.logout = function() {

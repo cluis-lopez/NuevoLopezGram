@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	if ('serviceWorker' in navigator) {
+/*	if ('serviceWorker' in navigator) {
 		navigator.serviceWorker.register('sw.js')
 			.then(function(registration) {
 				console.log('Registration successful, scope is:', registration.scope);
@@ -9,7 +9,7 @@
 			.catch(function(error) {
 				console.log('Service worker registration failed, error:', error);
 			});
-	}
+	}*/
 
 	angular
 		.module('app', ['ui.router', 'ngMessages', 'ngStorage', 'ngAnimate', 'ngSanitize',
@@ -45,6 +45,12 @@
 				url: '/userDetails',
 				templateUrl: 'userdetails/userDetails.view.html',
 				controller: 'UserDetailsController',
+				controllerAs: 'vm'
+			})
+			.state('creatorDetails', {
+				url: '/creatorDetails',
+				templateUrl: 'creatorDetails/creatorDetails.view.html',
+				controller: 'creatorDetailsController',
 				controllerAs: 'vm'
 			})
 			.state('comments', {

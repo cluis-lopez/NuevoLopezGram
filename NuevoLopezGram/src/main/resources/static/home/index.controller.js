@@ -79,6 +79,14 @@
 			console.log("HOME hash: "+ $location.hash());
 			$location.path("/userDetails");
 		}
+		
+		$scope.creatorDetails = function(creatorMail) {
+			console.log(creatorMail);
+			if(creatorMail != $scope.user)
+				$location.path('/creatorDetails').search({creatorMail: creatorMail});
+			else
+				return;
+		}
 
 		$scope.deleteEvent = function(eventId) {
 			console.log("Borrando evento " + eventId);

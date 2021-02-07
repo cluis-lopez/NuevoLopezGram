@@ -7,18 +7,20 @@ public class UserPublic {
 
 	public String name;
 	public String email;
-	private Set<String> friends;//List of friends uid's
 	private String avatar; //URL to avatar pictute
 	private int numPosts;
+	private Date userSince;
 	private Date lastPost;
+	private int numFollowers;
 	
 	public UserPublic(User u) {
 		this.name = u.getName();
 		this.email = u.getEmail();
-		this.friends = u.getFriends();
 		this.avatar = u.getAvatar();
 		this.numPosts = u.getNumPosts();
+		this.userSince = u.getUserSince();
 		this.lastPost = u.getLastPost();
+		this.numFollowers = u.getFollowers().size();
 	}
 
 	public String getName() {
@@ -29,12 +31,12 @@ public class UserPublic {
 		return email;
 	}
 
-	public Set<String> getFriends() {
-		return friends;
-	}
-
 	public String getAvatar() {
 		return avatar;
+	}
+	
+	public Date getUserSince() {
+		return userSince;
 	}
 	
 	public int getNumPosts() {
@@ -43,6 +45,14 @@ public class UserPublic {
 	
 	public Date getLastPost() {
 		return lastPost;
+	}
+	
+	public int getNumFollowers() {
+		return numFollowers;
+	}
+
+	public void removePersonalInfo() {
+		this.email = "";
 	}
 	
 	

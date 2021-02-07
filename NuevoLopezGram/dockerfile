@@ -1,0 +1,6 @@
+FROM openjdk:11
+ARG JAR_FILE=target/*.jar
+ARG CRED=gcp.json
+COPY ${JAR_FILE} app.jar
+COPY ${CRED} gcp.json
+ENTRYPOINT ["java","-jar","/app.jar"]

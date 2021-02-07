@@ -21,6 +21,7 @@
 					<p><b>Email</b>: {{data.email}}</p>
 					<p><b>Ultimo Post</b>: {{data.lastPost}}</p>
 					<p><b>N&uacute;mero de Posts</b>: {{data.numPosts}}</p>
+					<p><b>N&uacute;mero de Seguidores</b>: {{data.numFollowers}}</p>
 				</div>
 			</div>
 			<div class="col-xs-6" ng-click="avatarChange()">
@@ -32,7 +33,21 @@
 				</div> 
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-xs-1"></div>
+			<div class="col-xs-4">
+				<button type="button" class="btn btn-block btn-info" style="color:black;" ng-click="following()">
+				Siguiendo</button>
+			</div>
+			<div class="col-xs-2"></div>
+			<div class="col-xs-4">
+				<button type="button" class="btn btn-block btn-info" style="color:black;" ng-click="followers()">
+				Sequidores</button>
+			</div>
+			<div class="col-xs-1"></div>
+		</div>	
 	</div>
+	<div ng-if="! followingView && ! followersView">
 	<div class="botoncont">
 		<button type="button" class="btn btn-block btn-primary" ng-click="logout()">
 		<i class="icon-power-outline" style="font-size: 24px"></i>Logout</button>
@@ -45,6 +60,48 @@
 		<button type="button" class="btn btn-block btn-danger" ng-click="removeUser()">
 		<i class="icon-attention-filled" style="font-size: 24px"></i> Salirse de LopezGram</button>
 	</div>
+	</div>
+	
+	<div ng-if="followingView">
+		<div class='jumbotron' ng-repeat="x in followingUsers">
+			<div class="row">
+			<div class="col-xs-6">
+				<span ng-if="x.avatar.length > 0">
+					<img src="{{trustURL(x.avatar)}}" class="img-circle avatar">
+				</span>
+				<span ng-if="x.avatar == ''">
+					<i class="icon-user-outline" style="font-size: 20px; color: blue"></i>
+				</span>
+				<a href="#"><span style="font-size: 1.5em;padding-left: 5px;">{{x.name}}</span></a>
+			</div>
+			<div class="col-xs-6">
+				<span class="pull-right"><i class=" icon-cancel-outline"
+				style="font-size: 32px; color: tomato;"></i></span>
+			</div>
+		</div>
+		</div>
+	</div>
+	
+		<div ng-if="followersView">
+		<div class='jumbotron' ng-repeat="x in followersUsers">
+			<div class="row">
+			<div class="col-xs-6">
+				<span ng-if="x.avatar.length > 0">
+					<img src="{{trustURL(x.avatar)}}" class="img-circle avatar">
+				</span>
+				<span ng-if="x.avatar == ''">
+					<i class="icon-user-outline" style="font-size: 20px; color: blue"></i>
+				</span>
+				<a href="#"><span style="font-size: 1.5em;padding-left: 5px;">{{x.name}}</span></a>
+			</div>
+			<div class="col-xs-6">
+				<span class="pull-right"><i class=" icon-cancel-outline"
+				style="font-size: 32px; color: tomato;"></i></span>
+			</div>
+		</div>
+		</div>
+	</div>
+	
 </div>
 
 <div class="loading" ng-if="loading">

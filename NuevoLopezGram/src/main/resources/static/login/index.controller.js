@@ -9,7 +9,19 @@
         var vm = this;
 
         vm.login = login;
+/*		vm.iphoneInstall =false;
 
+		const isIos = () => {
+			const userAgent = window.navigator.userAgent.toLowerCase();
+			return /iphone|ipad|ipod/.test(userAgent);
+		}
+		
+		const isInStandaoneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+		if (isIos() && isInStandaloneMode()) {
+			vm.iphoneInstall = true;
+		}*/
+		
         initController();
 
         function initController() {

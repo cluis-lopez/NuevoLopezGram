@@ -37,6 +37,13 @@ body {
 	transform: translate(-50%, -50%);
 }
 
+.iphoneInstall {
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 1.5em;
+}
+
 .help-block {
 	font-size: 12px;
 }
