@@ -142,7 +142,7 @@ public class User {
 			following.remove(uid);
 			return uid;
 		} else {
-			return null;
+			return "";
 		}
 	}
 	
@@ -160,7 +160,7 @@ public class User {
 			followers.remove(uid);
 			return uid;
 		} else {
-			return null;
+			return "";
 		}
 	}
 	

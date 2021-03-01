@@ -14,6 +14,16 @@
 		$scope.events = [];
 		$scope.unBlock = true;
 
+		/* Check last visit */
+		var lv = $localStorage.lastVisit;
+		if (lv != null && typeof (lv) === 'string') {
+			console.log("Cheking lastVisit: ", new Date() - new Date(lv));
+			if (new Date() - new Date(lv) >  60 * 1000) //Más de un día desde la última visita
+				welcomeAgain(lv);
+		}
+
+		$localStorage.lastVisit = new Date();
+
 		initController();
 
 		function initController() {
@@ -39,6 +49,52 @@
 					$location.path('/login');
 				}
 			});
+		}
+
+		function welcomeAgain(d) {
+			// Funcion temporaly cancelled. The Spring backend cannot deal with dates 
+			// and brackets in Google Datastore
+			return;
+/*			$scope.loading = true;
+			$http({
+				url: '/api/getLastEvents',
+				method: 'GET',
+				params: { lastVisit: new Date(d).toISOString() }
+			}).success(function(data) {
+				$scope.loading = false;
+				var addText = "";
+				if (data.status === 'OK')
+					addText = "<p>Desde tu &uacute;ltima conexi&oacte;n se han publicado " +
+					data.message + " nuevos mensajes";
+
+				var modalInstance = $uibModal.open({
+					animation: true,
+					ariaLabelledBy: 'modal-title',
+					ariaDescribedBy: 'modal-body',
+					templateUrl: 'home/welcomeAgainModal.html',
+					controller: 'welcomeAgainCtrl',
+					controllerAs: 'pc',
+					size: 'l',
+					resolve: {
+						data: function() {
+							var varHtml = $sce.trustAsHtml("<p>Tu &uacute;ltima conexi&oacute;n fue " +
+								$rootScope.$formatDates(d) + "</p>");
+								varHtml += addText;
+							var title = $sce.trustAsHtml("Bienvenido de nuevo")
+							return { title: title, varHtml: varHtml };
+						}
+					}
+				});
+				modalInstance.result.then(function() {
+				});
+			}).error(function() {
+				$scope.loading = false;
+				console.log("Failed to get last events " + status.status + " " + status.error);
+				if (status.status === 401) {
+					$localStorage.currentUser = '';
+					$location.path('/login');
+				}
+			})*/
 		}
 
 		$scope.trustURL = function(src) {
@@ -70,20 +126,19 @@
 		}
 
 		$scope.eventComments = function(event) {
-			console.log("Vamos a comentarios..." + event.id);
 			$location.path('/comments').search({ event: event });
 		}
 
 		$scope.userDetails = function() {
-			console.log("HOME path: "+ $location.path());
-			console.log("HOME hash: "+ $location.hash());
+			console.log("HOME path: " + $location.path());
+			console.log("HOME hash: " + $location.hash());
 			$location.path("/userDetails");
 		}
-		
+
 		$scope.creatorDetails = function(creatorMail) {
 			console.log(creatorMail);
-			if(creatorMail != $scope.user)
-				$location.path('/creatorDetails').search({creatorMail: creatorMail});
+			if (creatorMail != $scope.user)
+				$location.path('/creatorDetails').search({ creatorMail: creatorMail });
 			else
 				return;
 		}
@@ -148,6 +203,16 @@
 			});
 		}
 	};
+
+	angular.module('app').controller('welcomeAgainCtrl', function($uibModalInstance, $http, data) {
+		var pc = this;
+		pc.data = data;
+		var loading = false;
+
+		pc.cancelModal = function() {
+			$uibModalInstance.close();
+		}
+	});
 
 	angular.module('app').controller('homeConfirmCtrl', function($uibModalInstance, $http, data) {
 		var pc = this;

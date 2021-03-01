@@ -1,5 +1,6 @@
 package com.clopez.lgram.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -228,6 +229,28 @@ public class EventController {
 			}
 		}
 		return ret;
+	}
+	
+	/*
+	 * WARNING !!!!
+	 * This method generates an Exception as lastVistit (when passed as argument to
+	 * the @Query annotation in the Events Repository) should include brackets
+	 * either double or single.
+	 * However I haven't fund out the way to do it.
+	 * 
+	 * In the meantime, this is method is mapped out
+	 * 
+	 */
+	// @GetMapping("/api/getLastEvents")
+	public @ResponseBody jsonStatus eventDetails(@RequestHeader(name = "Authorization") String token,
+			@RequestParam String lastVisit) {
+		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", "")).getBody()
+				.getSubject();
+		
+		System.out.println("LastVisit: " + "'" + lastVisit + "'");
+		int numPosts = eRep.getEventsNewerThan(lastVisit).size();
+		return new jsonStatus("OK", Integer.toString(numPosts));
+		
 	}
 
 	private String moveToTrash(Event ev) {

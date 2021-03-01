@@ -17,4 +17,6 @@ public interface EventRepository extends DatastoreRepository<Event, String>{
 	List<String> getCommentsFromId(@Param ("eventId") String eventId);
 	@Query("SELECT * FROM event WHERE creatorMail = @email")
 	List<Event> getEventsFromUserEmail(@Param ("email") String email);
+	@Query("SELECT * FROM event WHERE createdAt > DATETIME(@lastDate) OFFSET 25")
+	List<Event> getEventsNewerThan(@Param ("lastDate") String lastDate);
 }

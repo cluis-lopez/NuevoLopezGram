@@ -10,6 +10,8 @@
 		$scope.loading = false;
 		$scope.data = {};
 		console.log($scope.creatorMail);
+		var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
+		 'Agosto', 'Septiembre','Octubre','Noviembre', 'Diciembre'];
 
 		initController();
 
@@ -22,6 +24,9 @@
 			}).success(function(data) {
 				console.log(typeof (data) + " Retornado: " + data);
 				$scope.data = data;
+				var d = new Date(data.userSince);
+				$scope.data.year = d.getFullYear();
+				$scope.data.month = months[d.getMonth()];
 				console.log(data);
 				var jsdata = Date.parse(data.lastPost);
 				if (jsdata == 0 || isNaN(jsdata))

@@ -132,6 +132,32 @@ public class UserController {
 		
 	}
 	
+	@DeleteMapping("/api/follow")
+	public jsonStatus unFollow(@RequestHeader (name="Authorization") String token,
+			@RequestParam (defaultValue = "") String unFollowId) {
+		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", ""))
+				.getBody()
+				.getSubject();
+		if (unFollowId == null || unFollowId.equals(""))
+			return new jsonStatus ("NOT OK", "Invalid UserId to infollow");
+		
+		Optional<User> u = uRep.findById(userId);
+		Optional<User> uf = uRep.findById(unFollowId);
+		if (u.isEmpty() || uf.isEmpty())
+			return new jsonStatus("NOT OK", "Invalid Users");
+		
+		User user = u.get();
+		User unfollowed = uf.get();
+		if (user.removeFollowing(unFollowId).equals(unFollowId) &&
+				unfollowed.removeFollower(user.getId()).equals(user.getId())){
+			uRep.save(user);
+			uRep.save(unfollowed);
+			return new jsonStatus("OK", "You are now not following user " + unfollowed.getName());
+		}
+		return new jsonStatus("NOT OK", "Cannot remove " + unfollowed.getName() +
+				" from the list of users of " + user.getName());
+	}
+	
 	@GetMapping("/api/getfollowers")
 	public List<UserPublic> getFollowers(@RequestHeader (name="Authorization") String token) {
 		String userId = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace("Bearer", ""))

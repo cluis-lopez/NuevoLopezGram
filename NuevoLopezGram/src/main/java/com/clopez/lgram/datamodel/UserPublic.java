@@ -5,6 +5,7 @@ import java.util.Set;
 
 public class UserPublic {
 
+	public String id;
 	public String name;
 	public String email;
 	private String avatar; //URL to avatar pictute
@@ -14,6 +15,7 @@ public class UserPublic {
 	private int numFollowers;
 	
 	public UserPublic(User u) {
+		this.id = u.getId();
 		this.name = u.getName();
 		this.email = u.getEmail();
 		this.avatar = u.getAvatar();
@@ -21,6 +23,10 @@ public class UserPublic {
 		this.userSince = u.getUserSince();
 		this.lastPost = u.getLastPost();
 		this.numFollowers = u.getFollowers().size();
+	}
+	
+	public String getId() {
+		return id;
 	}
 
 	public String getName() {
